@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="MVVMFirma.Views.KosztyMaterialoweView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Aktualny cennik kosztów materiałowych (PLN)" 
+                   FontSize="18" FontWeight="Bold" Margin="0,0,10,15"/>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding ListaKosztow}" 
+                  AutoGenerateColumns="False" IsReadOnly="True" 
+                  GridLinesVisibility="Horizontal" AlternatingRowBackground="#F9F9F9"
+                  HorizontalScrollBarVisibility="Visible" 
+                  VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Kod Materiału" Binding="{Binding KodMaterialu}" 
+                                    Width="300" FontWeight="Bold"/>
+
+                <DataGridTextColumn Header="Opis" Binding="{Binding Opis}" Width="Auto">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="MinWidth" Value="800"/>
+                            <Setter Property="Padding" Value="10,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Cena (PLN)" Binding="{Binding CenaJednostkowa, StringFormat={}{0:N4} zł}" Width="150">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Padding" Value="0,0,20,0" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Jm" Binding="{Binding JednostkaMiary}" Width="80">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Data modyfikacji" Binding="{Binding DataModyfikacji, StringFormat={}{0:yyyy-MM-dd}}" Width="200"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

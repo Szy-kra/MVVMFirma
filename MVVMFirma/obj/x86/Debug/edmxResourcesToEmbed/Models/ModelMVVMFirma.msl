@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MVVMFirmaModelStoreContainer" CdmEntityContainer="MVVMFirmaEntities13">
+    <EntitySetMapping Name="Faktury">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Faktury">
+        <MappingFragment StoreEntitySet="Faktury">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NrFaktury" ColumnName="NrFaktury" />
+          <ScalarProperty Name="DataFaktury" ColumnName="DataFaktury" />
+          <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+          <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+          <ScalarProperty Name="Kwota" ColumnName="Kwota" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Formy">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Formy">
+        <MappingFragment StoreEntitySet="Formy">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="KodFormy" ColumnName="KodFormy" />
+          <ScalarProperty Name="MaszynaDedykowana" ColumnName="MaszynaDedykowana" />
+          <ScalarProperty Name="Lokalizacja" ColumnName="Lokalizacja" />
+          <ScalarProperty Name="CzasCyklu" ColumnName="CzasCyklu" />
+          <ScalarProperty Name="IloscGniazd" ColumnName="IloscGniazd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FormyMaszyny">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.FormyMaszyny">
+        <MappingFragment StoreEntitySet="FormyMaszyny">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IdFormy" ColumnName="IdFormy" />
+          <ScalarProperty Name="IdMaszyny" ColumnName="IdMaszyny" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GrupyWstawek">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.GrupyWstawek">
+        <MappingFragment StoreEntitySet="GrupyWstawek">
+          <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
+          <ScalarProperty Name="GrupaWstawki" ColumnName="GrupaWstawki" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IndeksBOM">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.IndeksBOM">
+        <MappingFragment StoreEntitySet="IndeksBOM">
+          <ScalarProperty Name="IdBOM" ColumnName="IdBOM" />
+          <ScalarProperty Name="Indeks" ColumnName="Indeks" />
+          <ScalarProperty Name="IdMaterialu_M1" ColumnName="IdMaterialu_M1" />
+          <ScalarProperty Name="Ilosc_M1" ColumnName="Ilosc_M1" />
+          <ScalarProperty Name="Udzial_M1" ColumnName="Udzial_M1" />
+          <ScalarProperty Name="IdMaterialu_M2" ColumnName="IdMaterialu_M2" />
+          <ScalarProperty Name="Ilosc_M2" ColumnName="Ilosc_M2" />
+          <ScalarProperty Name="Udzial_M2" ColumnName="Udzial_M2" />
+          <ScalarProperty Name="IdMaterialu_M3" ColumnName="IdMaterialu_M3" />
+          <ScalarProperty Name="Ilosc_M3" ColumnName="Ilosc_M3" />
+          <ScalarProperty Name="Udzial_M3" ColumnName="Udzial_M3" />
+          <ScalarProperty Name="IdMaterialu_M4" ColumnName="IdMaterialu_M4" />
+          <ScalarProperty Name="Ilosc_M4" ColumnName="Ilosc_M4" />
+          <ScalarProperty Name="Udzial_M4" ColumnName="Udzial_M4" />
+          <ScalarProperty Name="IdMaterialu_M5" ColumnName="IdMaterialu_M5" />
+          <ScalarProperty Name="Ilosc_M5" ColumnName="Ilosc_M5" />
+          <ScalarProperty Name="Udzial_M5" ColumnName="Udzial_M5" />
+          <ScalarProperty Name="IdMaterialu_M6" ColumnName="IdMaterialu_M6" />
+          <ScalarProperty Name="Ilosc_M6" ColumnName="Ilosc_M6" />
+          <ScalarProperty Name="Udzial_M6" ColumnName="Udzial_M6" />
+          <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Indeksy">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Indeksy">
+        <MappingFragment StoreEntitySet="Indeksy">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="KodIndeksu" ColumnName="KodIndeksu" />
+          <ScalarProperty Name="Rodzina" ColumnName="Rodzina" />
+          <ScalarProperty Name="Opis" ColumnName="Opis" />
+          <ScalarProperty Name="IdFormy" ColumnName="IdFormy" />
+          <ScalarProperty Name="PracaAutomatyczna" ColumnName="PracaAutomatyczna" />
+          <ScalarProperty Name="KodFormy" ColumnName="KodFormy" />
+          <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
+          <ScalarProperty Name="GrupaWstawki" ColumnName="GrupaWstawki" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Jednostki">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Jednostki">
+        <MappingFragment StoreEntitySet="Jednostki">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="KodJednostki" ColumnName="KodJednostki" />
+          <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KosztyMaterialowe">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.KosztyMaterialowe">
+        <MappingFragment StoreEntitySet="KosztyMaterialowe">
+          <ScalarProperty Name="IdMaterialu" ColumnName="IdMaterialu" />
+          <ScalarProperty Name="CenaJednostkowa" ColumnName="CenaJednostkowa" />
+          <ScalarProperty Name="DataModyfikacji" ColumnName="DataModyfikacji" />
+          <ScalarProperty Name="KodMaterialu" ColumnName="KodMaterialu" />
+          <ScalarProperty Name="Opis" ColumnName="Opis" />
+          <ScalarProperty Name="JednostkaMiary" ColumnName="JednostkaMiary" />
+          <ScalarProperty Name="IdKosztuMaterialowego" ColumnName="IdKosztuMaterialowego" />
+          <ScalarProperty Name="DataUtworzenia" ColumnName="DataUtworzenia" />
+          <ScalarProperty Name="Aktywne" ColumnName="Aktywne" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="KosztyOperacyjne">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.KosztyOperacyjne">
+        <MappingFragment StoreEntitySet="KosztyOperacyjne">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+          <ScalarProperty Name="NazwaOperacji" ColumnName="NazwaOperacji" />
+          <ScalarProperty Name="Koszt" ColumnName="Koszt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Kraje">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Kraje">
+        <MappingFragment StoreEntitySet="Kraje">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="KodKraju" ColumnName="KodKraju" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Maszyny">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Maszyny">
+        <MappingFragment StoreEntitySet="Maszyny">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="KodMaszyny" ColumnName="KodMaszyny" />
+          <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Materialy">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Materialy">
+        <MappingFragment StoreEntitySet="Materialy">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="KodMaterialu" ColumnName="KodMaterialu" />
+          <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+          <ScalarProperty Name="Cena" ColumnName="Cena" />
+          <ScalarProperty Name="Jednostka" ColumnName="Jednostka" />
+          <ScalarProperty Name="RodzajMaterialu" ColumnName="RodzajMaterialu" />
+          <ScalarProperty Name="KodJednostki" ColumnName="KodJednostki" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rozliczenia">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Rozliczenia">
+        <MappingFragment StoreEntitySet="Rozliczenia">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IdFaktury" ColumnName="IdFaktury" />
+          <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+          <ScalarProperty Name="NrZlecenia" ColumnName="NrZlecenia" />
+          <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+          <ScalarProperty Name="IloscZlecona" ColumnName="IloscZlecona" />
+          <ScalarProperty Name="DataWystawienia" ColumnName="DataWystawienia" />
+          <ScalarProperty Name="IloscWykonana" ColumnName="IloscWykonana" />
+          <ScalarProperty Name="Scrap" ColumnName="Scrap" />
+          <ScalarProperty Name="TKWPlan" ColumnName="TKWPlan" />
+          <ScalarProperty Name="TKWReal" ColumnName="TKWReal" />
+          <ScalarProperty Name="DataRozliczenia" ColumnName="DataRozliczenia" />
+          <ScalarProperty Name="IloscZafakturowana" ColumnName="IloscZafakturowana" />
+          <ScalarProperty Name="Kwota" ColumnName="Kwota" />
+          <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+          <ScalarProperty Name="NazwaWykonawcy" ColumnName="NazwaWykonawcy" />
+          <ScalarProperty Name="MaterialOdzyskany" ColumnName="MaterialOdzyskany" />
+          <ScalarProperty Name="MaterialUtylizacja" ColumnName="MaterialUtylizacja" />
+          <ScalarProperty Name="RzeczCzasCyklu" ColumnName="RzeczCzasCyklu" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Wstawki">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Wstawki">
+        <MappingFragment StoreEntitySet="Wstawki">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="KodWstawki" ColumnName="KodWstawki" />
+          <ScalarProperty Name="KodIndeksuWyrobu" ColumnName="KodIndeksuWyrobu" />
+          <ScalarProperty Name="GrupaWstawki" ColumnName="GrupaWstawki" />
+          <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Wykonawcy">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Wykonawcy">
+        <MappingFragment StoreEntitySet="Wykonawcy">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NrWykonawcy" ColumnName="NrWykonawcy" />
+          <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+          <ScalarProperty Name="NIP" ColumnName="NIP" />
+          <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+          <ScalarProperty Name="Kraj" ColumnName="Kraj" />
+          <ScalarProperty Name="Miasto" ColumnName="Miasto" />
+          <ScalarProperty Name="KodPocztowy" ColumnName="KodPocztowy" />
+          <ScalarProperty Name="Ulica" ColumnName="Ulica" />
+          <ScalarProperty Name="NrDomu" ColumnName="NrDomu" />
+          <ScalarProperty Name="IdKraju" ColumnName="IdKraju" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Zlecenia">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.Zlecenia">
+        <MappingFragment StoreEntitySet="Zlecenia">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NrZlecenia" ColumnName="NrZlecenia" />
+          <ScalarProperty Name="DataZlecenia" ColumnName="DataZlecenia" />
+          <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+          <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+          <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
+          <ScalarProperty Name="Uwagi" ColumnName="Uwagi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ZlecenieBOM">
+      <EntityTypeMapping TypeName="MVVMFirmaModel.ZlecenieBOM">
+        <MappingFragment StoreEntitySet="ZlecenieBOM">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+          <ScalarProperty Name="IdMaterialu" ColumnName="IdMaterialu" />
+          <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

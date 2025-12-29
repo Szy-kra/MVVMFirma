@@ -1,0 +1,202 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:MVVMFirma.ViewModels"
+                    xmlns:vw="clr-namespace:MVVMFirma.Views">
+
+    <!-- ✅ Styl przycisków menu -->
+    <Style TargetType="Button" x:Key="MenuButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="4"/>
+        <Setter Property="Padding" Value="8 4"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Cursor" Value="Hand"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="6">
+                        <ContentPresenter Margin="6,0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#33FFFFFF"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#55FFFFFF"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ✅ TOWARY -->
+    <DataTemplate DataType="{x:Type vm:WszystkieTowaryViewModel}">
+        <vw:WszystkieTowaryView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NowyTowarViewModel}">
+        <vw:NowyTowarView/>
+    </DataTemplate>
+
+    <!-- ✅ FAKTURY -->
+    <DataTemplate DataType="{x:Type vm:FakturyViewModel}">
+        <vw:FakturyView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NowaFakturaViewModel}">
+        <vw:NowaFakturaView/>
+    </DataTemplate>
+
+    <!-- ✅ INDEKSY -->
+    <DataTemplate DataType="{x:Type vm:ListaIndeksowViewModel}">
+        <vw:ListaIndeksowView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NowyIndeksViewModel}">
+        <vw:NowyIndeksView/>
+    </DataTemplate>
+
+    <!-- ✅ BOM -->
+    <DataTemplate DataType="{x:Type vm:BomViewModel}">
+        <vw:BomView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NowyBomViewModel}">
+        <vw:NowyBomView/>
+    </DataTemplate>
+
+    <!-- ✅ KOSZTY OPERACYJNE -->
+    <DataTemplate DataType="{x:Type vm:KosztyOperacyjneViewModel}">
+        <vw:KosztyOperacyjneView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NowyKosztOperacyjnyViewModel}">
+        <vw:NowyKosztOperacyjnyView/>
+    </DataTemplate>
+
+    <!-- ✅ KOSZTY MATERIAŁOWE -->
+    <DataTemplate DataType="{x:Type vm:KosztyMaterialoweViewModel}">
+        <vw:KosztyMaterialoweView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NowyKosztMaterialowyViewModel}">
+        <vw:NowyKosztMaterialowyView/>
+    </DataTemplate>
+
+    <!-- ✅ ZLECENIA -->
+    <DataTemplate DataType="{x:Type vm:ListaZlecenViewModel}">
+        <vw:ListaZlecenView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NoweZlecenieViewModel}">
+        <vw:NoweZlecenieView/>
+    </DataTemplate>
+
+    <!-- ✅ Rozliczenia -->
+    <DataTemplate DataType="{x:Type vm:RozliczenieViewModel}">
+        <vw:RozliczenieView/>
+    </DataTemplate>
+
+    <!-- ✅ WYKONAWCY -->
+    <DataTemplate DataType="{x:Type vm:WykonawcyViewModel}">
+        <vw:WykonawcyView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:NowyWykonawcaViewModel}">
+        <vw:NowyWykonawcaView/>
+    </DataTemplate>
+
+    <!-- ✅ MAIN WINDOW -->
+    <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
+        <vw:MainWindow/>
+    </DataTemplate>
+
+    <!-- ✅ Styl nagłówków paneli -->
+    <Style x:Key="MainHCCStyle" TargetType="{x:Type HeaderedContentControl}">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border Background="Blue"
+                            BorderBrush="LightGray"
+                            BorderThickness="1"
+                            CornerRadius="5"
+                            Margin="4"
+                            Padding="4">
+                        <TextBlock FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   Text="{TemplateBinding Content}" />
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
+                    <DockPanel>
+                        <ContentPresenter DockPanel.Dock="Top"
+                                          ContentSource="Header"
+                                          ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                        <ContentPresenter ContentSource="Content"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ✅ Styl borderów -->
+    <Style x:Key="MainBorderStyle" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="WhiteSmoke" />
+        <Setter Property="BorderBrush" Value="LightGray" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="5" />
+    </Style>
+
+    <!-- ✅ MENU (PRZYCISKI Z COMMANDAMI) -->
+    <DataTemplate x:Key="CommandsTemplate">
+        <ItemsControl ItemsSource="{Binding}" Margin="6,2">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Style="{StaticResource MenuButton}"
+                            Content="{Binding DisplayName}"
+                            Command="{Binding Command}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DataTemplate>
+
+    <!-- ✅ ZAMYKALNE ZAKŁADKI -->
+    <DataTemplate x:Key="ClosableTabItemTemplate">
+        <DockPanel Width="120">
+            <Button Command="{Binding CloseCommand}"
+                    Content="X"
+                    Cursor="Hand"
+                    DockPanel.Dock="Right"
+                    FontSize="9"
+                    FontWeight="Bold"
+                    Width="16" Height="16" />
+            <ContentPresenter Content="{Binding DisplayName}"
+                              VerticalAlignment="Center" />
+        </DockPanel>
+    </DataTemplate>
+
+    <!-- ✅ PRZESTRZEŃ ROBOCZA -->
+    <DataTemplate x:Key="WorkspacesTemplate">
+        <TabControl ItemsSource="{Binding}"
+                    IsSynchronizedWithCurrentItem="True"
+                    ItemTemplate="{StaticResource ClosableTabItemTemplate}"
+                    Margin="4" />
+    </DataTemplate>
+
+</ResourceDictionary>

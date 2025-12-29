@@ -1,0 +1,276 @@
+﻿<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Ustawienia projektu -->
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{435572FA-D2A2-48CA-B905-4A7899337063}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MVVMFirma</RootNamespace>
+    <AssemblyName>MVVMFirma</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <!-- Ścieżki dla Debug/Release -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <IntermediateOutputPath>obj\x86\Debug\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <IntermediateOutputPath>obj\x86\Release\</IntermediateOutputPath>
+  </PropertyGroup>
+  <!-- Referencje WPF + System -->
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Data" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+  <!-- Referencje EntityFramework -->
+  <!-- ViewModels -->
+  <ItemGroup>
+    <Compile Include="Helper\Messenger.cs" />
+    <Compile Include="Models\Faktury.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Formy.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FormyMaszyny.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GrupyWstawek.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IndeksBOM.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Indeksy.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Jednostki.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KosztyMaterialowe.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KosztyOperacyjne.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Kraje.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Maszyny.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Materialy.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelMVVMFirma.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelMVVMFirma.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelMVVMFirma.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ModelMVVMFirma.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelMVVMFirma.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Rozliczenia.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Wstawki.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Wykonawcy.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Zlecenia.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ZlecenieBOM.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BomViewModel.cs" />
+    <Compile Include="ViewModels\CommandViewModel.cs" />
+    <Compile Include="ViewModels\FakturyViewModel.cs" />
+    <Compile Include="ViewModels\FormyViewModel.cs" />
+    <Compile Include="ViewModels\KosztyMaterialoweViewModel.cs" />
+    <Compile Include="ViewModels\KosztyOperacyjneViewModel.cs" />
+    <Compile Include="ViewModels\ListaIndeksowViewModel.cs" />
+    <Compile Include="ViewModels\ListaZlecenViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NowaFakturaViewModel.cs" />
+    <Compile Include="ViewModels\NowaFormaViewModel.cs" />
+    <Compile Include="ViewModels\NoweZlecenieViewModel.cs" />
+    <Compile Include="ViewModels\NowyBomViewModel.cs" />
+    <Compile Include="ViewModels\NowyIndeksViewModel.cs" />
+    <Compile Include="ViewModels\NowyKosztMaterialowyViewModel.cs" />
+    <Compile Include="ViewModels\NowyKosztOperacyjnyViewModel.cs" />
+    <Compile Include="ViewModels\NowyTowarViewModel.cs" />
+    <Compile Include="ViewModels\RozliczenieViewModel.cs" />
+    <Compile Include="ViewModels\WorkspaceViewModel.cs" />
+    <Compile Include="ViewModels\WszystkieTowaryViewModel.cs" />
+    <Compile Include="ViewModels\WykonawcyViewModel.cs" />
+    <Compile Include="ViewModels\NowyWykonawcaViewModel.cs" />
+  </ItemGroup>
+  <!-- Helper -->
+  <ItemGroup>
+    <Compile Include="Helper\BaseCommand.cs" />
+  </ItemGroup>
+  <!-- App.xaml -->
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <!-- Views -->
+  <ItemGroup>
+    <Page Include="Views\NowyKosztOperacyjnyView.xaml" />
+    <Compile Include="Views\NowyKosztOperacyjnyView.xaml.cs">
+      <DependentUpon>NowyKosztOperacyjnyView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\Formy.xaml" />
+    <Compile Include="Views\Formy.xaml.cs">
+      <DependentUpon>Formy.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\FakturyView.xaml" />
+    <Compile Include="Views\FakturyView.xaml.cs">
+      <DependentUpon>FakturyView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\BomView.xaml" />
+    <Compile Include="Views\BomView.xaml.cs">
+      <DependentUpon>BomView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\KosztyMaterialoweView.xaml" />
+    <Compile Include="Views\KosztyMaterialoweView.xaml.cs">
+      <DependentUpon>KosztyMaterialoweView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\KosztyOperacyjneView.xaml" />
+    <Compile Include="Views\KosztyOperacyjneView.xaml.cs">
+      <DependentUpon>KosztyOperacyjneView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\ListaIndeksowView.xaml" />
+    <Compile Include="Views\ListaIndeksowView.xaml.cs">
+      <DependentUpon>ListaIndeksowView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\ListaZlecenView.xaml" />
+    <Compile Include="Views\ListaZlecenView.xaml.cs">
+      <DependentUpon>ListaZlecenView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\MainWindow.xaml" />
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\MainWindowResources.xaml" />
+    <Page Include="Views\NowaFormaView.xaml" />
+    <Compile Include="Views\NowaFormaView.xaml.cs">
+      <DependentUpon>NowaFormaView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NowaFakturaView.xaml" />
+    <Compile Include="Views\NowaFakturaView.xaml.cs">
+      <DependentUpon>NowaFakturaView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NoweZlecenieView.xaml" />
+    <Compile Include="Views\NoweZlecenieView.xaml.cs">
+      <DependentUpon>NoweZlecenieView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NowyBomView.xaml" />
+    <Compile Include="Views\NowyBomView.xaml.cs">
+      <DependentUpon>NowyBomView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NowyIndeksView.xaml" />
+    <Compile Include="Views\NowyIndeksView.xaml.cs">
+      <DependentUpon>NowyIndeksView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NowyKosztMaterialowyView.xaml" />
+    <Compile Include="Views\NowyKosztMaterialowyView.xaml.cs">
+      <DependentUpon>NowyKosztMaterialowyView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NowyTowarView.xaml" />
+    <Compile Include="Views\NowyTowarView.xaml.cs">
+      <DependentUpon>NowyTowarView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NowyWykonawcaView.xaml" />
+    <Compile Include="Views\NowyWykonawcaView.xaml.cs">
+      <DependentUpon>NowyWykonawcaView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\RozliczenieView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WszystkieTowaryView.xaml" />
+    <Compile Include="Views\RozliczenieView.xaml.cs">
+      <DependentUpon>RozliczenieView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WszystkieTowaryView.xaml.cs">
+      <DependentUpon>WszystkieTowaryView.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\WykonawcyView.xaml" />
+    <Compile Include="Views\WykonawcyView.xaml.cs">
+      <DependentUpon>WykonawcyView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <EntityDeploy Include="Models\ModelMVVMFirma.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ModelMVVMFirma.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Models\ModelMVVMFirma.edmx.diagram">
+      <DependentUpon>ModelMVVMFirma.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Models\ModelMVVMFirma.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModelMVVMFirma.edmx</DependentUpon>
+      <LastGenOutput>ModelMVVMFirma.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ModelMVVMFirma.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ModelMVVMFirma.edmx</DependentUpon>
+      <LastGenOutput>ModelMVVMFirma.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <!-- Import MSBuild -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+</Project>

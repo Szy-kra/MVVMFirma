@@ -1,0 +1,147 @@
+﻿<UserControl x:Class="MVVMFirma.Views.RozliczenieView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Background="White">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="Opis detalu" HorizontalAlignment="Center" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Grid.Row="1" Text="{Binding Zlecenie.Indeksy.Opis}" MinHeight="60" FontSize="15" TextAlignment="Center" VerticalContentAlignment="Center" TextWrapping="Wrap" IsReadOnly="True" Background="#F9F9F9" Padding="10"/>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="5">
+                    <TextBlock Text="Nr zlecenia" FontWeight="Bold"/>
+                    <TextBox Text="{Binding Zlecenie.NrZlecenia}" IsReadOnly="True" Background="#F0F0F0" Margin="0,0,0,10"/>
+                    <TextBlock Text="Indeks" FontWeight="Bold"/>
+                    <TextBox Text="{Binding Zlecenie.Indeksy.KodIndeksu}" IsReadOnly="True" Background="#F0F0F0" Margin="0,0,0,10"/>
+                    <TextBlock Text="Ilość zlecona" FontWeight="Bold"/>
+                    <TextBox Text="{Binding Zlecenie.Ilosc}" IsReadOnly="True" Background="#F0F0F0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="5">
+                    <TextBlock Text="Nr formy" FontWeight="Bold"/>
+                    <TextBox Text="{Binding Zlecenie.Indeksy.KodFormy}" IsReadOnly="True" Background="#F0F0F0" Margin="0,0,0,10"/>
+                    <TextBlock Text="Wstawki" FontWeight="Bold"/>
+                    <TextBox Text="{Binding Zlecenie.Indeksy.GrupaWstawki}" IsReadOnly="True" Background="#F0F0F0" Margin="0,0,0,10"/>
+                    <TextBlock Text="TKW plan" HorizontalAlignment="Center" FontWeight="Bold"/>
+                    <TextBox Text="{Binding TkwPlan}" Height="40" Background="#FFF7D7" VerticalContentAlignment="Center" TextAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="5">
+                    <TextBlock Text="Ilość gniazd" FontWeight="Bold"/>
+                    <TextBox Text="{Binding IloscGniazd}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Ilość wykonana" FontWeight="Bold"/>
+                    <TextBox Text="{Binding IloscWykonana}" Margin="0,0,0,10"/>
+                    <TextBlock Text="TKW real" HorizontalAlignment="Center" FontWeight="Bold"/>
+                    <TextBox Text="{Binding TkwReal}" Height="40" Background="#E5FFD9" VerticalContentAlignment="Center" TextAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Margin="5">
+                    <TextBlock Text="Data wystawienia" FontWeight="Bold"/>
+                    <DatePicker SelectedDate="{Binding DataWystawienia}" Margin="0,0,0,10"/>
+                    <TextBlock Text="Data wykonania" FontWeight="Bold"/>
+                    <DatePicker SelectedDate="{Binding DataWykonania}"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="5">
+                    <TextBlock Text="Koszt usługi"/>
+                    <TextBox Text="{Binding KosztUslugi}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5">
+                    <TextBlock Text="Koszt transportu"/>
+                    <TextBox Text="{Binding KosztTransportu}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="5">
+                    <TextBlock Text="Koszt amortyzacji"/>
+                    <TextBox Text="{Binding KosztAmortyzacji}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Margin="5">
+                    <TextBlock Text="Inne"/>
+                    <TextBox Text="{Binding KosztInne}"/>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="3" Margin="0,0,0,20">
+                <TextBlock Text="Faktury do zlecenia" FontSize="18" FontWeight="Bold" Margin="0,0,0,5"/>
+                <DataGrid ItemsSource="{Binding Faktury}" AutoGenerateColumns="False" CanUserAddRows="True" GridLinesVisibility="All" BorderBrush="Black" BorderThickness="1" RowHeight="28">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nr faktury" Binding="{Binding NrFaktury}" Width="200"/>
+                        <DataGridTextColumn Header="Kwota" Binding="{Binding Kwota}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <StackPanel Grid.Row="4" Margin="0,0,0,20">
+                <TextBlock Text="Zestawienie surowców (BOM)" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                <DataGrid ItemsSource="{Binding ElementyBOM}" 
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False" 
+                          GridLinesVisibility="All" 
+                          BorderBrush="Black" 
+                          BorderThickness="1" 
+                          IsReadOnly="True"
+                          MinHeight="150">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Lp" Binding="{Binding Lp}" Width="40"/>
+                        <DataGridTextColumn Header="Materiał / Surowiec" Binding="{Binding Material}" Width="*"/>
+                        <DataGridTextColumn Header="Udział %" Binding="{Binding UdzialProcentowy, StringFormat={}{0}%}" Width="80"/>
+                        <DataGridTextColumn Header="Ilość / szt." Binding="{Binding IloscNaSzt, StringFormat={}{0:N4}}" Width="100"/>
+                        <DataGridTextColumn Header="Zapotrzebowanie" Binding="{Binding IloscPotrzebna, StringFormat={}{0:N2}}" Width="150">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Foreground" Value="DarkGreen"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <Grid Grid.Row="5" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Content="Zapisz i wyjdź" Width="150" Height="40" Margin="10,0" Background="#C8E6C9" FontWeight="Bold" Command="{Binding ZapiszCommand}"/>
+                <Button Grid.Column="2" Content="Drukuj" Width="120" Height="40" Margin="10,0" Background="#BBDEFB" FontWeight="Bold" Command="{Binding DrukujCommand}"/>
+                <Button Grid.Column="3" Content="Wyjdź" Width="120" Height="40" Margin="10,0" Background="#FFCDD2" FontWeight="Bold" Command="{Binding WyjdzCommand}"/>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

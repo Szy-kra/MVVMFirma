@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="MVVMFirma.Views.ListaZlecenView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="1200">
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" Background="#F5F5F5">
+            <Label Content="Kolumna:" VerticalAlignment="Center" Margin="5"/>
+            <ComboBox Width="200" Margin="5"
+                      ItemsSource="{Binding DostepneKolumny}"
+                      SelectedItem="{Binding WybranaKolumna}"/>
+            <Label Content="Szukaj:" VerticalAlignment="Center" Margin="5"/>
+            <TextBox Width="300" Margin="5"
+                     Text="{Binding FrazaFiltrowania, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalContentAlignment="Center"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding ListaZlecen}"
+                  SelectedItem="{Binding WybraneZlecenie}" 
+                  AutoGenerateColumns="False"
+                  Margin="10"
+                  IsReadOnly="True"
+                  SelectionMode="Single">
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Opcje">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Szczegóły"
+                                    Command="{Binding DataContext.PokazSzczegolyCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    Padding="10,2"
+                                    Background="LightBlue"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Nr Zlecenia" Binding="{Binding NrZlecenia}"/>
+                <DataGridTextColumn Header="Indeks" Binding="{Binding Indeksy.Nazwa}"/>
+                <DataGridTextColumn Header="Ilość" Binding="{Binding Ilosc}"/>
+                <DataGridTextColumn Header="Wykonawca" Binding="{Binding Wykonawcy.Nazwa}"/>
+                <DataGridTextColumn Header="Data Zlecenia" Binding="{Binding DataZlecenia, StringFormat={}{0:yyyy-MM-dd}}"/>
+                
+                
+                <DataGridTextColumn Header="Uwagi" Binding="{Binding Uwagi}"/>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

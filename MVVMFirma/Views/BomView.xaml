@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="MVVMFirma.Views.BomView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             Background="White">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Pełne zestawienie BOM (Surowce, Ilości, Jednostki)" 
+                   FontSize="18" FontWeight="Bold" Margin="0,0,10,15"/>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding ListaBOM}" 
+                  AutoGenerateColumns="False" IsReadOnly="True" 
+                  GridLinesVisibility="All" AlternatingRowBackground="#F2F2F2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Indeks" Binding="{Binding Indeks, TargetNullValue='brak'}" Width="150" FontWeight="Bold"/>
+
+                <DataGridTextColumn Header="Surowiec 1" Binding="{Binding Materialy.Nazwa, TargetNullValue='-'}" Width="150"/>
+                <DataGridTextColumn Header="Ilość 1" Binding="{Binding Ilosc_M1, StringFormat={}{0:N4}}" Width="60"/>
+                <DataGridTextColumn Header="Jm 1" Binding="{Binding Materialy.KodJednostki, TargetNullValue='-'}" Width="45"/>
+
+                <DataGridTextColumn Header="Surowiec 2" Binding="{Binding Materialy1.Nazwa, TargetNullValue='-'}" Width="150"/>
+                <DataGridTextColumn Header="Ilość 2" Binding="{Binding Ilosc_M2, StringFormat={}{0:N4}}" Width="60"/>
+                <DataGridTextColumn Header="Jm 2" Binding="{Binding Materialy1.KodJednostki, TargetNullValue='-'}" Width="45"/>
+
+                <DataGridTextColumn Header="Surowiec 3" Binding="{Binding Materialy2.Nazwa, TargetNullValue='-'}" Width="150"/>
+                <DataGridTextColumn Header="Ilość 3" Binding="{Binding Ilosc_M3, StringFormat={}{0:N4}}" Width="60"/>
+                <DataGridTextColumn Header="Jm 3" Binding="{Binding Materialy2.KodJednostki, TargetNullValue='-'}" Width="45"/>
+
+                <DataGridTextColumn Header="Surowiec 4" Binding="{Binding Materialy3.Nazwa, TargetNullValue='-'}" Width="150"/>
+                <DataGridTextColumn Header="Ilość 4" Binding="{Binding Ilosc_M4, StringFormat={}{0:N4}}" Width="60"/>
+                <DataGridTextColumn Header="Jm 4" Binding="{Binding Materialy3.KodJednostki, TargetNullValue='-'}" Width="45"/>
+
+                <DataGridTextColumn Header="Surowiec 5" Binding="{Binding Materialy4.Nazwa, TargetNullValue='-'}" Width="150"/>
+                <DataGridTextColumn Header="Ilość 5" Binding="{Binding Ilosc_M5, StringFormat={}{0:N4}}" Width="60"/>
+                <DataGridTextColumn Header="Jm 5" Binding="{Binding Materialy4.KodJednostki, TargetNullValue='-'}" Width="45"/>
+
+                <DataGridTextColumn Header="Surowiec 6" Binding="{Binding Materialy5.Nazwa, TargetNullValue='-'}" Width="150"/>
+                <DataGridTextColumn Header="Ilość 6" Binding="{Binding Ilosc_M6, StringFormat={}{0:N4}}" Width="60"/>
+                <DataGridTextColumn Header="Jm 6" Binding="{Binding Materialy5.KodJednostki, TargetNullValue='-'}" Width="45"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
