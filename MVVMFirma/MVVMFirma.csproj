@@ -45,7 +45,18 @@
   <!-- Referencje EntityFramework -->
   <!-- ViewModels -->
   <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helper\BOMCalculator.cs" />
     <Compile Include="Helper\Messenger.cs" />
+    <Compile Include="Helper\ZlecenieHelper.cs" />
+    <Compile Include="Models\CennikUslugWykonawcow.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Faktury.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
@@ -64,7 +75,13 @@
     <Compile Include="Models\Indeksy.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\IndeksyParametry.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Jednostki.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KonfiguracjaSystemu.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KosztyMaterialowe.cs">
@@ -74,6 +91,9 @@
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Kraje.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LogistykaWykonawcow.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Maszyny.cs">
@@ -97,12 +117,34 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ModelMVVMFirma.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParametryLogistyczne.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RodzajeMaterialow.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Rozliczenia.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Shared\DisplayBom.cs" />
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Sp_ZapotrzebowanieProdukcyjne_Result.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UstawieniaDomyslne.cs">
+      <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Validatory\BiznesValidator.cs" />
+    <Compile Include="Models\Validatory\StringValidator.cs" />
+    <Compile Include="Models\Validatory\Validator.cs" />
     <Compile Include="Models\Wstawki.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
@@ -263,6 +305,7 @@
       <LastGenOutput>ModelMVVMFirma.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <!-- Import MSBuild -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

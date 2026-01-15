@@ -4,51 +4,57 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5e2e36f8ff6845f0b060043feab41bae" Name="Diagram1">
-        <EntityTypeShape EntityType="MVVMFirmaModel.Faktury" Width="1.5" PointX="8.25" PointY="19.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Formy" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.FormyMaszyny" Width="1.5" PointX="6" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.GrupyWstawek" Width="1.5" PointX="0.75" PointY="11.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.IndeksBOM" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Indeksy" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Jednostki" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.KosztyMaterialowe" Width="1.5" PointX="5.25" PointY="14.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.KosztyOperacyjne" Width="1.5" PointX="8.25" PointY="23.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Kraje" Width="1.5" PointX="1.5" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Maszyny" Width="1.5" PointX="3.75" PointY="24.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Materialy" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Rozliczenia" Width="1.5" PointX="10.5" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.sysdiagrams" Width="1.5" PointX="8.75" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Wstawki" Width="1.5" PointX="3" PointY="12" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Wykonawcy" Width="1.5" PointX="3.75" PointY="18.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.Zlecenia" Width="1.5" PointX="6" PointY="18.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MVVMFirmaModel.ZlecenieBOM" Width="1.5" PointX="8.25" PointY="7.5" IsExpanded="true" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__Faktury__IdWykon__52593CB8" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__Faktury__IdZlece__534D60F1" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Faktury" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__FormyMasz__IdFor__02084FDA" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Indeksy_Formy" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__FormyMasz__IdMas__02FC7413" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Indeksy_GrupyWstawek" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Wstawki_GrupyWstawek" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_Indeksy" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_M1" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_M2" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_M3" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_M4" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_M5" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_M6" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__Zlecenia__IdInde__45F365D3" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Indeksy" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Materialy_Jednostki" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__KosztyMat__IdMat__3587F3E0" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_KosztyOperacyjne_Zlecenia" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__Wykonawcy__IdKra__160F4887" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__ZlecenieB__IdMat__5CD6CB2B" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Wykonawcy" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Zlecenia" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK_Zlecenia_Wykonawcy" ManuallyRouted="false" />
-        <AssociationConnector Association="MVVMFirmaModel.FK__ZlecenieB__IdZle__5BE2A6F2" ManuallyRouted="false" />
+      <Diagram DiagramId="5e2e36f8ff6845f0b060043feab41bae" Name="Diagram1" ZoomLevel="94">
+        <EntityTypeShape EntityType="MVVMFirmaModel.CennikUslugWykonawcow" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Faktury" Width="1.5" PointX="13.5" PointY="11.25" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Formy" Width="1.5" PointX="3.75" PointY="7.375" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.FormyMaszyny" Width="1.5" PointX="6" PointY="7.625" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.GrupyWstawek" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Indeksy" Width="1.5" PointX="6" PointY="10.625" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.IndeksyParametry" Width="1.5" PointX="8.25" PointY="19.125" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Jednostki" Width="1.5" PointX="6.75" PointY="2.5" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.KonfiguracjaSystemu" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.KosztyMaterialowe" Width="1.5" PointX="11.25" PointY="3.125" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.KosztyOperacyjne" Width="1.5" PointX="10.5" PointY="14.875" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Kraje" Width="1.5" PointX="3.75" PointY="16.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.LogistykaWykonawcow" Width="1.5" PointX="8.25" PointY="23" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Maszyny" Width="1.5" PointX="3.75" PointY="4.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Materialy" Width="1.5" PointX="9" PointY="2.875" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.ParametryLogistyczne" Width="1.5" PointX="8.25" PointY="15.375" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.RodzajeMaterialow" Width="1.5" PointX="6.75" PointY="5.125" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Rozliczenia" Width="1.5" PointX="15.75" PointY="9.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.UstawieniaDomyslne" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Wstawki" Width="1.5" PointX="3" PointY="11.5" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Wykonawcy" Width="1.5" PointX="6" PointY="15.5" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.Zlecenia" Width="1.5" PointX="8.25" PointY="10.875" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.ZlecenieBOM" Width="1.5" PointX="10.5" PointY="7.5" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__Faktury__IdWykon__52593CB8" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__Faktury__IdZlece__534D60F1" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Faktury" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__FormyMasz__IdFor__02084FDA" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Indeksy_Formy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__FormyMasz__IdMas__02FC7413" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Indeksy_GrupyWstawek" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Wstawki_GrupyWstawek" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__Zlecenia__IdInde__45F365D3" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Parametry_Indeksy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Indeksy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Materialy_Jednostki" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__KosztyMat__IdMat__3587F3E0" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_KosztyOperacyjne_Zlecenia" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__Wykonawcy__IdKra__160F4887" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Logistyka_Wykonawcy_Unique_Log" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__ZlecenieB__IdMat__5CD6CB2B" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Materialy_Rodzaje" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Logistyka_Wykonawcy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Wykonawcy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Rozliczenia_Zlecenia" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Zlecenia_Wykonawcy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK__ZlecenieB__IdZle__5BE2A6F2" />
+        <EntityTypeShape EntityType="MVVMFirmaModel.IndeksBOM" Width="1.5" PointX="13.25" PointY="7.375" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_Indeksy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_Materialy" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

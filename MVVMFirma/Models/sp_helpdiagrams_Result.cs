@@ -10,18 +10,13 @@
 namespace MVVMFirma.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class KosztyOperacyjne
+    public partial class sp_helpdiagrams_Result
     {
-        public int Id { get; set; }
-        public int IdZlecenia { get; set; }
-        public string NazwaOperacji { get; set; }
-        public Nullable<decimal> Koszt { get; set; }
-        public string TypKosztu { get; set; }
-        public Nullable<System.DateTime> DataWpisu { get; set; }
-        public Nullable<int> IdWykonawcy { get; set; }
-    
-        public virtual Zlecenia Zlecenia { get; set; }
+        public string Database { get; set; }
+        public string Name { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

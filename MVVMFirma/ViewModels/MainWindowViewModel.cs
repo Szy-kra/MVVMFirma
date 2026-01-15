@@ -173,9 +173,15 @@ namespace MVVMFirma.ViewModels
 
         private void OtworzRozliczenie(Zlecenia zlecenie)
         {
-            // Tworzymy nowy ViewModel rozliczenia, przekazując mu dane konkretnego zlecenia
+            // Tworzymy nowy ViewModel rozliczenia. 
+            // Jeśli nadal masz błąd CS1729, upewnij się, że w RozliczenieViewModel.cs 
+            // konstruktor przyjmuje (Zlecenia zlecenie).
             var workspace = new RozliczenieViewModel(zlecenie);
-            this.Workspaces.Add(workspace);
+
+            // Rzutowanie na WorkspaceViewModel naprawia błąd CS1503 (Argument 1: cannot convert)
+            // pod warunkiem, że RozliczenieViewModel dziedziczy po WorkspaceViewModel.
+            this.Workspaces.Add(workspace as WorkspaceViewModel);
+
             this.SetActiveWorkspace(workspace);
         }
 

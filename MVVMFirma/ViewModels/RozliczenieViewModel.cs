@@ -1,87 +1,102 @@
-﻿using MVVMFirma.Models;
+﻿using MVVMFirma.Helper;
+using MVVMFirma.Models;
+using MVVMFirma.Models.Shared;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MVVMFirma.ViewModels
 {
     public class RozliczenieViewModel : WorkspaceViewModel
     {
-        private Zlecenia _Zlecenie;
+        #region Properties
+        private Zlecenia _zlecenie;
         public Zlecenia Zlecenie
         {
-            get => _Zlecenie;
-            set
+            get => _zlecenie;
+            set { _zlecenie = value; OnPropertyChanged(); }
+        }
+
+        // Kolekcje zgodne z Twoim modelem DisplayBom i relacjami SQL
+        public ObservableCollection<DisplayBom> BomItems { get; set; }
+        public ObservableCollection<Faktury> Faktury { get; set; }
+        public ObservableCollection<ArkuszRozliczeniowyItem> ArkuszRozliczeniowy { get; set; }
+
+        public ICommand SaveCommand { get; }
+        #endregion
+
+        public RozliczenieViewModel(Zlecenia wybraneZlecenie) : base()
+        {
+            if (wybraneZlecenie == null) return;
+
+            // Inicjalizacja list
+            BomItems = new ObservableCollection<DisplayBom>();
+            Faktury = new ObservableCollection<Faktury>();
+            ArkuszRozliczeniowy = new ObservableCollection<ArkuszRozliczeniowyItem>();
+
+            // Pobieranie danych z bazy z uwzględnieniem relacji
+            this.Zlecenie = db.Zlecenia
+                .Include(z => z.Indeksy.Formy)
+                .Include(z => z.Indeksy.IndeksBOM.Select(b => b.Materialy.Jednostki))
+                .Include(z => z.Faktury)
+                .FirstOrDefault(z => z.Id == wybraneZlecenie.Id);
+
+            this.DisplayName = "Rozliczenie: " + (Zlecenie?.NrZlecenia ?? "");
+
+            SaveCommand = new BaseCommand(() => SaveAction());
+
+            OdswiezDane();
+        }
+
+        private void OdswiezDane()
+        {
+            if (Zlecenie?.Indeksy == null) return;
+
+            // 1. BOM - używamy Twojego kalkulatora. 1m to decimal (ilość na 1 sztukę)
+            var listaBOM = db.IndeksBOM
+                .Where(b => b.IdIndeksu == Zlecenie.IdIndeksu)
+                .Include(b => b.Materialy.Jednostki)
+                .ToList();
+
+            var wynikiBOM = BOMCalculator.ObliczZapotrzebowanie(listaBOM, "1");
+
+            BomItems.Clear();
+            foreach (var item in wynikiBOM) BomItems.Add(item);
+            // Uzupełniamy do 5 wierszy dla XAML (używając Twojego konstruktora)
+            while (BomItems.Count < 5) BomItems.Add(new DisplayBom("", 0, "", 0));
+
+            // 2. Faktury
+            foreach (var f in Zlecenie.Faktury) Faktury.Add(f);
+            while (Faktury.Count < 5) Faktury.Add(new Faktury());
+
+            // 3. Arkusz (Plan/Wykonanie)
+            foreach (var b in listaBOM)
             {
-                _Zlecenie = value;
-                OnPropertyChanged(nameof(Zlecenie));
-                if (_Zlecenie != null)
+                ArkuszRozliczeniowy.Add(new ArkuszRozliczeniowyItem
                 {
-                    ZaladujBOMDlaIndeksu(_Zlecenie.IdIndeksu);
-                }
-            }
-        }
-
-        private ObservableCollection<dynamic> _ElementyBOM;
-        public ObservableCollection<dynamic> ElementyBOM
-        {
-            get => _ElementyBOM;
-            set
-            {
-                _ElementyBOM = value;
-                OnPropertyChanged(nameof(ElementyBOM));
-            }
-        }
-
-        // TUTAJ POPRAWIŁEM NAZWĘ NA TĄ ZE ZDJĘCIA
-        private MVVMFirmaEntities13 _db = new MVVMFirmaEntities13();
-
-        public RozliczenieViewModel()
-        {
-            base.DisplayName = "Rozliczenie";
-        }
-
-        public RozliczenieViewModel(Zlecenia zlecenie)
-        {
-            base.DisplayName = "Rozliczenie: " + (zlecenie?.NrZlecenia ?? "");
-            this.Zlecenie = zlecenie;
-        }
-
-        private void ZaladujBOMDlaIndeksu(int? idIndeksu)
-        {
-            if (!idIndeksu.HasValue) return;
-
-            // Szukamy danych w tabeli IndeksBOM
-            var bom = _db.IndeksBOM.FirstOrDefault(b => b.IdIndeksu == idIndeksu);
-            if (bom == null) return;
-
-            var nowaLista = new ObservableCollection<dynamic>();
-            decimal iloscZlecenia = Zlecenie?.Ilosc ?? 0;
-
-            // Mapujemy wszystkie 6 surowców dla PANA
-            DodajJesliIstnieje(nowaLista, 1, bom.Materialy?.Nazwa, bom.Udzial_M1, bom.Ilosc_M1, iloscZlecenia);
-            DodajJesliIstnieje(nowaLista, 2, bom.Materialy1?.Nazwa, bom.Udzial_M2, bom.Ilosc_M2, iloscZlecenia);
-            DodajJesliIstnieje(nowaLista, 3, bom.Materialy2?.Nazwa, bom.Udzial_M3, bom.Ilosc_M3, iloscZlecenia);
-            DodajJesliIstnieje(nowaLista, 4, bom.Materialy3?.Nazwa, bom.Udzial_M4, bom.Ilosc_M4, iloscZlecenia);
-            DodajJesliIstnieje(nowaLista, 5, bom.Materialy4?.Nazwa, bom.Udzial_M5, bom.Ilosc_M5, iloscZlecenia);
-            DodajJesliIstnieje(nowaLista, 6, bom.Materialy5?.Nazwa, bom.Udzial_M6, bom.Ilosc_M6, iloscZlecenia);
-
-            this.ElementyBOM = nowaLista;
-        }
-
-        private void DodajJesliIstnieje(ObservableCollection<dynamic> lista, int lp, string nazwa, decimal? udzial, decimal? naSzt, decimal calosc)
-        {
-            // Jeśli materiał istnieje w bazie, dodajemy go do tabeli widocznej w oknie
-            if (!string.IsNullOrEmpty(nazwa))
-            {
-                lista.Add(new
-                {
-                    Lp = lp,
-                    Material = nazwa,
-                    UdzialProcentowy = udzial,
-                    IloscNaSzt = naSzt,
-                    IloscPotrzebna = (naSzt ?? 0) * calosc
+                    Material = b.Materialy?.Nazwa,
+                    ZaplanowaneIlosc = b.Ilosc * Zlecenie.Ilosc
                 });
             }
+            while (ArkuszRozliczeniowy.Count < 10) ArkuszRozliczeniowy.Add(new ArkuszRozliczeniowyItem());
         }
+
+        private void SaveAction()
+        {
+            db.SaveChanges();
+        }
+    }
+
+    // Klasa pomocnicza tylko dla dolnej tabeli (bo tam nie masz modelu w bazie)
+    public class ArkuszRozliczeniowyItem
+    {
+        public string Material { get; set; }
+        public decimal? ZaplanowaneIlosc { get; set; }
+        public decimal? ZaplanowaneKoszt { get; set; }
+        public decimal? WykonaneIlosc { get; set; }
+        public decimal? WykonaneKoszt { get; set; }
+        public decimal? ZafakturowaneIlosc { get; set; }
+        public decimal? ZafakturowaneKoszt { get; set; }
     }
 }

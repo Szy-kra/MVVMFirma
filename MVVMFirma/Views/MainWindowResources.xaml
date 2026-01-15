@@ -3,7 +3,6 @@
                     xmlns:vm="clr-namespace:MVVMFirma.ViewModels"
                     xmlns:vw="clr-namespace:MVVMFirma.Views">
 
-    <!-- ✅ Styl przycisków menu -->
     <Style TargetType="Button" x:Key="MenuButton">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
@@ -12,7 +11,7 @@
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Margin" Value="4"/>
-        <Setter Property="Padding" Value="8 4"/>
+        <Setter Property="Padding" Value="8,4"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Cursor" Value="Hand"/>
 
@@ -21,7 +20,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
                             CornerRadius="6">
-                        <ContentPresenter Margin="6,0"/>
+                        <ContentPresenter Margin="6,0" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -37,7 +36,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ✅ TOWARY -->
     <DataTemplate DataType="{x:Type vm:WszystkieTowaryViewModel}">
         <vw:WszystkieTowaryView/>
     </DataTemplate>
@@ -46,7 +44,6 @@
         <vw:NowyTowarView/>
     </DataTemplate>
 
-    <!-- ✅ FAKTURY -->
     <DataTemplate DataType="{x:Type vm:FakturyViewModel}">
         <vw:FakturyView/>
     </DataTemplate>
@@ -55,7 +52,6 @@
         <vw:NowaFakturaView/>
     </DataTemplate>
 
-    <!-- ✅ INDEKSY -->
     <DataTemplate DataType="{x:Type vm:ListaIndeksowViewModel}">
         <vw:ListaIndeksowView/>
     </DataTemplate>
@@ -64,7 +60,6 @@
         <vw:NowyIndeksView/>
     </DataTemplate>
 
-    <!-- ✅ BOM -->
     <DataTemplate DataType="{x:Type vm:BomViewModel}">
         <vw:BomView/>
     </DataTemplate>
@@ -73,7 +68,6 @@
         <vw:NowyBomView/>
     </DataTemplate>
 
-    <!-- ✅ KOSZTY OPERACYJNE -->
     <DataTemplate DataType="{x:Type vm:KosztyOperacyjneViewModel}">
         <vw:KosztyOperacyjneView/>
     </DataTemplate>
@@ -82,7 +76,6 @@
         <vw:NowyKosztOperacyjnyView/>
     </DataTemplate>
 
-    <!-- ✅ KOSZTY MATERIAŁOWE -->
     <DataTemplate DataType="{x:Type vm:KosztyMaterialoweViewModel}">
         <vw:KosztyMaterialoweView/>
     </DataTemplate>
@@ -91,7 +84,6 @@
         <vw:NowyKosztMaterialowyView/>
     </DataTemplate>
 
-    <!-- ✅ ZLECENIA -->
     <DataTemplate DataType="{x:Type vm:ListaZlecenViewModel}">
         <vw:ListaZlecenView/>
     </DataTemplate>
@@ -100,12 +92,10 @@
         <vw:NoweZlecenieView/>
     </DataTemplate>
 
-    <!-- ✅ Rozliczenia -->
     <DataTemplate DataType="{x:Type vm:RozliczenieViewModel}">
         <vw:RozliczenieView/>
     </DataTemplate>
 
-    <!-- ✅ WYKONAWCY -->
     <DataTemplate DataType="{x:Type vm:WykonawcyViewModel}">
         <vw:WykonawcyView/>
     </DataTemplate>
@@ -114,12 +104,6 @@
         <vw:NowyWykonawcaView/>
     </DataTemplate>
 
-    <!-- ✅ MAIN WINDOW -->
-    <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
-        <vw:MainWindow/>
-    </DataTemplate>
-
-    <!-- ✅ Styl nagłówków paneli -->
     <Style x:Key="MainHCCStyle" TargetType="{x:Type HeaderedContentControl}">
         <Setter Property="HeaderTemplate">
             <Setter.Value>
@@ -134,7 +118,7 @@
                                    FontWeight="Bold"
                                    Foreground="White"
                                    HorizontalAlignment="Center"
-                                   Text="{TemplateBinding Content}" />
+                                   Text="{Binding}" />
                     </Border>
                 </DataTemplate>
             </Setter.Value>
@@ -155,7 +139,6 @@
         </Setter>
     </Style>
 
-    <!-- ✅ Styl borderów -->
     <Style x:Key="MainBorderStyle" TargetType="{x:Type Border}">
         <Setter Property="Background" Value="WhiteSmoke" />
         <Setter Property="BorderBrush" Value="LightGray" />
@@ -163,7 +146,6 @@
         <Setter Property="CornerRadius" Value="5" />
     </Style>
 
-    <!-- ✅ MENU (PRZYCISKI Z COMMANDAMI) -->
     <DataTemplate x:Key="CommandsTemplate">
         <ItemsControl ItemsSource="{Binding}" Margin="6,2">
             <ItemsControl.ItemTemplate>
@@ -176,22 +158,23 @@
         </ItemsControl>
     </DataTemplate>
 
-    <!-- ✅ ZAMYKALNE ZAKŁADKI -->
     <DataTemplate x:Key="ClosableTabItemTemplate">
-        <DockPanel Width="120">
+        <DockPanel MinWidth="100">
             <Button Command="{Binding CloseCommand}"
                     Content="X"
                     Cursor="Hand"
                     DockPanel.Dock="Right"
                     FontSize="9"
                     FontWeight="Bold"
-                    Width="16" Height="16" />
-            <ContentPresenter Content="{Binding DisplayName}"
-                              VerticalAlignment="Center" />
+                    Width="18" Height="18"
+                    VerticalAlignment="Center"
+                    Margin="5,0,0,0" />
+            <TextBlock Text="{Binding DisplayName}"
+                       VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis"/>
         </DockPanel>
     </DataTemplate>
 
-    <!-- ✅ PRZESTRZEŃ ROBOCZA -->
     <DataTemplate x:Key="WorkspacesTemplate">
         <TabControl ItemsSource="{Binding}"
                     IsSynchronizedWithCurrentItem="True"

@@ -15,7 +15,7 @@ namespace MVVMFirma.Models
     public partial class Rozliczenia
     {
         public int Id { get; set; }
-        public int IdFaktury { get; set; }
+        public Nullable<int> IdFaktury { get; set; }
         public int IdZlecenia { get; set; }
         public string NrZlecenia { get; set; }
         public int IdIndeksu { get; set; }
@@ -33,6 +33,7 @@ namespace MVVMFirma.Models
         public Nullable<decimal> MaterialOdzyskany { get; set; }
         public Nullable<decimal> MaterialUtylizacja { get; set; }
         public Nullable<decimal> RzeczCzasCyklu { get; set; }
+        public string Status { get; set; }
     
         public virtual Faktury Faktury { get; set; }
         public virtual Indeksy Indeksy { get; set; }

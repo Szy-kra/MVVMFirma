@@ -4,7 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MVVMFirmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MVVMFirmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CennikUslugWykonawcow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdIndeksu" Type="int" />
+          <Property Name="IdWykonawcy" Type="int" />
+          <Property Name="DomyslnaCenaUslugi" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="DataAktualizacji" Type="datetime" />
+        </EntityType>
         <EntityType Name="Faktury">
           <Key>
             <PropertyRef Name="Id" />
@@ -22,7 +32,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="KodFormy" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="MaszynaDedykowana" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="MaszynaDedykowana" Type="nvarchar" MaxLength="50" />
           <Property Name="Lokalizacja" Type="nvarchar(max)" />
           <Property Name="CzasCyklu" Type="decimal" Precision="18" Scale="0" />
           <Property Name="IloscGniazd" Type="decimal" Precision="18" Scale="0" />
@@ -47,26 +57,12 @@
             <PropertyRef Name="IdBOM" />
           </Key>
           <Property Name="IdBOM" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Indeks" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="IdMaterialu_M1" Type="int" />
-          <Property Name="Ilosc_M1" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M1" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M2" Type="int" />
-          <Property Name="Ilosc_M2" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M2" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M3" Type="int" />
-          <Property Name="Ilosc_M3" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M3" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M4" Type="int" />
-          <Property Name="Ilosc_M4" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M4" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M5" Type="int" />
-          <Property Name="Ilosc_M5" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M5" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M6" Type="int" />
-          <Property Name="Ilosc_M6" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M6" Type="decimal" Precision="18" Scale="6" />
-          <Property Name="IdIndeksu" Type="int" />
+          <Property Name="IdIndeksu" Type="int" Nullable="false" />
+          <Property Name="IdMaterialu" Type="int" Nullable="false" />
+          <Property Name="Ilosc" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="UdzialProcentowy" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="KodIndeksu" Type="nvarchar" MaxLength="50" />
+          <Property Name="DataUtworzenia" Type="datetime" />
         </EntityType>
         <EntityType Name="Indeksy">
           <Key>
@@ -82,6 +78,17 @@
           <Property Name="IdGrupa" Type="int" />
           <Property Name="GrupaWstawki" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="IndeksyParametry">
+          <Key>
+            <PropertyRef Name="IdIndeksu" />
+          </Key>
+          <Property Name="IdIndeksu" Type="int" Nullable="false" />
+          <Property Name="WagaWtryskuBrutto_g" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="WagaWtryskuNetto_g" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="NormaCzasCyklu_s" Type="int" />
+          <Property Name="KrotnoscFormy" Type="int" />
+          <Property Name="CzyWlewek" Type="bit" />
+        </EntityType>
         <EntityType Name="Jednostki">
           <Key>
             <PropertyRef Name="Id" />
@@ -89,6 +96,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="KodJednostki" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Nazwa" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KonfiguracjaSystemu">
+          <Key>
+            <PropertyRef Name="Klucz" />
+          </Key>
+          <Property Name="Klucz" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Wartosc" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="Opis" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="KosztyMaterialowe">
           <Key>
@@ -112,6 +127,9 @@
           <Property Name="IdZlecenia" Type="int" Nullable="false" />
           <Property Name="NazwaOperacji" Type="nvarchar" MaxLength="150" />
           <Property Name="Koszt" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TypKosztu" Type="varchar" MaxLength="50" />
+          <Property Name="DataWpisu" Type="datetime" />
+          <Property Name="IdWykonawcy" Type="int" />
         </EntityType>
         <EntityType Name="Kraje">
           <Key>
@@ -119,6 +137,14 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="KodKraju" Type="char" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LogistykaWykonawcow">
+          <Key>
+            <PropertyRef Name="IdWykonawcy" />
+          </Key>
+          <Property Name="IdWykonawcy" Type="int" Nullable="false" />
+          <Property Name="DystansKM" Type="int" />
+          <Property Name="KosztZaKM_Default" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Maszyny">
           <Key>
@@ -137,15 +163,30 @@
           <Property Name="Nazwa" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="Cena" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Jednostka" Type="int" />
-          <Property Name="RodzajMaterialu" Type="nvarchar" MaxLength="100" />
+          <Property Name="RodzajMaterialu" Type="varchar" MaxLength="50" />
           <Property Name="KodJednostki" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="ParametryLogistyczne">
+          <Key>
+            <PropertyRef Name="IdWykonawcy" />
+          </Key>
+          <Property Name="IdWykonawcy" Type="int" Nullable="false" />
+          <Property Name="OdlegloscKM" Type="int" />
+          <Property Name="KosztZaKM" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="RodzajeMaterialow">
+          <Key>
+            <PropertyRef Name="KodRodzaju" />
+          </Key>
+          <Property Name="KodRodzaju" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Opis" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Rozliczenia">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdFaktury" Type="int" Nullable="false" />
+          <Property Name="IdFaktury" Type="int" />
           <Property Name="IdZlecenia" Type="int" Nullable="false" />
           <Property Name="NrZlecenia" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="IdIndeksu" Type="int" Nullable="false" />
@@ -163,6 +204,7 @@
           <Property Name="MaterialOdzyskany" Type="decimal" Precision="18" Scale="3" />
           <Property Name="MaterialUtylizacja" Type="decimal" Precision="18" Scale="3" />
           <Property Name="RzeczCzasCyklu" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Status" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -173,6 +215,13 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="UstawieniaDomyslne">
+          <Key>
+            <PropertyRef Name="Klucz" />
+          </Key>
+          <Property Name="Klucz" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Wartosc" Type="decimal" Precision="18" Scale="4" />
         </EntityType>
         <EntityType Name="Wstawki">
           <Key>
@@ -330,7 +379,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_IndeksBOM_Indeksy">
-          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="0..1" />
+          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="1" />
           <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Indeksy">
@@ -341,75 +390,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_IndeksBOM_M1">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
+        <Association Name="FK_IndeksBOM_Materialy">
+          <End Role="Materialy" Type="Self.Materialy" Multiplicity="1" />
           <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Materialy">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M2">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M3">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M4">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M4" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M5">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M5" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M6">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M6" />
+              <PropertyRef Name="IdMaterialu" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -449,6 +438,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Logistyka_Wykonawcy">
+          <End Role="Wykonawcy" Type="Self.Wykonawcy" Multiplicity="1" />
+          <End Role="ParametryLogistyczne" Type="Self.ParametryLogistyczne" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Wykonawcy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ParametryLogistyczne">
+              <PropertyRef Name="IdWykonawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Logistyka_Wykonawcy_Unique_Log">
+          <End Role="Wykonawcy" Type="Self.Wykonawcy" Multiplicity="1" />
+          <End Role="LogistykaWykonawcow" Type="Self.LogistykaWykonawcow" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Wykonawcy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogistykaWykonawcow">
+              <PropertyRef Name="IdWykonawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Materialy_Jednostki">
           <End Role="Jednostki" Type="Self.Jednostki" Multiplicity="0..1" />
           <End Role="Materialy" Type="Self.Materialy" Multiplicity="*" />
@@ -461,8 +474,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Materialy_Rodzaje">
+          <End Role="RodzajeMaterialow" Type="Self.RodzajeMaterialow" Multiplicity="0..1" />
+          <End Role="Materialy" Type="Self.Materialy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RodzajeMaterialow">
+              <PropertyRef Name="KodRodzaju" />
+            </Principal>
+            <Dependent Role="Materialy">
+              <PropertyRef Name="RodzajMaterialu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Parametry_Indeksy">
+          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="1" />
+          <End Role="IndeksyParametry" Type="Self.IndeksyParametry" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Indeksy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndeksyParametry">
+              <PropertyRef Name="IdIndeksu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Rozliczenia_Faktury">
-          <End Role="Faktury" Type="Self.Faktury" Multiplicity="1" />
+          <End Role="Faktury" Type="Self.Faktury" Multiplicity="0..1" />
           <End Role="Rozliczenia" Type="Self.Rozliczenia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Faktury">
@@ -533,21 +570,91 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="DodajKosztMaterialu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdMaterialu" Type="int" Mode="In" />
+          <Parameter Name="CenaJednostkowa" Type="decimal" Mode="In" />
+          <Parameter Name="KodMaterialu" Type="nvarchar" Mode="In" />
+          <Parameter Name="Opis" Type="nvarchar" Mode="In" />
+          <Parameter Name="JednostkaMiary" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Sp_RozliczZlecenie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdZlecenia" Type="int" Mode="In" />
+          <Parameter Name="IloscWykonana" Type="int" Mode="In" />
+          <Parameter Name="Scrap" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Sp_ZapiszDoRozliczen" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdZlecenia" Type="int" Mode="In" />
+          <Parameter Name="IdFaktury" Type="int" Mode="In" />
+          <Parameter Name="IloscWykonana" Type="int" Mode="In" />
+          <Parameter Name="Scrap" Type="int" Mode="In" />
+          <Parameter Name="IloscZafakturowana" Type="int" Mode="In" />
+          <Parameter Name="MaterialOdzyskany" Type="decimal" Mode="In" />
+          <Parameter Name="MaterialUtylizacja" Type="decimal" Mode="In" />
+          <Parameter Name="RzeczCzasCyklu" Type="int" Mode="In" />
+          <Parameter Name="KosztUslugiJednostkowy" Type="decimal" Mode="In" />
+          <Parameter Name="KosztTransportu" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="Sp_ZapotrzebowanieProdukcyjne" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KodProduktu" Type="varchar" Mode="In" />
+          <Parameter Name="IloscSztuk" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_ZmienStatusZlecenia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdZlecenia" Type="int" Mode="In" />
+          <Parameter Name="NowyStatus" Type="nvarchar" Mode="In" />
+        </Function>
         <EntityContainer Name="MVVMFirmaModelStoreContainer">
+          <EntitySet Name="CennikUslugWykonawcow" EntityType="Self.CennikUslugWykonawcow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Faktury" EntityType="Self.Faktury" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Formy" EntityType="Self.Formy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FormyMaszyny" EntityType="Self.FormyMaszyny" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GrupyWstawek" EntityType="Self.GrupyWstawek" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IndeksBOM" EntityType="Self.IndeksBOM" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Indeksy" EntityType="Self.Indeksy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IndeksyParametry" EntityType="Self.IndeksyParametry" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Jednostki" EntityType="Self.Jednostki" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KonfiguracjaSystemu" EntityType="Self.KonfiguracjaSystemu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KosztyMaterialowe" EntityType="Self.KosztyMaterialowe" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KosztyOperacyjne" EntityType="Self.KosztyOperacyjne" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Kraje" EntityType="Self.Kraje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LogistykaWykonawcow" EntityType="Self.LogistykaWykonawcow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Maszyny" EntityType="Self.Maszyny" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Materialy" EntityType="Self.Materialy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParametryLogistyczne" EntityType="Self.ParametryLogistyczne" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RodzajeMaterialow" EntityType="Self.RodzajeMaterialow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rozliczenia" EntityType="Self.Rozliczenia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UstawieniaDomyslne" EntityType="Self.UstawieniaDomyslne" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Wstawki" EntityType="Self.Wstawki" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Wykonawcy" EntityType="Self.Wykonawcy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Zlecenia" EntityType="Self.Zlecenia" Schema="dbo" store:Type="Tables" />
@@ -592,27 +699,7 @@
             <End Role="Indeksy" EntitySet="Indeksy" />
             <End Role="IndeksBOM" EntitySet="IndeksBOM" />
           </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M1" Association="Self.FK_IndeksBOM_M1">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M2" Association="Self.FK_IndeksBOM_M2">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M3" Association="Self.FK_IndeksBOM_M3">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M4" Association="Self.FK_IndeksBOM_M4">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M5" Association="Self.FK_IndeksBOM_M5">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M6" Association="Self.FK_IndeksBOM_M6">
+          <AssociationSet Name="FK_IndeksBOM_Materialy" Association="Self.FK_IndeksBOM_Materialy">
             <End Role="Materialy" EntitySet="Materialy" />
             <End Role="IndeksBOM" EntitySet="IndeksBOM" />
           </AssociationSet>
@@ -628,9 +715,25 @@
             <End Role="Zlecenia" EntitySet="Zlecenia" />
             <End Role="KosztyOperacyjne" EntitySet="KosztyOperacyjne" />
           </AssociationSet>
+          <AssociationSet Name="FK_Logistyka_Wykonawcy" Association="Self.FK_Logistyka_Wykonawcy">
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+            <End Role="ParametryLogistyczne" EntitySet="ParametryLogistyczne" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logistyka_Wykonawcy_Unique_Log" Association="Self.FK_Logistyka_Wykonawcy_Unique_Log">
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+            <End Role="LogistykaWykonawcow" EntitySet="LogistykaWykonawcow" />
+          </AssociationSet>
           <AssociationSet Name="FK_Materialy_Jednostki" Association="Self.FK_Materialy_Jednostki">
             <End Role="Jednostki" EntitySet="Jednostki" />
             <End Role="Materialy" EntitySet="Materialy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materialy_Rodzaje" Association="Self.FK_Materialy_Rodzaje">
+            <End Role="RodzajeMaterialow" EntitySet="RodzajeMaterialow" />
+            <End Role="Materialy" EntitySet="Materialy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Parametry_Indeksy" Association="Self.FK_Parametry_Indeksy">
+            <End Role="Indeksy" EntitySet="Indeksy" />
+            <End Role="IndeksyParametry" EntitySet="IndeksyParametry" />
           </AssociationSet>
           <AssociationSet Name="FK_Rozliczenia_Faktury" Association="Self.FK_Rozliczenia_Faktury">
             <End Role="Faktury" EntitySet="Faktury" />
@@ -657,37 +760,252 @@
             <End Role="Zlecenia" EntitySet="Zlecenia" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MVVMFirmaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MVVMFirmaEntities13" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="DodajKosztMaterialu">
+            <Parameter Name="IdMaterialu" Mode="In" Type="Int32" />
+            <Parameter Name="CenaJednostkowa" Mode="In" Type="Decimal" />
+            <Parameter Name="KodMaterialu" Mode="In" Type="String" />
+            <Parameter Name="Opis" Mode="In" Type="String" />
+            <Parameter Name="JednostkaMiary" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(MVVMFirmaModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(MVVMFirmaModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_RozliczZlecenie">
+            <Parameter Name="IdZlecenia" Mode="In" Type="Int32" />
+            <Parameter Name="IloscWykonana" Mode="In" Type="Int32" />
+            <Parameter Name="Scrap" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="Sp_ZapiszDoRozliczen">
+            <Parameter Name="IdZlecenia" Mode="In" Type="Int32" />
+            <Parameter Name="IdFaktury" Mode="In" Type="Int32" />
+            <Parameter Name="IloscWykonana" Mode="In" Type="Int32" />
+            <Parameter Name="Scrap" Mode="In" Type="Int32" />
+            <Parameter Name="IloscZafakturowana" Mode="In" Type="Int32" />
+            <Parameter Name="MaterialOdzyskany" Mode="In" Type="Decimal" />
+            <Parameter Name="MaterialUtylizacja" Mode="In" Type="Decimal" />
+            <Parameter Name="RzeczCzasCyklu" Mode="In" Type="Int32" />
+            <Parameter Name="KosztUslugiJednostkowy" Mode="In" Type="Decimal" />
+            <Parameter Name="KosztTransportu" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_ZapotrzebowanieProdukcyjne" ReturnType="Collection(MVVMFirmaModel.Sp_ZapotrzebowanieProdukcyjne_Result)">
+            <Parameter Name="KodProduktu" Mode="In" Type="String" />
+            <Parameter Name="IloscSztuk" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_ZmienStatusZlecenia">
+            <Parameter Name="IdZlecenia" Mode="In" Type="Int32" />
+            <Parameter Name="NowyStatus" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="CennikUslugWykonawcow" EntityType="MVVMFirmaModel.CennikUslugWykonawcow" />
+          <EntitySet Name="Faktury" EntityType="MVVMFirmaModel.Faktury" />
+          <EntitySet Name="Formy" EntityType="MVVMFirmaModel.Formy" />
+          <EntitySet Name="FormyMaszyny" EntityType="MVVMFirmaModel.FormyMaszyny" />
+          <EntitySet Name="GrupyWstawek" EntityType="MVVMFirmaModel.GrupyWstawek" />
+          <EntitySet Name="Indeksy" EntityType="MVVMFirmaModel.Indeksy" />
+          <EntitySet Name="IndeksyParametry" EntityType="MVVMFirmaModel.IndeksyParametry" />
+          <EntitySet Name="Jednostki" EntityType="MVVMFirmaModel.Jednostki" />
+          <EntitySet Name="KonfiguracjaSystemu" EntityType="MVVMFirmaModel.KonfiguracjaSystemu" />
+          <EntitySet Name="KosztyMaterialowe" EntityType="MVVMFirmaModel.KosztyMaterialowe" />
+          <EntitySet Name="KosztyOperacyjne" EntityType="MVVMFirmaModel.KosztyOperacyjne" />
+          <EntitySet Name="Kraje" EntityType="MVVMFirmaModel.Kraje" />
+          <EntitySet Name="LogistykaWykonawcow" EntityType="MVVMFirmaModel.LogistykaWykonawcow" />
+          <EntitySet Name="Maszyny" EntityType="MVVMFirmaModel.Maszyny" />
+          <EntitySet Name="Materialy" EntityType="MVVMFirmaModel.Materialy" />
+          <EntitySet Name="ParametryLogistyczne" EntityType="MVVMFirmaModel.ParametryLogistyczne" />
+          <EntitySet Name="RodzajeMaterialow" EntityType="MVVMFirmaModel.RodzajeMaterialow" />
+          <EntitySet Name="Rozliczenia" EntityType="MVVMFirmaModel.Rozliczenia" />
+          <EntitySet Name="sysdiagrams" EntityType="MVVMFirmaModel.sysdiagrams" />
+          <EntitySet Name="UstawieniaDomyslne" EntityType="MVVMFirmaModel.UstawieniaDomyslne" />
+          <EntitySet Name="Wstawki" EntityType="MVVMFirmaModel.Wstawki" />
+          <EntitySet Name="Wykonawcy" EntityType="MVVMFirmaModel.Wykonawcy" />
+          <EntitySet Name="Zlecenia" EntityType="MVVMFirmaModel.Zlecenia" />
+          <EntitySet Name="ZlecenieBOM" EntityType="MVVMFirmaModel.ZlecenieBOM" />
+          <AssociationSet Name="FK__Faktury__IdWykon__52593CB8" Association="MVVMFirmaModel.FK__Faktury__IdWykon__52593CB8">
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+            <End Role="Faktury" EntitySet="Faktury" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Faktury__IdZlece__534D60F1" Association="MVVMFirmaModel.FK__Faktury__IdZlece__534D60F1">
+            <End Role="Zlecenia" EntitySet="Zlecenia" />
+            <End Role="Faktury" EntitySet="Faktury" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozliczenia_Faktury" Association="MVVMFirmaModel.FK_Rozliczenia_Faktury">
+            <End Role="Faktury" EntitySet="Faktury" />
+            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FormyMasz__IdFor__02084FDA" Association="MVVMFirmaModel.FK__FormyMasz__IdFor__02084FDA">
+            <End Role="Formy" EntitySet="Formy" />
+            <End Role="FormyMaszyny" EntitySet="FormyMaszyny" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Indeksy_Formy" Association="MVVMFirmaModel.FK_Indeksy_Formy">
+            <End Role="Formy" EntitySet="Formy" />
+            <End Role="Indeksy" EntitySet="Indeksy" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FormyMasz__IdMas__02FC7413" Association="MVVMFirmaModel.FK__FormyMasz__IdMas__02FC7413">
+            <End Role="Maszyny" EntitySet="Maszyny" />
+            <End Role="FormyMaszyny" EntitySet="FormyMaszyny" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Indeksy_GrupyWstawek" Association="MVVMFirmaModel.FK_Indeksy_GrupyWstawek">
+            <End Role="GrupyWstawek" EntitySet="GrupyWstawek" />
+            <End Role="Indeksy" EntitySet="Indeksy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Wstawki_GrupyWstawek" Association="MVVMFirmaModel.FK_Wstawki_GrupyWstawek">
+            <End Role="GrupyWstawek" EntitySet="GrupyWstawek" />
+            <End Role="Wstawki" EntitySet="Wstawki" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Zlecenia__IdInde__45F365D3" Association="MVVMFirmaModel.FK__Zlecenia__IdInde__45F365D3">
+            <End Role="Indeksy" EntitySet="Indeksy" />
+            <End Role="Zlecenia" EntitySet="Zlecenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Parametry_Indeksy" Association="MVVMFirmaModel.FK_Parametry_Indeksy">
+            <End Role="Indeksy" EntitySet="Indeksy" />
+            <End Role="IndeksyParametry" EntitySet="IndeksyParametry" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozliczenia_Indeksy" Association="MVVMFirmaModel.FK_Rozliczenia_Indeksy">
+            <End Role="Indeksy" EntitySet="Indeksy" />
+            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materialy_Jednostki" Association="MVVMFirmaModel.FK_Materialy_Jednostki">
+            <End Role="Jednostki" EntitySet="Jednostki" />
+            <End Role="Materialy" EntitySet="Materialy" />
+          </AssociationSet>
+          <AssociationSet Name="FK__KosztyMat__IdMat__3587F3E0" Association="MVVMFirmaModel.FK__KosztyMat__IdMat__3587F3E0">
+            <End Role="Materialy" EntitySet="Materialy" />
+            <End Role="KosztyMaterialowe" EntitySet="KosztyMaterialowe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KosztyOperacyjne_Zlecenia" Association="MVVMFirmaModel.FK_KosztyOperacyjne_Zlecenia">
+            <End Role="Zlecenia" EntitySet="Zlecenia" />
+            <End Role="KosztyOperacyjne" EntitySet="KosztyOperacyjne" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Wykonawcy__IdKra__160F4887" Association="MVVMFirmaModel.FK__Wykonawcy__IdKra__160F4887">
+            <End Role="Kraje" EntitySet="Kraje" />
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logistyka_Wykonawcy_Unique_Log" Association="MVVMFirmaModel.FK_Logistyka_Wykonawcy_Unique_Log">
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+            <End Role="LogistykaWykonawcow" EntitySet="LogistykaWykonawcow" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ZlecenieB__IdMat__5CD6CB2B" Association="MVVMFirmaModel.FK__ZlecenieB__IdMat__5CD6CB2B">
+            <End Role="Materialy" EntitySet="Materialy" />
+            <End Role="ZlecenieBOM" EntitySet="ZlecenieBOM" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materialy_Rodzaje" Association="MVVMFirmaModel.FK_Materialy_Rodzaje">
+            <End Role="RodzajeMaterialow" EntitySet="RodzajeMaterialow" />
+            <End Role="Materialy" EntitySet="Materialy" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logistyka_Wykonawcy" Association="MVVMFirmaModel.FK_Logistyka_Wykonawcy">
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+            <End Role="ParametryLogistyczne" EntitySet="ParametryLogistyczne" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozliczenia_Wykonawcy" Association="MVVMFirmaModel.FK_Rozliczenia_Wykonawcy">
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rozliczenia_Zlecenia" Association="MVVMFirmaModel.FK_Rozliczenia_Zlecenia">
+            <End Role="Zlecenia" EntitySet="Zlecenia" />
+            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zlecenia_Wykonawcy" Association="MVVMFirmaModel.FK_Zlecenia_Wykonawcy">
+            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
+            <End Role="Zlecenia" EntitySet="Zlecenia" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ZlecenieB__IdZle__5BE2A6F2" Association="MVVMFirmaModel.FK__ZlecenieB__IdZle__5BE2A6F2">
+            <End Role="Zlecenia" EntitySet="Zlecenia" />
+            <End Role="ZlecenieBOM" EntitySet="ZlecenieBOM" />
+          </AssociationSet>
+          <EntitySet Name="IndeksBOM" EntityType="MVVMFirmaModel.IndeksBOM" />
+          <AssociationSet Name="FK_IndeksBOM_Indeksy" Association="MVVMFirmaModel.FK_IndeksBOM_Indeksy">
+            <End Role="Indeksy" EntitySet="Indeksy" />
+            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IndeksBOM_Materialy" Association="MVVMFirmaModel.FK_IndeksBOM_Materialy">
+            <End Role="Materialy" EntitySet="Materialy" />
+            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Sp_ZapotrzebowanieProdukcyjne_Result">
+          <Property Type="String" Name="Material" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Typ" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="CalkowiteZapotrzebowanie" Nullable="true" Precision="29" Scale="4" />
+          <Property Type="String" Name="Jednostka" Nullable="false" MaxLength="10" />
+        </ComplexType>
+        <EntityType Name="CennikUslugWykonawcow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdIndeksu" Type="Int32" />
+          <Property Name="IdWykonawcy" Type="Int32" />
+          <Property Name="DomyslnaCenaUslugi" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="DataAktualizacji" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="Faktury">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NrFaktury" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NrFaktury" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DataFaktury" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="IdWykonawcy" Type="Int32" Nullable="false" />
           <Property Name="IdZlecenia" Type="Int32" Nullable="false" />
           <Property Name="Kwota" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="Wykonawcy" Relationship="Self.FK__Faktury__IdWykon__52593CB8" FromRole="Faktury" ToRole="Wykonawcy" />
-          <NavigationProperty Name="Zlecenia" Relationship="Self.FK__Faktury__IdZlece__534D60F1" FromRole="Faktury" ToRole="Zlecenia" />
-          <NavigationProperty Name="Rozliczenia" Relationship="Self.FK_Rozliczenia_Faktury" FromRole="Faktury" ToRole="Rozliczenia" />
+          <NavigationProperty Name="Wykonawcy" Relationship="MVVMFirmaModel.FK__Faktury__IdWykon__52593CB8" FromRole="Faktury" ToRole="Wykonawcy" />
+          <NavigationProperty Name="Zlecenia" Relationship="MVVMFirmaModel.FK__Faktury__IdZlece__534D60F1" FromRole="Faktury" ToRole="Zlecenia" />
+          <NavigationProperty Name="Rozliczenia" Relationship="MVVMFirmaModel.FK_Rozliczenia_Faktury" FromRole="Faktury" ToRole="Rozliczenia" />
         </EntityType>
         <EntityType Name="Formy">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KodFormy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="MaszynaDedykowana" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="KodFormy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MaszynaDedykowana" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Lokalizacja" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CzasCyklu" Type="Decimal" Precision="18" Scale="0" />
           <Property Name="IloscGniazd" Type="Decimal" Precision="18" Scale="0" />
-          <NavigationProperty Name="FormyMaszyny" Relationship="Self.FK__FormyMasz__IdFor__02084FDA" FromRole="Formy" ToRole="FormyMaszyny" />
-          <NavigationProperty Name="Indeksy" Relationship="Self.FK_Indeksy_Formy" FromRole="Formy" ToRole="Indeksy" />
+          <NavigationProperty Name="FormyMaszyny" Relationship="MVVMFirmaModel.FK__FormyMasz__IdFor__02084FDA" FromRole="Formy" ToRole="FormyMaszyny" />
+          <NavigationProperty Name="Indeksy" Relationship="MVVMFirmaModel.FK_Indeksy_Formy" FromRole="Formy" ToRole="Indeksy" />
         </EntityType>
         <EntityType Name="FormyMaszyny">
           <Key>
@@ -696,85 +1014,73 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdFormy" Type="Int32" Nullable="false" />
           <Property Name="IdMaszyny" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Formy" Relationship="Self.FK__FormyMasz__IdFor__02084FDA" FromRole="FormyMaszyny" ToRole="Formy" />
-          <NavigationProperty Name="Maszyny" Relationship="Self.FK__FormyMasz__IdMas__02FC7413" FromRole="FormyMaszyny" ToRole="Maszyny" />
+          <NavigationProperty Name="Formy" Relationship="MVVMFirmaModel.FK__FormyMasz__IdFor__02084FDA" FromRole="FormyMaszyny" ToRole="Formy" />
+          <NavigationProperty Name="Maszyny" Relationship="MVVMFirmaModel.FK__FormyMasz__IdMas__02FC7413" FromRole="FormyMaszyny" ToRole="Maszyny" />
         </EntityType>
         <EntityType Name="GrupyWstawek">
           <Key>
             <PropertyRef Name="IdGrupa" />
           </Key>
           <Property Name="IdGrupa" Type="Int32" Nullable="false" />
-          <Property Name="GrupaWstawki" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Indeksy" Relationship="Self.FK_Indeksy_GrupyWstawek" FromRole="GrupyWstawek" ToRole="Indeksy" />
-          <NavigationProperty Name="Wstawki" Relationship="Self.FK_Wstawki_GrupyWstawek" FromRole="GrupyWstawek" ToRole="Wstawki" />
-        </EntityType>
-        <EntityType Name="IndeksBOM">
-          <Key>
-            <PropertyRef Name="IdBOM" />
-          </Key>
-          <Property Name="IdBOM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Indeks" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IdMaterialu_M1" Type="Int32" />
-          <Property Name="Ilosc_M1" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M1" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M2" Type="Int32" />
-          <Property Name="Ilosc_M2" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M2" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M3" Type="Int32" />
-          <Property Name="Ilosc_M3" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M3" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M4" Type="Int32" />
-          <Property Name="Ilosc_M4" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M4" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M5" Type="Int32" />
-          <Property Name="Ilosc_M5" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M5" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="IdMaterialu_M6" Type="Int32" />
-          <Property Name="Ilosc_M6" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="Udzial_M6" Type="Decimal" Precision="18" Scale="6" />
-          <Property Name="IdIndeksu" Type="Int32" />
-          <NavigationProperty Name="Indeksy" Relationship="Self.FK_IndeksBOM_Indeksy" FromRole="IndeksBOM" ToRole="Indeksy" />
-          <NavigationProperty Name="Materialy" Relationship="Self.FK_IndeksBOM_M1" FromRole="IndeksBOM" ToRole="Materialy" />
-          <NavigationProperty Name="Materialy1" Relationship="Self.FK_IndeksBOM_M2" FromRole="IndeksBOM" ToRole="Materialy" />
-          <NavigationProperty Name="Materialy2" Relationship="Self.FK_IndeksBOM_M3" FromRole="IndeksBOM" ToRole="Materialy" />
-          <NavigationProperty Name="Materialy3" Relationship="Self.FK_IndeksBOM_M4" FromRole="IndeksBOM" ToRole="Materialy" />
-          <NavigationProperty Name="Materialy4" Relationship="Self.FK_IndeksBOM_M5" FromRole="IndeksBOM" ToRole="Materialy" />
-          <NavigationProperty Name="Materialy5" Relationship="Self.FK_IndeksBOM_M6" FromRole="IndeksBOM" ToRole="Materialy" />
+          <Property Name="GrupaWstawki" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Indeksy" Relationship="MVVMFirmaModel.FK_Indeksy_GrupyWstawek" FromRole="GrupyWstawek" ToRole="Indeksy" />
+          <NavigationProperty Name="Wstawki" Relationship="MVVMFirmaModel.FK_Wstawki_GrupyWstawek" FromRole="GrupyWstawek" ToRole="Wstawki" />
         </EntityType>
         <EntityType Name="Indeksy">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KodIndeksu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Rodzina" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="KodIndeksu" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Rodzina" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Opis" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IdFormy" Type="Int32" />
           <Property Name="PracaAutomatyczna" Type="Boolean" Nullable="false" />
           <Property Name="KodFormy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IdGrupa" Type="Int32" />
           <Property Name="GrupaWstawki" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Formy" Relationship="Self.FK_Indeksy_Formy" FromRole="Indeksy" ToRole="Formy" />
-          <NavigationProperty Name="GrupyWstawek" Relationship="Self.FK_Indeksy_GrupyWstawek" FromRole="Indeksy" ToRole="GrupyWstawek" />
-          <NavigationProperty Name="IndeksBOM" Relationship="Self.FK_IndeksBOM_Indeksy" FromRole="Indeksy" ToRole="IndeksBOM" />
-          <NavigationProperty Name="Zlecenia" Relationship="Self.FK__Zlecenia__IdInde__45F365D3" FromRole="Indeksy" ToRole="Zlecenia" />
-          <NavigationProperty Name="Rozliczenia" Relationship="Self.FK_Rozliczenia_Indeksy" FromRole="Indeksy" ToRole="Rozliczenia" />
+          <NavigationProperty Name="Formy" Relationship="MVVMFirmaModel.FK_Indeksy_Formy" FromRole="Indeksy" ToRole="Formy" />
+          <NavigationProperty Name="GrupyWstawek" Relationship="MVVMFirmaModel.FK_Indeksy_GrupyWstawek" FromRole="Indeksy" ToRole="GrupyWstawek" />
+          <NavigationProperty Name="Zlecenia" Relationship="MVVMFirmaModel.FK__Zlecenia__IdInde__45F365D3" FromRole="Indeksy" ToRole="Zlecenia" />
+          <NavigationProperty Name="IndeksyParametry" Relationship="MVVMFirmaModel.FK_Parametry_Indeksy" FromRole="Indeksy" ToRole="IndeksyParametry" />
+          <NavigationProperty Name="Rozliczenia" Relationship="MVVMFirmaModel.FK_Rozliczenia_Indeksy" FromRole="Indeksy" ToRole="Rozliczenia" />
+          <NavigationProperty Name="IndeksBOM" Relationship="MVVMFirmaModel.FK_IndeksBOM_Indeksy" FromRole="Indeksy" ToRole="IndeksBOM" />
+        </EntityType>
+        <EntityType Name="IndeksyParametry">
+          <Key>
+            <PropertyRef Name="IdIndeksu" />
+          </Key>
+          <Property Name="IdIndeksu" Type="Int32" Nullable="false" />
+          <Property Name="WagaWtryskuBrutto_g" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="WagaWtryskuNetto_g" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="NormaCzasCyklu_s" Type="Int32" />
+          <Property Name="KrotnoscFormy" Type="Int32" />
+          <Property Name="CzyWlewek" Type="Boolean" />
+          <NavigationProperty Name="Indeksy" Relationship="MVVMFirmaModel.FK_Parametry_Indeksy" FromRole="IndeksyParametry" ToRole="Indeksy" />
         </EntityType>
         <EntityType Name="Jednostki">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KodJednostki" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Nazwa" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Materialy" Relationship="Self.FK_Materialy_Jednostki" FromRole="Jednostki" ToRole="Materialy" />
+          <Property Name="KodJednostki" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Nazwa" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Materialy" Relationship="MVVMFirmaModel.FK_Materialy_Jednostki" FromRole="Jednostki" ToRole="Materialy" />
+        </EntityType>
+        <EntityType Name="KonfiguracjaSystemu">
+          <Key>
+            <PropertyRef Name="Klucz" />
+          </Key>
+          <Property Name="Klucz" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Wartosc" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="Opis" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="KosztyMaterialowe">
           <Key>
             <PropertyRef Name="IdKosztuMaterialowego" />
           </Key>
           <Property Name="IdMaterialu" Type="Int32" Nullable="false" />
-          <Property Name="CenaJednostkowa" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="CenaJednostkowa" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
           <Property Name="DataModyfikacji" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="KodMaterialu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Opis" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -782,7 +1088,7 @@
           <Property Name="IdKosztuMaterialowego" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DataUtworzenia" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Aktywne" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Materialy" Relationship="Self.FK__KosztyMat__IdMat__3587F3E0" FromRole="KosztyMaterialowe" ToRole="Materialy" />
+          <NavigationProperty Name="Materialy" Relationship="MVVMFirmaModel.FK__KosztyMat__IdMat__3587F3E0" FromRole="KosztyMaterialowe" ToRole="Materialy" />
         </EntityType>
         <EntityType Name="KosztyOperacyjne">
           <Key>
@@ -792,102 +1098,135 @@
           <Property Name="IdZlecenia" Type="Int32" Nullable="false" />
           <Property Name="NazwaOperacji" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Koszt" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="Zlecenia" Relationship="Self.FK_KosztyOperacyjne_Zlecenia" FromRole="KosztyOperacyjne" ToRole="Zlecenia" />
+          <Property Name="TypKosztu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DataWpisu" Type="DateTime" Precision="3" />
+          <Property Name="IdWykonawcy" Type="Int32" />
+          <NavigationProperty Name="Zlecenia" Relationship="MVVMFirmaModel.FK_KosztyOperacyjne_Zlecenia" FromRole="KosztyOperacyjne" ToRole="Zlecenia" />
         </EntityType>
         <EntityType Name="Kraje">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KodKraju" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Wykonawcy" Relationship="Self.FK__Wykonawcy__IdKra__160F4887" FromRole="Kraje" ToRole="Wykonawcy" />
+          <Property Name="KodKraju" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Wykonawcy" Relationship="MVVMFirmaModel.FK__Wykonawcy__IdKra__160F4887" FromRole="Kraje" ToRole="Wykonawcy" />
+        </EntityType>
+        <EntityType Name="LogistykaWykonawcow">
+          <Key>
+            <PropertyRef Name="IdWykonawcy" />
+          </Key>
+          <Property Name="IdWykonawcy" Type="Int32" Nullable="false" />
+          <Property Name="DystansKM" Type="Int32" />
+          <Property Name="KosztZaKM_Default" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Wykonawcy" Relationship="MVVMFirmaModel.FK_Logistyka_Wykonawcy_Unique_Log" FromRole="LogistykaWykonawcow" ToRole="Wykonawcy" />
         </EntityType>
         <EntityType Name="Maszyny">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KodMaszyny" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Nazwa" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="FormyMaszyny" Relationship="Self.FK__FormyMasz__IdMas__02FC7413" FromRole="Maszyny" ToRole="FormyMaszyny" />
+          <Property Name="KodMaszyny" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nazwa" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FormyMaszyny" Relationship="MVVMFirmaModel.FK__FormyMasz__IdMas__02FC7413" FromRole="Maszyny" ToRole="FormyMaszyny" />
         </EntityType>
         <EntityType Name="Materialy">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KodMaterialu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Nazwa" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="KodMaterialu" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nazwa" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Cena" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Jednostka" Type="Int32" />
-          <Property Name="RodzajMaterialu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RodzajMaterialu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="KodJednostki" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="IndeksBOM" Relationship="Self.FK_IndeksBOM_M1" FromRole="Materialy" ToRole="IndeksBOM" />
-          <NavigationProperty Name="IndeksBOM1" Relationship="Self.FK_IndeksBOM_M2" FromRole="Materialy" ToRole="IndeksBOM" />
-          <NavigationProperty Name="IndeksBOM2" Relationship="Self.FK_IndeksBOM_M3" FromRole="Materialy" ToRole="IndeksBOM" />
-          <NavigationProperty Name="IndeksBOM3" Relationship="Self.FK_IndeksBOM_M4" FromRole="Materialy" ToRole="IndeksBOM" />
-          <NavigationProperty Name="IndeksBOM4" Relationship="Self.FK_IndeksBOM_M5" FromRole="Materialy" ToRole="IndeksBOM" />
-          <NavigationProperty Name="IndeksBOM5" Relationship="Self.FK_IndeksBOM_M6" FromRole="Materialy" ToRole="IndeksBOM" />
-          <NavigationProperty Name="Jednostki" Relationship="Self.FK_Materialy_Jednostki" FromRole="Materialy" ToRole="Jednostki" />
-          <NavigationProperty Name="KosztyMaterialowe" Relationship="Self.FK__KosztyMat__IdMat__3587F3E0" FromRole="Materialy" ToRole="KosztyMaterialowe" />
-          <NavigationProperty Name="ZlecenieBOM" Relationship="Self.FK__ZlecenieB__IdMat__5CD6CB2B" FromRole="Materialy" ToRole="ZlecenieBOM" />
+          <NavigationProperty Name="Jednostki" Relationship="MVVMFirmaModel.FK_Materialy_Jednostki" FromRole="Materialy" ToRole="Jednostki" />
+          <NavigationProperty Name="KosztyMaterialowe" Relationship="MVVMFirmaModel.FK__KosztyMat__IdMat__3587F3E0" FromRole="Materialy" ToRole="KosztyMaterialowe" />
+          <NavigationProperty Name="ZlecenieBOM" Relationship="MVVMFirmaModel.FK__ZlecenieB__IdMat__5CD6CB2B" FromRole="Materialy" ToRole="ZlecenieBOM" />
+          <NavigationProperty Name="RodzajeMaterialow" Relationship="MVVMFirmaModel.FK_Materialy_Rodzaje" FromRole="Materialy" ToRole="RodzajeMaterialow" />
+          <NavigationProperty Name="IndeksBOM" Relationship="MVVMFirmaModel.FK_IndeksBOM_Materialy" FromRole="Materialy" ToRole="IndeksBOM" />
+        </EntityType>
+        <EntityType Name="ParametryLogistyczne">
+          <Key>
+            <PropertyRef Name="IdWykonawcy" />
+          </Key>
+          <Property Name="IdWykonawcy" Type="Int32" Nullable="false" />
+          <Property Name="OdlegloscKM" Type="Int32" />
+          <Property Name="KosztZaKM" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Wykonawcy" Relationship="MVVMFirmaModel.FK_Logistyka_Wykonawcy" FromRole="ParametryLogistyczne" ToRole="Wykonawcy" />
+        </EntityType>
+        <EntityType Name="RodzajeMaterialow">
+          <Key>
+            <PropertyRef Name="KodRodzaju" />
+          </Key>
+          <Property Name="KodRodzaju" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Opis" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Materialy" Relationship="MVVMFirmaModel.FK_Materialy_Rodzaje" FromRole="RodzajeMaterialow" ToRole="Materialy" />
         </EntityType>
         <EntityType Name="Rozliczenia">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdFaktury" Type="Int32" Nullable="false" />
+          <Property Name="IdFaktury" Type="Int32" />
           <Property Name="IdZlecenia" Type="Int32" Nullable="false" />
-          <Property Name="NrZlecenia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NrZlecenia" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IdIndeksu" Type="Int32" Nullable="false" />
           <Property Name="IloscZlecona" Type="Int32" Nullable="false" />
           <Property Name="DataWystawienia" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="IloscWykonana" Type="Int32" Nullable="false" />
-          <Property Name="Scrap" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Scrap" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
           <Property Name="TKWPlan" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="TKWReal" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="DataRozliczenia" Type="DateTime" Precision="0" />
           <Property Name="IloscZafakturowana" Type="Int32" />
           <Property Name="Kwota" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="IdWykonawcy" Type="Int32" Nullable="false" />
-          <Property Name="NazwaWykonawcy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NazwaWykonawcy" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="MaterialOdzyskany" Type="Decimal" Precision="18" Scale="3" />
           <Property Name="MaterialUtylizacja" Type="Decimal" Precision="18" Scale="3" />
           <Property Name="RzeczCzasCyklu" Type="Decimal" Precision="18" Scale="0" />
-          <NavigationProperty Name="Faktury" Relationship="Self.FK_Rozliczenia_Faktury" FromRole="Rozliczenia" ToRole="Faktury" />
-          <NavigationProperty Name="Indeksy" Relationship="Self.FK_Rozliczenia_Indeksy" FromRole="Rozliczenia" ToRole="Indeksy" />
-          <NavigationProperty Name="Wykonawcy" Relationship="Self.FK_Rozliczenia_Wykonawcy" FromRole="Rozliczenia" ToRole="Wykonawcy" />
-          <NavigationProperty Name="Zlecenia" Relationship="Self.FK_Rozliczenia_Zlecenia" FromRole="Rozliczenia" ToRole="Zlecenia" />
+          <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Faktury" Relationship="MVVMFirmaModel.FK_Rozliczenia_Faktury" FromRole="Rozliczenia" ToRole="Faktury" />
+          <NavigationProperty Name="Indeksy" Relationship="MVVMFirmaModel.FK_Rozliczenia_Indeksy" FromRole="Rozliczenia" ToRole="Indeksy" />
+          <NavigationProperty Name="Wykonawcy" Relationship="MVVMFirmaModel.FK_Rozliczenia_Wykonawcy" FromRole="Rozliczenia" ToRole="Wykonawcy" />
+          <NavigationProperty Name="Zlecenia" Relationship="MVVMFirmaModel.FK_Rozliczenia_Zlecenia" FromRole="Rozliczenia" ToRole="Zlecenia" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="principal_id" Type="Int32" Nullable="false" />
           <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="UstawieniaDomyslne">
+          <Key>
+            <PropertyRef Name="Klucz" />
+          </Key>
+          <Property Name="Klucz" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Wartosc" Type="Decimal" Precision="18" Scale="4" />
         </EntityType>
         <EntityType Name="Wstawki">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KodWstawki" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="KodIndeksuWyrobu" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="KodWstawki" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KodIndeksuWyrobu" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="GrupaWstawki" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="IdGrupa" Type="Int32" />
-          <NavigationProperty Name="GrupyWstawek" Relationship="Self.FK_Wstawki_GrupyWstawek" FromRole="Wstawki" ToRole="GrupyWstawek" />
+          <NavigationProperty Name="GrupyWstawek" Relationship="MVVMFirmaModel.FK_Wstawki_GrupyWstawek" FromRole="Wstawki" ToRole="GrupyWstawek" />
         </EntityType>
         <EntityType Name="Wykonawcy">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NrWykonawcy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Nazwa" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NrWykonawcy" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Nazwa" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="NIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Telefon" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Kraj" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -896,28 +1235,30 @@
           <Property Name="Ulica" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="NrDomu" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="IdKraju" Type="Int32" />
-          <NavigationProperty Name="Faktury" Relationship="Self.FK__Faktury__IdWykon__52593CB8" FromRole="Wykonawcy" ToRole="Faktury" />
-          <NavigationProperty Name="Kraje" Relationship="Self.FK__Wykonawcy__IdKra__160F4887" FromRole="Wykonawcy" ToRole="Kraje" />
-          <NavigationProperty Name="Rozliczenia" Relationship="Self.FK_Rozliczenia_Wykonawcy" FromRole="Wykonawcy" ToRole="Rozliczenia" />
-          <NavigationProperty Name="Zlecenia" Relationship="Self.FK_Zlecenia_Wykonawcy" FromRole="Wykonawcy" ToRole="Zlecenia" />
+          <NavigationProperty Name="Faktury" Relationship="MVVMFirmaModel.FK__Faktury__IdWykon__52593CB8" FromRole="Wykonawcy" ToRole="Faktury" />
+          <NavigationProperty Name="Kraje" Relationship="MVVMFirmaModel.FK__Wykonawcy__IdKra__160F4887" FromRole="Wykonawcy" ToRole="Kraje" />
+          <NavigationProperty Name="LogistykaWykonawcow" Relationship="MVVMFirmaModel.FK_Logistyka_Wykonawcy_Unique_Log" FromRole="Wykonawcy" ToRole="LogistykaWykonawcow" />
+          <NavigationProperty Name="ParametryLogistyczne" Relationship="MVVMFirmaModel.FK_Logistyka_Wykonawcy" FromRole="Wykonawcy" ToRole="ParametryLogistyczne" />
+          <NavigationProperty Name="Rozliczenia" Relationship="MVVMFirmaModel.FK_Rozliczenia_Wykonawcy" FromRole="Wykonawcy" ToRole="Rozliczenia" />
+          <NavigationProperty Name="Zlecenia" Relationship="MVVMFirmaModel.FK_Zlecenia_Wykonawcy" FromRole="Wykonawcy" ToRole="Zlecenia" />
         </EntityType>
         <EntityType Name="Zlecenia">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NrZlecenia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NrZlecenia" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DataZlecenia" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="IdWykonawcy" Type="Int32" Nullable="false" />
           <Property Name="IdIndeksu" Type="Int32" Nullable="false" />
           <Property Name="Ilosc" Type="Int32" Nullable="false" />
           <Property Name="Uwagi" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Faktury" Relationship="Self.FK__Faktury__IdZlece__534D60F1" FromRole="Zlecenia" ToRole="Faktury" />
-          <NavigationProperty Name="Indeksy" Relationship="Self.FK__Zlecenia__IdInde__45F365D3" FromRole="Zlecenia" ToRole="Indeksy" />
-          <NavigationProperty Name="KosztyOperacyjne" Relationship="Self.FK_KosztyOperacyjne_Zlecenia" FromRole="Zlecenia" ToRole="KosztyOperacyjne" />
-          <NavigationProperty Name="Rozliczenia" Relationship="Self.FK_Rozliczenia_Zlecenia" FromRole="Zlecenia" ToRole="Rozliczenia" />
-          <NavigationProperty Name="Wykonawcy" Relationship="Self.FK_Zlecenia_Wykonawcy" FromRole="Zlecenia" ToRole="Wykonawcy" />
-          <NavigationProperty Name="ZlecenieBOM" Relationship="Self.FK__ZlecenieB__IdZle__5BE2A6F2" FromRole="Zlecenia" ToRole="ZlecenieBOM" />
+          <NavigationProperty Name="Faktury" Relationship="MVVMFirmaModel.FK__Faktury__IdZlece__534D60F1" FromRole="Zlecenia" ToRole="Faktury" />
+          <NavigationProperty Name="Indeksy" Relationship="MVVMFirmaModel.FK__Zlecenia__IdInde__45F365D3" FromRole="Zlecenia" ToRole="Indeksy" />
+          <NavigationProperty Name="KosztyOperacyjne" Relationship="MVVMFirmaModel.FK_KosztyOperacyjne_Zlecenia" FromRole="Zlecenia" ToRole="KosztyOperacyjne" />
+          <NavigationProperty Name="Rozliczenia" Relationship="MVVMFirmaModel.FK_Rozliczenia_Zlecenia" FromRole="Zlecenia" ToRole="Rozliczenia" />
+          <NavigationProperty Name="Wykonawcy" Relationship="MVVMFirmaModel.FK_Zlecenia_Wykonawcy" FromRole="Zlecenia" ToRole="Wykonawcy" />
+          <NavigationProperty Name="ZlecenieBOM" Relationship="MVVMFirmaModel.FK__ZlecenieB__IdZle__5BE2A6F2" FromRole="Zlecenia" ToRole="ZlecenieBOM" />
         </EntityType>
         <EntityType Name="ZlecenieBOM">
           <Key>
@@ -926,13 +1267,13 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdZlecenia" Type="Int32" Nullable="false" />
           <Property Name="IdMaterialu" Type="Int32" Nullable="false" />
-          <Property Name="Ilosc" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
-          <NavigationProperty Name="Materialy" Relationship="Self.FK__ZlecenieB__IdMat__5CD6CB2B" FromRole="ZlecenieBOM" ToRole="Materialy" />
-          <NavigationProperty Name="Zlecenia" Relationship="Self.FK__ZlecenieB__IdZle__5BE2A6F2" FromRole="ZlecenieBOM" ToRole="Zlecenia" />
+          <Property Name="Ilosc" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
+          <NavigationProperty Name="Materialy" Relationship="MVVMFirmaModel.FK__ZlecenieB__IdMat__5CD6CB2B" FromRole="ZlecenieBOM" ToRole="Materialy" />
+          <NavigationProperty Name="Zlecenia" Relationship="MVVMFirmaModel.FK__ZlecenieB__IdZle__5BE2A6F2" FromRole="ZlecenieBOM" ToRole="Zlecenia" />
         </EntityType>
         <Association Name="FK__Faktury__IdWykon__52593CB8">
-          <End Role="Wykonawcy" Type="Self.Wykonawcy" Multiplicity="1" />
-          <End Role="Faktury" Type="Self.Faktury" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Wykonawcy" Role="Wykonawcy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.Faktury" Role="Faktury" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Wykonawcy">
               <PropertyRef Name="Id" />
@@ -943,8 +1284,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Faktury__IdZlece__534D60F1">
-          <End Role="Zlecenia" Type="Self.Zlecenia" Multiplicity="1" />
-          <End Role="Faktury" Type="Self.Faktury" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Zlecenia" Role="Zlecenia" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.Faktury" Role="Faktury" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Zlecenia">
               <PropertyRef Name="Id" />
@@ -955,8 +1296,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rozliczenia_Faktury">
-          <End Role="Faktury" Type="Self.Faktury" Multiplicity="1" />
-          <End Role="Rozliczenia" Type="Self.Rozliczenia" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Faktury" Role="Faktury" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Rozliczenia" Role="Rozliczenia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Faktury">
               <PropertyRef Name="Id" />
@@ -967,8 +1308,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__FormyMasz__IdFor__02084FDA">
-          <End Role="Formy" Type="Self.Formy" Multiplicity="1" />
-          <End Role="FormyMaszyny" Type="Self.FormyMaszyny" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Formy" Role="Formy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.FormyMaszyny" Role="FormyMaszyny" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Formy">
               <PropertyRef Name="Id" />
@@ -979,8 +1320,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Indeksy_Formy">
-          <End Role="Formy" Type="Self.Formy" Multiplicity="0..1" />
-          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Formy" Role="Formy" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Indeksy" Role="Indeksy" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Formy">
               <PropertyRef Name="Id" />
@@ -991,8 +1332,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__FormyMasz__IdMas__02FC7413">
-          <End Role="Maszyny" Type="Self.Maszyny" Multiplicity="1" />
-          <End Role="FormyMaszyny" Type="Self.FormyMaszyny" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Maszyny" Role="Maszyny" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.FormyMaszyny" Role="FormyMaszyny" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Maszyny">
               <PropertyRef Name="Id" />
@@ -1003,8 +1344,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Indeksy_GrupyWstawek">
-          <End Role="GrupyWstawek" Type="Self.GrupyWstawek" Multiplicity="0..1" />
-          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.GrupyWstawek" Role="GrupyWstawek" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Indeksy" Role="Indeksy" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="GrupyWstawek">
               <PropertyRef Name="IdGrupa" />
@@ -1015,8 +1356,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Wstawki_GrupyWstawek">
-          <End Role="GrupyWstawek" Type="Self.GrupyWstawek" Multiplicity="0..1" />
-          <End Role="Wstawki" Type="Self.Wstawki" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.GrupyWstawek" Role="GrupyWstawek" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Wstawki" Role="Wstawki" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="GrupyWstawek">
               <PropertyRef Name="IdGrupa" />
@@ -1026,93 +1367,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_IndeksBOM_Indeksy">
-          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Indeksy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdIndeksu" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M1">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M1" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M2">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M2" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M3">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M3" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M4">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M4" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M5">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M5" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_IndeksBOM_M6">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="0..1" />
-          <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Materialy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="IndeksBOM">
-              <PropertyRef Name="IdMaterialu_M6" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Zlecenia__IdInde__45F365D3">
-          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="1" />
-          <End Role="Zlecenia" Type="Self.Zlecenia" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Indeksy" Role="Indeksy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.Zlecenia" Role="Zlecenia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Indeksy">
               <PropertyRef Name="Id" />
@@ -1122,9 +1379,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Parametry_Indeksy">
+          <End Type="MVVMFirmaModel.Indeksy" Role="Indeksy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.IndeksyParametry" Role="IndeksyParametry" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Indeksy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndeksyParametry">
+              <PropertyRef Name="IdIndeksu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Rozliczenia_Indeksy">
-          <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="1" />
-          <End Role="Rozliczenia" Type="Self.Rozliczenia" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Indeksy" Role="Indeksy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.Rozliczenia" Role="Rozliczenia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Indeksy">
               <PropertyRef Name="Id" />
@@ -1135,8 +1404,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Materialy_Jednostki">
-          <End Role="Jednostki" Type="Self.Jednostki" Multiplicity="0..1" />
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Jednostki" Role="Jednostki" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Materialy" Role="Materialy" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Jednostki">
               <PropertyRef Name="Id" />
@@ -1147,8 +1416,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__KosztyMat__IdMat__3587F3E0">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="1" />
-          <End Role="KosztyMaterialowe" Type="Self.KosztyMaterialowe" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Materialy" Role="Materialy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.KosztyMaterialowe" Role="KosztyMaterialowe" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Materialy">
               <PropertyRef Name="Id" />
@@ -1159,8 +1428,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_KosztyOperacyjne_Zlecenia">
-          <End Role="Zlecenia" Type="Self.Zlecenia" Multiplicity="1" />
-          <End Role="KosztyOperacyjne" Type="Self.KosztyOperacyjne" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Zlecenia" Role="Zlecenia" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.KosztyOperacyjne" Role="KosztyOperacyjne" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Zlecenia">
               <PropertyRef Name="Id" />
@@ -1171,8 +1440,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__Wykonawcy__IdKra__160F4887">
-          <End Role="Kraje" Type="Self.Kraje" Multiplicity="0..1" />
-          <End Role="Wykonawcy" Type="Self.Wykonawcy" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Kraje" Role="Kraje" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Wykonawcy" Role="Wykonawcy" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Kraje">
               <PropertyRef Name="Id" />
@@ -1182,9 +1451,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Logistyka_Wykonawcy_Unique_Log">
+          <End Type="MVVMFirmaModel.Wykonawcy" Role="Wykonawcy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.LogistykaWykonawcow" Role="LogistykaWykonawcow" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Wykonawcy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LogistykaWykonawcow">
+              <PropertyRef Name="IdWykonawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__ZlecenieB__IdMat__5CD6CB2B">
-          <End Role="Materialy" Type="Self.Materialy" Multiplicity="1" />
-          <End Role="ZlecenieBOM" Type="Self.ZlecenieBOM" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Materialy" Role="Materialy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.ZlecenieBOM" Role="ZlecenieBOM" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Materialy">
               <PropertyRef Name="Id" />
@@ -1194,9 +1475,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Materialy_Rodzaje">
+          <End Type="MVVMFirmaModel.RodzajeMaterialow" Role="RodzajeMaterialow" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Materialy" Role="Materialy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RodzajeMaterialow">
+              <PropertyRef Name="KodRodzaju" />
+            </Principal>
+            <Dependent Role="Materialy">
+              <PropertyRef Name="RodzajMaterialu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Logistyka_Wykonawcy">
+          <End Type="MVVMFirmaModel.Wykonawcy" Role="Wykonawcy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.ParametryLogistyczne" Role="ParametryLogistyczne" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Wykonawcy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ParametryLogistyczne">
+              <PropertyRef Name="IdWykonawcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Rozliczenia_Wykonawcy">
-          <End Role="Wykonawcy" Type="Self.Wykonawcy" Multiplicity="1" />
-          <End Role="Rozliczenia" Type="Self.Rozliczenia" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Wykonawcy" Role="Wykonawcy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.Rozliczenia" Role="Rozliczenia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Wykonawcy">
               <PropertyRef Name="Id" />
@@ -1207,8 +1512,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Rozliczenia_Zlecenia">
-          <End Role="Zlecenia" Type="Self.Zlecenia" Multiplicity="1" />
-          <End Role="Rozliczenia" Type="Self.Rozliczenia" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Zlecenia" Role="Zlecenia" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.Rozliczenia" Role="Rozliczenia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Zlecenia">
               <PropertyRef Name="Id" />
@@ -1219,8 +1524,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Zlecenia_Wykonawcy">
-          <End Role="Wykonawcy" Type="Self.Wykonawcy" Multiplicity="1" />
-          <End Role="Zlecenia" Type="Self.Zlecenia" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Wykonawcy" Role="Wykonawcy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.Zlecenia" Role="Zlecenia" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Wykonawcy">
               <PropertyRef Name="Id" />
@@ -1231,8 +1536,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__ZlecenieB__IdZle__5BE2A6F2">
-          <End Role="Zlecenia" Type="Self.Zlecenia" Multiplicity="1" />
-          <End Role="ZlecenieBOM" Type="Self.ZlecenieBOM" Multiplicity="*" />
+          <End Type="MVVMFirmaModel.Zlecenia" Role="Zlecenia" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.ZlecenieBOM" Role="ZlecenieBOM" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Zlecenia">
               <PropertyRef Name="Id" />
@@ -1242,367 +1547,375 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="MVVMFirmaEntities13" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Faktury" EntityType="Self.Faktury" />
-          <EntitySet Name="Formy" EntityType="Self.Formy" />
-          <EntitySet Name="FormyMaszyny" EntityType="Self.FormyMaszyny" />
-          <EntitySet Name="GrupyWstawek" EntityType="Self.GrupyWstawek" />
-          <EntitySet Name="IndeksBOM" EntityType="Self.IndeksBOM" />
-          <EntitySet Name="Indeksy" EntityType="Self.Indeksy" />
-          <EntitySet Name="Jednostki" EntityType="Self.Jednostki" />
-          <EntitySet Name="KosztyMaterialowe" EntityType="Self.KosztyMaterialowe" />
-          <EntitySet Name="KosztyOperacyjne" EntityType="Self.KosztyOperacyjne" />
-          <EntitySet Name="Kraje" EntityType="Self.Kraje" />
-          <EntitySet Name="Maszyny" EntityType="Self.Maszyny" />
-          <EntitySet Name="Materialy" EntityType="Self.Materialy" />
-          <EntitySet Name="Rozliczenia" EntityType="Self.Rozliczenia" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="Wstawki" EntityType="Self.Wstawki" />
-          <EntitySet Name="Wykonawcy" EntityType="Self.Wykonawcy" />
-          <EntitySet Name="Zlecenia" EntityType="Self.Zlecenia" />
-          <EntitySet Name="ZlecenieBOM" EntityType="Self.ZlecenieBOM" />
-          <AssociationSet Name="FK__Faktury__IdWykon__52593CB8" Association="Self.FK__Faktury__IdWykon__52593CB8">
-            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
-            <End Role="Faktury" EntitySet="Faktury" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Faktury__IdZlece__534D60F1" Association="Self.FK__Faktury__IdZlece__534D60F1">
-            <End Role="Zlecenia" EntitySet="Zlecenia" />
-            <End Role="Faktury" EntitySet="Faktury" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rozliczenia_Faktury" Association="Self.FK_Rozliczenia_Faktury">
-            <End Role="Faktury" EntitySet="Faktury" />
-            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
-          </AssociationSet>
-          <AssociationSet Name="FK__FormyMasz__IdFor__02084FDA" Association="Self.FK__FormyMasz__IdFor__02084FDA">
-            <End Role="Formy" EntitySet="Formy" />
-            <End Role="FormyMaszyny" EntitySet="FormyMaszyny" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Indeksy_Formy" Association="Self.FK_Indeksy_Formy">
-            <End Role="Formy" EntitySet="Formy" />
-            <End Role="Indeksy" EntitySet="Indeksy" />
-          </AssociationSet>
-          <AssociationSet Name="FK__FormyMasz__IdMas__02FC7413" Association="Self.FK__FormyMasz__IdMas__02FC7413">
-            <End Role="Maszyny" EntitySet="Maszyny" />
-            <End Role="FormyMaszyny" EntitySet="FormyMaszyny" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Indeksy_GrupyWstawek" Association="Self.FK_Indeksy_GrupyWstawek">
-            <End Role="GrupyWstawek" EntitySet="GrupyWstawek" />
-            <End Role="Indeksy" EntitySet="Indeksy" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Wstawki_GrupyWstawek" Association="Self.FK_Wstawki_GrupyWstawek">
-            <End Role="GrupyWstawek" EntitySet="GrupyWstawek" />
-            <End Role="Wstawki" EntitySet="Wstawki" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_Indeksy" Association="Self.FK_IndeksBOM_Indeksy">
-            <End Role="Indeksy" EntitySet="Indeksy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M1" Association="Self.FK_IndeksBOM_M1">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M2" Association="Self.FK_IndeksBOM_M2">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M3" Association="Self.FK_IndeksBOM_M3">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M4" Association="Self.FK_IndeksBOM_M4">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M5" Association="Self.FK_IndeksBOM_M5">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_IndeksBOM_M6" Association="Self.FK_IndeksBOM_M6">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="IndeksBOM" EntitySet="IndeksBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Zlecenia__IdInde__45F365D3" Association="Self.FK__Zlecenia__IdInde__45F365D3">
-            <End Role="Indeksy" EntitySet="Indeksy" />
-            <End Role="Zlecenia" EntitySet="Zlecenia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rozliczenia_Indeksy" Association="Self.FK_Rozliczenia_Indeksy">
-            <End Role="Indeksy" EntitySet="Indeksy" />
-            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Materialy_Jednostki" Association="Self.FK_Materialy_Jednostki">
-            <End Role="Jednostki" EntitySet="Jednostki" />
-            <End Role="Materialy" EntitySet="Materialy" />
-          </AssociationSet>
-          <AssociationSet Name="FK__KosztyMat__IdMat__3587F3E0" Association="Self.FK__KosztyMat__IdMat__3587F3E0">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="KosztyMaterialowe" EntitySet="KosztyMaterialowe" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KosztyOperacyjne_Zlecenia" Association="Self.FK_KosztyOperacyjne_Zlecenia">
-            <End Role="Zlecenia" EntitySet="Zlecenia" />
-            <End Role="KosztyOperacyjne" EntitySet="KosztyOperacyjne" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Wykonawcy__IdKra__160F4887" Association="Self.FK__Wykonawcy__IdKra__160F4887">
-            <End Role="Kraje" EntitySet="Kraje" />
-            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ZlecenieB__IdMat__5CD6CB2B" Association="Self.FK__ZlecenieB__IdMat__5CD6CB2B">
-            <End Role="Materialy" EntitySet="Materialy" />
-            <End Role="ZlecenieBOM" EntitySet="ZlecenieBOM" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rozliczenia_Wykonawcy" Association="Self.FK_Rozliczenia_Wykonawcy">
-            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
-            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rozliczenia_Zlecenia" Association="Self.FK_Rozliczenia_Zlecenia">
-            <End Role="Zlecenia" EntitySet="Zlecenia" />
-            <End Role="Rozliczenia" EntitySet="Rozliczenia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Zlecenia_Wykonawcy" Association="Self.FK_Zlecenia_Wykonawcy">
-            <End Role="Wykonawcy" EntitySet="Wykonawcy" />
-            <End Role="Zlecenia" EntitySet="Zlecenia" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ZlecenieB__IdZle__5BE2A6F2" Association="Self.FK__ZlecenieB__IdZle__5BE2A6F2">
-            <End Role="Zlecenia" EntitySet="Zlecenia" />
-            <End Role="ZlecenieBOM" EntitySet="ZlecenieBOM" />
-          </AssociationSet>
-        </EntityContainer>
+        <EntityType Name="IndeksBOM">
+          <Key>
+            <PropertyRef Name="IdBOM" />
+          </Key>
+          <Property Name="IdBOM" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdIndeksu" Type="Int32" Nullable="false" />
+          <Property Name="IdMaterialu" Type="Int32" Nullable="false" />
+          <Property Name="Ilosc" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="UdzialProcentowy" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="KodIndeksu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DataUtworzenia" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Indeksy" Relationship="MVVMFirmaModel.FK_IndeksBOM_Indeksy" FromRole="IndeksBOM" ToRole="Indeksy" />
+          <NavigationProperty Name="Materialy" Relationship="MVVMFirmaModel.FK_IndeksBOM_Materialy" FromRole="IndeksBOM" ToRole="Materialy" />
+        </EntityType>
+        <Association Name="FK_IndeksBOM_Indeksy">
+          <End Type="MVVMFirmaModel.Indeksy" Role="Indeksy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.IndeksBOM" Role="IndeksBOM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Indeksy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndeksBOM">
+              <PropertyRef Name="IdIndeksu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IndeksBOM_Materialy">
+          <End Type="MVVMFirmaModel.Materialy" Role="Materialy" Multiplicity="1" />
+          <End Type="MVVMFirmaModel.IndeksBOM" Role="IndeksBOM" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materialy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IndeksBOM">
+              <PropertyRef Name="IdMaterialu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MVVMFirmaModelStoreContainer" CdmEntityContainer="MVVMFirmaEntities13">
+          <FunctionImportMapping FunctionImportName="DodajKosztMaterialu" FunctionName="MVVMFirmaModel.Store.DodajKosztMaterialu" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="MVVMFirmaModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="MVVMFirmaModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="MVVMFirmaModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="MVVMFirmaModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVVMFirmaModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="MVVMFirmaModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVVMFirmaModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="MVVMFirmaModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="Sp_RozliczZlecenie" FunctionName="MVVMFirmaModel.Store.Sp_RozliczZlecenie" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="MVVMFirmaModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="Sp_ZapiszDoRozliczen" FunctionName="MVVMFirmaModel.Store.Sp_ZapiszDoRozliczen" />
+          <FunctionImportMapping FunctionImportName="Sp_ZapotrzebowanieProdukcyjne" FunctionName="MVVMFirmaModel.Store.Sp_ZapotrzebowanieProdukcyjne">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MVVMFirmaModel.Sp_ZapotrzebowanieProdukcyjne_Result">
+                <ScalarProperty Name="Material" ColumnName="Material" />
+                <ScalarProperty Name="Typ" ColumnName="Typ" />
+                <ScalarProperty Name="CalkowiteZapotrzebowanie" ColumnName="CalkowiteZapotrzebowanie" />
+                <ScalarProperty Name="Jednostka" ColumnName="Jednostka" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Sp_ZmienStatusZlecenia" FunctionName="MVVMFirmaModel.Store.Sp_ZmienStatusZlecenia" />
+          <EntitySetMapping Name="CennikUslugWykonawcow">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.CennikUslugWykonawcow">
+              <MappingFragment StoreEntitySet="CennikUslugWykonawcow">
+                <ScalarProperty Name="DataAktualizacji" ColumnName="DataAktualizacji" />
+                <ScalarProperty Name="DomyslnaCenaUslugi" ColumnName="DomyslnaCenaUslugi" />
+                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Faktury">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Faktury">
               <MappingFragment StoreEntitySet="Faktury">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NrFaktury" ColumnName="NrFaktury" />
-                <ScalarProperty Name="DataFaktury" ColumnName="DataFaktury" />
-                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
-                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
                 <ScalarProperty Name="Kwota" ColumnName="Kwota" />
+                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+                <ScalarProperty Name="DataFaktury" ColumnName="DataFaktury" />
+                <ScalarProperty Name="NrFaktury" ColumnName="NrFaktury" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Formy">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Formy">
               <MappingFragment StoreEntitySet="Formy">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="KodFormy" ColumnName="KodFormy" />
-                <ScalarProperty Name="MaszynaDedykowana" ColumnName="MaszynaDedykowana" />
-                <ScalarProperty Name="Lokalizacja" ColumnName="Lokalizacja" />
-                <ScalarProperty Name="CzasCyklu" ColumnName="CzasCyklu" />
                 <ScalarProperty Name="IloscGniazd" ColumnName="IloscGniazd" />
+                <ScalarProperty Name="CzasCyklu" ColumnName="CzasCyklu" />
+                <ScalarProperty Name="Lokalizacja" ColumnName="Lokalizacja" />
+                <ScalarProperty Name="MaszynaDedykowana" ColumnName="MaszynaDedykowana" />
+                <ScalarProperty Name="KodFormy" ColumnName="KodFormy" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="FormyMaszyny">
             <EntityTypeMapping TypeName="MVVMFirmaModel.FormyMaszyny">
               <MappingFragment StoreEntitySet="FormyMaszyny">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdFormy" ColumnName="IdFormy" />
                 <ScalarProperty Name="IdMaszyny" ColumnName="IdMaszyny" />
+                <ScalarProperty Name="IdFormy" ColumnName="IdFormy" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GrupyWstawek">
             <EntityTypeMapping TypeName="MVVMFirmaModel.GrupyWstawek">
               <MappingFragment StoreEntitySet="GrupyWstawek">
-                <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
                 <ScalarProperty Name="GrupaWstawki" ColumnName="GrupaWstawki" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IndeksBOM">
-            <EntityTypeMapping TypeName="MVVMFirmaModel.IndeksBOM">
-              <MappingFragment StoreEntitySet="IndeksBOM">
-                <ScalarProperty Name="IdBOM" ColumnName="IdBOM" />
-                <ScalarProperty Name="Indeks" ColumnName="Indeks" />
-                <ScalarProperty Name="IdMaterialu_M1" ColumnName="IdMaterialu_M1" />
-                <ScalarProperty Name="Ilosc_M1" ColumnName="Ilosc_M1" />
-                <ScalarProperty Name="Udzial_M1" ColumnName="Udzial_M1" />
-                <ScalarProperty Name="IdMaterialu_M2" ColumnName="IdMaterialu_M2" />
-                <ScalarProperty Name="Ilosc_M2" ColumnName="Ilosc_M2" />
-                <ScalarProperty Name="Udzial_M2" ColumnName="Udzial_M2" />
-                <ScalarProperty Name="IdMaterialu_M3" ColumnName="IdMaterialu_M3" />
-                <ScalarProperty Name="Ilosc_M3" ColumnName="Ilosc_M3" />
-                <ScalarProperty Name="Udzial_M3" ColumnName="Udzial_M3" />
-                <ScalarProperty Name="IdMaterialu_M4" ColumnName="IdMaterialu_M4" />
-                <ScalarProperty Name="Ilosc_M4" ColumnName="Ilosc_M4" />
-                <ScalarProperty Name="Udzial_M4" ColumnName="Udzial_M4" />
-                <ScalarProperty Name="IdMaterialu_M5" ColumnName="IdMaterialu_M5" />
-                <ScalarProperty Name="Ilosc_M5" ColumnName="Ilosc_M5" />
-                <ScalarProperty Name="Udzial_M5" ColumnName="Udzial_M5" />
-                <ScalarProperty Name="IdMaterialu_M6" ColumnName="IdMaterialu_M6" />
-                <ScalarProperty Name="Ilosc_M6" ColumnName="Ilosc_M6" />
-                <ScalarProperty Name="Udzial_M6" ColumnName="Udzial_M6" />
-                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+                <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Indeksy">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Indeksy">
               <MappingFragment StoreEntitySet="Indeksy">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="KodIndeksu" ColumnName="KodIndeksu" />
-                <ScalarProperty Name="Rodzina" ColumnName="Rodzina" />
-                <ScalarProperty Name="Opis" ColumnName="Opis" />
-                <ScalarProperty Name="IdFormy" ColumnName="IdFormy" />
-                <ScalarProperty Name="PracaAutomatyczna" ColumnName="PracaAutomatyczna" />
-                <ScalarProperty Name="KodFormy" ColumnName="KodFormy" />
-                <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
                 <ScalarProperty Name="GrupaWstawki" ColumnName="GrupaWstawki" />
+                <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
+                <ScalarProperty Name="KodFormy" ColumnName="KodFormy" />
+                <ScalarProperty Name="PracaAutomatyczna" ColumnName="PracaAutomatyczna" />
+                <ScalarProperty Name="IdFormy" ColumnName="IdFormy" />
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+                <ScalarProperty Name="Rodzina" ColumnName="Rodzina" />
+                <ScalarProperty Name="KodIndeksu" ColumnName="KodIndeksu" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndeksyParametry">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.IndeksyParametry">
+              <MappingFragment StoreEntitySet="IndeksyParametry">
+                <ScalarProperty Name="CzyWlewek" ColumnName="CzyWlewek" />
+                <ScalarProperty Name="KrotnoscFormy" ColumnName="KrotnoscFormy" />
+                <ScalarProperty Name="NormaCzasCyklu_s" ColumnName="NormaCzasCyklu_s" />
+                <ScalarProperty Name="WagaWtryskuNetto_g" ColumnName="WagaWtryskuNetto_g" />
+                <ScalarProperty Name="WagaWtryskuBrutto_g" ColumnName="WagaWtryskuBrutto_g" />
+                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Jednostki">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Jednostki">
               <MappingFragment StoreEntitySet="Jednostki">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="KodJednostki" ColumnName="KodJednostki" />
                 <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="KodJednostki" ColumnName="KodJednostki" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KonfiguracjaSystemu">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.KonfiguracjaSystemu">
+              <MappingFragment StoreEntitySet="KonfiguracjaSystemu">
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+                <ScalarProperty Name="Wartosc" ColumnName="Wartosc" />
+                <ScalarProperty Name="Klucz" ColumnName="Klucz" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="KosztyMaterialowe">
             <EntityTypeMapping TypeName="MVVMFirmaModel.KosztyMaterialowe">
               <MappingFragment StoreEntitySet="KosztyMaterialowe">
-                <ScalarProperty Name="IdMaterialu" ColumnName="IdMaterialu" />
-                <ScalarProperty Name="CenaJednostkowa" ColumnName="CenaJednostkowa" />
-                <ScalarProperty Name="DataModyfikacji" ColumnName="DataModyfikacji" />
-                <ScalarProperty Name="KodMaterialu" ColumnName="KodMaterialu" />
-                <ScalarProperty Name="Opis" ColumnName="Opis" />
-                <ScalarProperty Name="JednostkaMiary" ColumnName="JednostkaMiary" />
-                <ScalarProperty Name="IdKosztuMaterialowego" ColumnName="IdKosztuMaterialowego" />
-                <ScalarProperty Name="DataUtworzenia" ColumnName="DataUtworzenia" />
                 <ScalarProperty Name="Aktywne" ColumnName="Aktywne" />
+                <ScalarProperty Name="DataUtworzenia" ColumnName="DataUtworzenia" />
+                <ScalarProperty Name="IdKosztuMaterialowego" ColumnName="IdKosztuMaterialowego" />
+                <ScalarProperty Name="JednostkaMiary" ColumnName="JednostkaMiary" />
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+                <ScalarProperty Name="KodMaterialu" ColumnName="KodMaterialu" />
+                <ScalarProperty Name="DataModyfikacji" ColumnName="DataModyfikacji" />
+                <ScalarProperty Name="CenaJednostkowa" ColumnName="CenaJednostkowa" />
+                <ScalarProperty Name="IdMaterialu" ColumnName="IdMaterialu" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="KosztyOperacyjne">
             <EntityTypeMapping TypeName="MVVMFirmaModel.KosztyOperacyjne">
               <MappingFragment StoreEntitySet="KosztyOperacyjne">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
-                <ScalarProperty Name="NazwaOperacji" ColumnName="NazwaOperacji" />
+                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+                <ScalarProperty Name="DataWpisu" ColumnName="DataWpisu" />
+                <ScalarProperty Name="TypKosztu" ColumnName="TypKosztu" />
                 <ScalarProperty Name="Koszt" ColumnName="Koszt" />
+                <ScalarProperty Name="NazwaOperacji" ColumnName="NazwaOperacji" />
+                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Kraje">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Kraje">
               <MappingFragment StoreEntitySet="Kraje">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="KodKraju" ColumnName="KodKraju" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogistykaWykonawcow">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.LogistykaWykonawcow">
+              <MappingFragment StoreEntitySet="LogistykaWykonawcow">
+                <ScalarProperty Name="KosztZaKM_Default" ColumnName="KosztZaKM_Default" />
+                <ScalarProperty Name="DystansKM" ColumnName="DystansKM" />
+                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Maszyny">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Maszyny">
               <MappingFragment StoreEntitySet="Maszyny">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="KodMaszyny" ColumnName="KodMaszyny" />
                 <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="KodMaszyny" ColumnName="KodMaszyny" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Materialy">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Materialy">
               <MappingFragment StoreEntitySet="Materialy">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="KodMaterialu" ColumnName="KodMaterialu" />
-                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
-                <ScalarProperty Name="Cena" ColumnName="Cena" />
-                <ScalarProperty Name="Jednostka" ColumnName="Jednostka" />
-                <ScalarProperty Name="RodzajMaterialu" ColumnName="RodzajMaterialu" />
                 <ScalarProperty Name="KodJednostki" ColumnName="KodJednostki" />
+                <ScalarProperty Name="RodzajMaterialu" ColumnName="RodzajMaterialu" />
+                <ScalarProperty Name="Jednostka" ColumnName="Jednostka" />
+                <ScalarProperty Name="Cena" ColumnName="Cena" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="KodMaterialu" ColumnName="KodMaterialu" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParametryLogistyczne">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.ParametryLogistyczne">
+              <MappingFragment StoreEntitySet="ParametryLogistyczne">
+                <ScalarProperty Name="KosztZaKM" ColumnName="KosztZaKM" />
+                <ScalarProperty Name="OdlegloscKM" ColumnName="OdlegloscKM" />
+                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RodzajeMaterialow">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.RodzajeMaterialow">
+              <MappingFragment StoreEntitySet="RodzajeMaterialow">
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+                <ScalarProperty Name="KodRodzaju" ColumnName="KodRodzaju" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Rozliczenia">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Rozliczenia">
               <MappingFragment StoreEntitySet="Rozliczenia">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdFaktury" ColumnName="IdFaktury" />
-                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
-                <ScalarProperty Name="NrZlecenia" ColumnName="NrZlecenia" />
-                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
-                <ScalarProperty Name="IloscZlecona" ColumnName="IloscZlecona" />
-                <ScalarProperty Name="DataWystawienia" ColumnName="DataWystawienia" />
-                <ScalarProperty Name="IloscWykonana" ColumnName="IloscWykonana" />
-                <ScalarProperty Name="Scrap" ColumnName="Scrap" />
-                <ScalarProperty Name="TKWPlan" ColumnName="TKWPlan" />
-                <ScalarProperty Name="TKWReal" ColumnName="TKWReal" />
-                <ScalarProperty Name="DataRozliczenia" ColumnName="DataRozliczenia" />
-                <ScalarProperty Name="IloscZafakturowana" ColumnName="IloscZafakturowana" />
-                <ScalarProperty Name="Kwota" ColumnName="Kwota" />
-                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
-                <ScalarProperty Name="NazwaWykonawcy" ColumnName="NazwaWykonawcy" />
-                <ScalarProperty Name="MaterialOdzyskany" ColumnName="MaterialOdzyskany" />
-                <ScalarProperty Name="MaterialUtylizacja" ColumnName="MaterialUtylizacja" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="RzeczCzasCyklu" ColumnName="RzeczCzasCyklu" />
+                <ScalarProperty Name="MaterialUtylizacja" ColumnName="MaterialUtylizacja" />
+                <ScalarProperty Name="MaterialOdzyskany" ColumnName="MaterialOdzyskany" />
+                <ScalarProperty Name="NazwaWykonawcy" ColumnName="NazwaWykonawcy" />
+                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+                <ScalarProperty Name="Kwota" ColumnName="Kwota" />
+                <ScalarProperty Name="IloscZafakturowana" ColumnName="IloscZafakturowana" />
+                <ScalarProperty Name="DataRozliczenia" ColumnName="DataRozliczenia" />
+                <ScalarProperty Name="TKWReal" ColumnName="TKWReal" />
+                <ScalarProperty Name="TKWPlan" ColumnName="TKWPlan" />
+                <ScalarProperty Name="Scrap" ColumnName="Scrap" />
+                <ScalarProperty Name="IloscWykonana" ColumnName="IloscWykonana" />
+                <ScalarProperty Name="DataWystawienia" ColumnName="DataWystawienia" />
+                <ScalarProperty Name="IloscZlecona" ColumnName="IloscZlecona" />
+                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+                <ScalarProperty Name="NrZlecenia" ColumnName="NrZlecenia" />
+                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+                <ScalarProperty Name="IdFaktury" ColumnName="IdFaktury" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="MVVMFirmaModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UstawieniaDomyslne">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.UstawieniaDomyslne">
+              <MappingFragment StoreEntitySet="UstawieniaDomyslne">
+                <ScalarProperty Name="Wartosc" ColumnName="Wartosc" />
+                <ScalarProperty Name="Klucz" ColumnName="Klucz" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Wstawki">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Wstawki">
               <MappingFragment StoreEntitySet="Wstawki">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="KodWstawki" ColumnName="KodWstawki" />
-                <ScalarProperty Name="KodIndeksuWyrobu" ColumnName="KodIndeksuWyrobu" />
-                <ScalarProperty Name="GrupaWstawki" ColumnName="GrupaWstawki" />
                 <ScalarProperty Name="IdGrupa" ColumnName="IdGrupa" />
+                <ScalarProperty Name="GrupaWstawki" ColumnName="GrupaWstawki" />
+                <ScalarProperty Name="KodIndeksuWyrobu" ColumnName="KodIndeksuWyrobu" />
+                <ScalarProperty Name="KodWstawki" ColumnName="KodWstawki" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Wykonawcy">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Wykonawcy">
               <MappingFragment StoreEntitySet="Wykonawcy">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NrWykonawcy" ColumnName="NrWykonawcy" />
-                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
-                <ScalarProperty Name="NIP" ColumnName="NIP" />
-                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
-                <ScalarProperty Name="Kraj" ColumnName="Kraj" />
-                <ScalarProperty Name="Miasto" ColumnName="Miasto" />
-                <ScalarProperty Name="KodPocztowy" ColumnName="KodPocztowy" />
-                <ScalarProperty Name="Ulica" ColumnName="Ulica" />
-                <ScalarProperty Name="NrDomu" ColumnName="NrDomu" />
                 <ScalarProperty Name="IdKraju" ColumnName="IdKraju" />
+                <ScalarProperty Name="NrDomu" ColumnName="NrDomu" />
+                <ScalarProperty Name="Ulica" ColumnName="Ulica" />
+                <ScalarProperty Name="KodPocztowy" ColumnName="KodPocztowy" />
+                <ScalarProperty Name="Miasto" ColumnName="Miasto" />
+                <ScalarProperty Name="Kraj" ColumnName="Kraj" />
+                <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+                <ScalarProperty Name="NIP" ColumnName="NIP" />
+                <ScalarProperty Name="Nazwa" ColumnName="Nazwa" />
+                <ScalarProperty Name="NrWykonawcy" ColumnName="NrWykonawcy" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Zlecenia">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Zlecenia">
               <MappingFragment StoreEntitySet="Zlecenia">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="NrZlecenia" ColumnName="NrZlecenia" />
-                <ScalarProperty Name="DataZlecenia" ColumnName="DataZlecenia" />
-                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
-                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
-                <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
                 <ScalarProperty Name="Uwagi" ColumnName="Uwagi" />
+                <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
+                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+                <ScalarProperty Name="IdWykonawcy" ColumnName="IdWykonawcy" />
+                <ScalarProperty Name="DataZlecenia" ColumnName="DataZlecenia" />
+                <ScalarProperty Name="NrZlecenia" ColumnName="NrZlecenia" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ZlecenieBOM">
             <EntityTypeMapping TypeName="MVVMFirmaModel.ZlecenieBOM">
               <MappingFragment StoreEntitySet="ZlecenieBOM">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
-                <ScalarProperty Name="IdMaterialu" ColumnName="IdMaterialu" />
                 <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
+                <ScalarProperty Name="IdMaterialu" ColumnName="IdMaterialu" />
+                <ScalarProperty Name="IdZlecenia" ColumnName="IdZlecenia" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IndeksBOM">
+            <EntityTypeMapping TypeName="MVVMFirmaModel.IndeksBOM">
+              <MappingFragment StoreEntitySet="IndeksBOM">
+                <ScalarProperty Name="DataUtworzenia" ColumnName="DataUtworzenia" />
+                <ScalarProperty Name="KodIndeksu" ColumnName="KodIndeksu" />
+                <ScalarProperty Name="UdzialProcentowy" ColumnName="UdzialProcentowy" />
+                <ScalarProperty Name="Ilosc" ColumnName="Ilosc" />
+                <ScalarProperty Name="IdMaterialu" ColumnName="IdMaterialu" />
+                <ScalarProperty Name="IdIndeksu" ColumnName="IdIndeksu" />
+                <ScalarProperty Name="IdBOM" ColumnName="IdBOM" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -17,14 +17,9 @@ namespace MVVMFirma.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Materialy()
         {
-            this.IndeksBOM = new HashSet<IndeksBOM>();
-            this.IndeksBOM1 = new HashSet<IndeksBOM>();
-            this.IndeksBOM2 = new HashSet<IndeksBOM>();
-            this.IndeksBOM3 = new HashSet<IndeksBOM>();
-            this.IndeksBOM4 = new HashSet<IndeksBOM>();
-            this.IndeksBOM5 = new HashSet<IndeksBOM>();
             this.KosztyMaterialowe = new HashSet<KosztyMaterialowe>();
             this.ZlecenieBOM = new HashSet<ZlecenieBOM>();
+            this.IndeksBOM = new HashSet<IndeksBOM>();
         }
     
         public int Id { get; set; }
@@ -35,22 +30,13 @@ namespace MVVMFirma.Models
         public string RodzajMaterialu { get; set; }
         public string KodJednostki { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndeksBOM> IndeksBOM { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndeksBOM> IndeksBOM1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndeksBOM> IndeksBOM2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndeksBOM> IndeksBOM3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndeksBOM> IndeksBOM4 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IndeksBOM> IndeksBOM5 { get; set; }
         public virtual Jednostki Jednostki { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KosztyMaterialowe> KosztyMaterialowe { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZlecenieBOM> ZlecenieBOM { get; set; }
+        public virtual RodzajeMaterialow RodzajeMaterialow { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<IndeksBOM> IndeksBOM { get; set; }
     }
 }

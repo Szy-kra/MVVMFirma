@@ -12,16 +12,12 @@ namespace MVVMFirma.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class KosztyOperacyjne
+    public partial class ParametryLogistyczne
     {
-        public int Id { get; set; }
-        public int IdZlecenia { get; set; }
-        public string NazwaOperacji { get; set; }
-        public Nullable<decimal> Koszt { get; set; }
-        public string TypKosztu { get; set; }
-        public Nullable<System.DateTime> DataWpisu { get; set; }
-        public Nullable<int> IdWykonawcy { get; set; }
+        public int IdWykonawcy { get; set; }
+        public Nullable<int> OdlegloscKM { get; set; }
+        public Nullable<decimal> KosztZaKM { get; set; }
     
-        public virtual Zlecenia Zlecenia { get; set; }
+        public virtual Wykonawcy Wykonawcy { get; set; }
     }
 }

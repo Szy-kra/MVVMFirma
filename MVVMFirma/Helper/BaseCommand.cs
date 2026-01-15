@@ -10,10 +10,8 @@ namespace MVVMFirma.Helper
 
         public BaseCommand(Action command, Func<bool> canExecute = null)
         {
-            if (command == null)
-                throw new ArgumentNullException("command");
+            _command = command ?? throw new ArgumentNullException(nameof(command));
             _canExecute = canExecute;
-            _command = command;
         }
 
         public void Execute(object parameter)
@@ -23,11 +21,14 @@ namespace MVVMFirma.Helper
 
         public bool CanExecute(object parameter)
         {
-            if (_canExecute == null)
-                return true;
-            return _canExecute();
+            return _canExecute?.Invoke() ?? true;
         }
 
-        public event EventHandler CanExecuteChanged;
+        // Event poprawiony – teraz mo¿e byæ wywo³ywany, np. z ViewModel
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
     }
 }

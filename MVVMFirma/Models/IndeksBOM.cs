@@ -15,33 +15,14 @@ namespace MVVMFirma.Models
     public partial class IndeksBOM
     {
         public int IdBOM { get; set; }
-        public string Indeks { get; set; }
-        public Nullable<int> IdMaterialu_M1 { get; set; }
-        public Nullable<decimal> Ilosc_M1 { get; set; }
-        public Nullable<decimal> Udzial_M1 { get; set; }
-        public Nullable<int> IdMaterialu_M2 { get; set; }
-        public Nullable<decimal> Ilosc_M2 { get; set; }
-        public Nullable<decimal> Udzial_M2 { get; set; }
-        public Nullable<int> IdMaterialu_M3 { get; set; }
-        public Nullable<decimal> Ilosc_M3 { get; set; }
-        public Nullable<decimal> Udzial_M3 { get; set; }
-        public Nullable<int> IdMaterialu_M4 { get; set; }
-        public Nullable<decimal> Ilosc_M4 { get; set; }
-        public Nullable<decimal> Udzial_M4 { get; set; }
-        public Nullable<int> IdMaterialu_M5 { get; set; }
-        public Nullable<decimal> Ilosc_M5 { get; set; }
-        public Nullable<decimal> Udzial_M5 { get; set; }
-        public Nullable<int> IdMaterialu_M6 { get; set; }
-        public Nullable<decimal> Ilosc_M6 { get; set; }
-        public Nullable<decimal> Udzial_M6 { get; set; }
-        public Nullable<int> IdIndeksu { get; set; }
+        public int IdIndeksu { get; set; }
+        public int IdMaterialu { get; set; }
+        public decimal Ilosc { get; set; }
+        public decimal UdzialProcentowy { get; set; }
+        public string KodIndeksu { get; set; }
+        public Nullable<System.DateTime> DataUtworzenia { get; set; }
     
         public virtual Indeksy Indeksy { get; set; }
         public virtual Materialy Materialy { get; set; }
-        public virtual Materialy Materialy1 { get; set; }
-        public virtual Materialy Materialy2 { get; set; }
-        public virtual Materialy Materialy3 { get; set; }
-        public virtual Materialy Materialy4 { get; set; }
-        public virtual Materialy Materialy5 { get; set; }
     }
 }

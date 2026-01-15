@@ -3,159 +3,118 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MVVMFirma.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1000">
 
-    <!-- TŁO CAŁEGO WIDOKU -->
+    <UserControl.Resources>
+        <ControlTemplate x:Key="ErrorTemplateWithText">
+            <StackPanel Orientation="Horizontal">
+                <AdornedElementPlaceholder Name="ControlWithError" />
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                    <TextBlock Text="❌" VerticalAlignment="Center" Foreground="Red" FontSize="14" Margin="0,0,3,0"/>
+                    <TextBlock Text="{Binding ElementName=ControlWithError, Path=(Validation.Errors)[0].ErrorContent}" 
+                               Foreground="Red" FontSize="11" VerticalAlignment="Center" FontWeight="Bold"/>
+                </StackPanel>
+            </StackPanel>
+        </ControlTemplate>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplateWithText}" />
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                            </Border>
+                            <TextBlock x:Name="PlaceholderText" Text="{TemplateBinding Tag}" Foreground="DarkGray" IsHitTestVisible="False" VerticalAlignment="Center" Margin="10,0" Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="Validation.HasError" Value="true">
+                                <Setter Property="BorderBrush" Value="Red"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-
-        <!-- Gradient  -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                 <GradientStop Color="#0b0517" Offset="0.0"/>
-                <!-- najciemniejszy u góry -->
                 <GradientStop Color="#231a45" Offset="0.25"/>
                 <GradientStop Color="#2f3e7d" Offset="0.5"/>
                 <GradientStop Color="#4674a6" Offset="0.75"/>
                 <GradientStop Color="#72cee8" Offset="1.0"/>
-                <!-- najjaśniejszy na dole -->
             </LinearGradientBrush>
         </Grid.Background>
 
-        <!-- ✅ FORMULARZ ODSUNIĘTY O ~2 CM -->
         <Grid Margin="75,75,0,0">
-
-            <!-- KOLUMNY -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250" />
-                <!-- etykiety -->
-                <ColumnDefinition Width="250" />
-                <!-- pola -->
                 <ColumnDefinition Width="200" />
-                <!-- etykiety prawe -->
-                <ColumnDefinition Width="158" />
-                <!-- pola prawe -->
+                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="250" />
             </Grid.ColumnDefinitions>
 
-            <!-- WIERSZE -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"/>
-                <!-- nr wykonawcy -->
                 <RowDefinition Height="45"/>
-                <!-- nazwa + NIP -->
                 <RowDefinition Height="45"/>
-                <!-- telefon + kraj -->
                 <RowDefinition Height="45"/>
-                <!-- miasto + kod pocztowy -->
                 <RowDefinition Height="45"/>
-                <!-- ulica + nr domu -->
-                <RowDefinition Height="45"/>
+                <RowDefinition Height="80"/>
             </Grid.RowDefinitions>
 
-            <!-- NUMER WYKONAWCY -->
-            <Label Grid.Column="0" Grid.Row="0"
-                   Content="Nadaj numer wykonawcy:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="1" Grid.Row="0"
-                     Background="White"
-                     Margin="0,8"/>
+            <Label Content="Nr wykonawcy:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Background="White" Margin="0,8"
+                     Text="{Binding Numer, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-            <!-- NAZWA WYKONAWCY -->
-            <Label Grid.Column="0" Grid.Row="1"
-                   Content="Nazwa wykonawcy:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="1" Grid.Row="1"
-                     Background="White"
-                     Margin="0,8"/>
+            <Label Content="Nazwa wykonawcy:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Background="White" Margin="0,8"
+                     Text="{Binding Nazwa, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-            <!-- NIP -->
-            <Label Grid.Column="2" Grid.Row="1"
-                   Content="NIP:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="3" Grid.Row="1"
-                     Background="White"
-                     Margin="0,8"
-                     Width="150"/>
+            <Label Content="NIP:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="1" Grid.Column="3" Background="White" Margin="0,8" Width="150" HorizontalAlignment="Left"
+                     Tag="xxx-xxx-xx-xx"
+                     Text="{Binding NIP, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-            <!-- TELEFON -->
-            <Label Grid.Column="2" Grid.Row="2"
-                   Content="Telefon:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="3" Grid.Row="2"
-                     Background="White"
-                     Margin="0,8"
-                     Width="150"/>
+            <Label Content="Kraj:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Background="White" Margin="0,8"
+                     Text="{Binding Kraj, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- KRAJ -->
-            <Label Grid.Column="0" Grid.Row="2"
-                   Content="Kraj:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="1" Grid.Row="2"
-                     Background="White"
-                     Margin="0,8"/>
+            <Label Content="Telefon:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="2" Grid.Column="3" Background="White" Margin="0,8" Width="150" HorizontalAlignment="Left"
+                     Text="{Binding Telefon, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- MIASTO -->
-            <Label Grid.Column="0" Grid.Row="3"
-                   Content="Miasto:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="1" Grid.Row="3"
-                     Background="White"
-                     Margin="0,8"/>
+            <Label Content="Miasto:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Background="White" Margin="0,8"
+                     Text="{Binding Miasto, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- KOD POCZTOWY -->
-            <Label Grid.Column="2" Grid.Row="3"
-                   Content="Kod pocztowy:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="3" Grid.Row="3"
-                     Background="White"
-                     Margin="0,8"
-                     Width="100"/>
+            <Label Content="Kod pocztowy:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="3" Grid.Column="3" Background="White" Margin="0,8" Width="100" HorizontalAlignment="Left"
+                     Tag="xx-xxx"
+                     Text="{Binding KodPocztowy, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
-            <!-- ULICA -->
-            <Label Grid.Column="0" Grid.Row="4"
-                   Content="Ulica:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="1" Grid.Row="4"
-                     Background="White"
-                     Margin="0,8"/>
+            <Label Content="Ulica:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Background="White" Margin="0,8"
+                     Text="{Binding Ulica, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- NR DOMU -->
-            <Label Grid.Column="2" Grid.Row="4"
-                   Content="Nr domu:"
-                   Foreground="White"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="0,8,10,8"/>
-            <TextBox Grid.Column="3" Grid.Row="4"
-                     Background="White"
-                     Margin="0,8"
-                     Width="80"/>
+            <Label Content="Nr domu:" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Margin="0,0,10,0"/>
+            <TextBox Grid.Row="4" Grid.Column="3" Background="White" Margin="0,8" Width="80" HorizontalAlignment="Left"
+                     Text="{Binding NrDomu, UpdateSourceTrigger=PropertyChanged}"/>
 
+            <Button Grid.Row="5" Grid.Column="1" Content="ZAPISZ DO BAZY" 
+                    Command="{Binding SaveCommand}"
+                    Background="#231a45" Foreground="White" FontWeight="Bold"
+                    Height="40" Width="200" HorizontalAlignment="Left"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,49 +1,68 @@
 ﻿<UserControl x:Class="MVVMFirma.Views.BomView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             Background="White">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+             d:DesignHeight="600" d:DesignWidth="1000">
+    <Grid Background="#F0F0F0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Pełne zestawienie BOM (Surowce, Ilości, Jednostki)" 
-                   FontSize="18" FontWeight="Bold" Margin="0,0,10,15"/>
+        <Border Grid.Column="0" Background="White" BorderBrush="#CCCCCC" BorderThickness="0,0,1,0">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding ListaBOM}" 
-                  AutoGenerateColumns="False" IsReadOnly="True" 
-                  GridLinesVisibility="All" AlternatingRowBackground="#F2F2F2">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Indeks" Binding="{Binding Indeks, TargetNullValue='brak'}" Width="150" FontWeight="Bold"/>
+                <TextBlock Text="Szukaj Indeksu:" FontWeight="Bold" Margin="0,0,0,5"/>
 
-                <DataGridTextColumn Header="Surowiec 1" Binding="{Binding Materialy.Nazwa, TargetNullValue='-'}" Width="150"/>
-                <DataGridTextColumn Header="Ilość 1" Binding="{Binding Ilosc_M1, StringFormat={}{0:N4}}" Width="60"/>
-                <DataGridTextColumn Header="Jm 1" Binding="{Binding Materialy.KodJednostki, TargetNullValue='-'}" Width="45"/>
+                <TextBox Grid.Row="1" 
+                         Text="{Binding FrazaWyszukiwania, UpdateSourceTrigger=PropertyChanged}" 
+                         Height="25" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
 
-                <DataGridTextColumn Header="Surowiec 2" Binding="{Binding Materialy1.Nazwa, TargetNullValue='-'}" Width="150"/>
-                <DataGridTextColumn Header="Ilość 2" Binding="{Binding Ilosc_M2, StringFormat={}{0:N4}}" Width="60"/>
-                <DataGridTextColumn Header="Jm 2" Binding="{Binding Materialy1.KodJednostki, TargetNullValue='-'}" Width="45"/>
+                <ListBox Grid.Row="2" 
+                         ItemsSource="{Binding ListaIndeksow}" 
+                         SelectedItem="{Binding WybranyIndeks}"
+                         DisplayMemberPath="Nazwa">
+                </ListBox>
+            </Grid>
+        </Border>
 
-                <DataGridTextColumn Header="Surowiec 3" Binding="{Binding Materialy2.Nazwa, TargetNullValue='-'}" Width="150"/>
-                <DataGridTextColumn Header="Ilość 3" Binding="{Binding Ilosc_M3, StringFormat={}{0:N4}}" Width="60"/>
-                <DataGridTextColumn Header="Jm 3" Binding="{Binding Materialy2.KodJednostki, TargetNullValue='-'}" Width="45"/>
+        <Grid Grid.Column="1" Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                <DataGridTextColumn Header="Surowiec 4" Binding="{Binding Materialy3.Nazwa, TargetNullValue='-'}" Width="150"/>
-                <DataGridTextColumn Header="Ilość 4" Binding="{Binding Ilosc_M4, StringFormat={}{0:N4}}" Width="60"/>
-                <DataGridTextColumn Header="Jm 4" Binding="{Binding Materialy3.KodJednostki, TargetNullValue='-'}" Width="45"/>
+            <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                <TextBlock Text="Struktura BOM dla:" FontSize="14"/>
+                <TextBlock Text="{Binding WybranyIndeks.Nazwa}" FontSize="20" FontWeight="Bold" Foreground="#2C3E50"/>
+            </StackPanel>
 
-                <DataGridTextColumn Header="Surowiec 5" Binding="{Binding Materialy4.Nazwa, TargetNullValue='-'}" Width="150"/>
-                <DataGridTextColumn Header="Ilość 5" Binding="{Binding Ilosc_M5, StringFormat={}{0:N4}}" Width="60"/>
-                <DataGridTextColumn Header="Jm 5" Binding="{Binding Materialy4.KodJednostki, TargetNullValue='-'}" Width="45"/>
+            <DataGrid Grid.Row="1" 
+                      ItemsSource="{Binding StrukturaBOM}" 
+                      AutoGenerateColumns="False" 
+                      CanUserAddRows="True"
+                      Background="White">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Składnik (Indeks)" Binding="{Binding NazwaSkladnika}" Width="*"/>
+                    <DataGridTextColumn Header="Ilość" Binding="{Binding Ilosc, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                    <DataGridTextColumn Header="Jednostka" Binding="{Binding Jednostka}" Width="80"/>
+                    <DataGridTextColumn Header="Koszt jedn." Binding="{Binding Koszt}" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
-                <DataGridTextColumn Header="Surowiec 6" Binding="{Binding Materialy5.Nazwa, TargetNullValue='-'}" Width="150"/>
-                <DataGridTextColumn Header="Ilość 6" Binding="{Binding Ilosc_M6, StringFormat={}{0:N4}}" Width="60"/>
-                <DataGridTextColumn Header="Jm 6" Binding="{Binding Materialy5.KodJednostki, TargetNullValue='-'}" Width="45"/>
-            </DataGrid.Columns>
-        </DataGrid>
+            <Button Grid.Row="2" 
+                    Content="Zapisz zmiany w BOM" 
+                    Command="{Binding SaveCommand}"
+                    Width="200" Height="35" HorizontalAlignment="Right" Margin="0,15,0,0"
+                    Background="#27AE60" Foreground="White" FontWeight="Bold"/>
+        </Grid>
     </Grid>
 </UserControl>

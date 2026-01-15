@@ -12,6 +12,8 @@ namespace MVVMFirma.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class MVVMFirmaEntities13 : DbContext
     {
@@ -25,23 +27,246 @@ namespace MVVMFirma.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<CennikUslugWykonawcow> CennikUslugWykonawcow { get; set; }
         public virtual DbSet<Faktury> Faktury { get; set; }
         public virtual DbSet<Formy> Formy { get; set; }
         public virtual DbSet<FormyMaszyny> FormyMaszyny { get; set; }
         public virtual DbSet<GrupyWstawek> GrupyWstawek { get; set; }
-        public virtual DbSet<IndeksBOM> IndeksBOM { get; set; }
         public virtual DbSet<Indeksy> Indeksy { get; set; }
+        public virtual DbSet<IndeksyParametry> IndeksyParametry { get; set; }
         public virtual DbSet<Jednostki> Jednostki { get; set; }
+        public virtual DbSet<KonfiguracjaSystemu> KonfiguracjaSystemu { get; set; }
         public virtual DbSet<KosztyMaterialowe> KosztyMaterialowe { get; set; }
         public virtual DbSet<KosztyOperacyjne> KosztyOperacyjne { get; set; }
         public virtual DbSet<Kraje> Kraje { get; set; }
+        public virtual DbSet<LogistykaWykonawcow> LogistykaWykonawcow { get; set; }
         public virtual DbSet<Maszyny> Maszyny { get; set; }
         public virtual DbSet<Materialy> Materialy { get; set; }
+        public virtual DbSet<ParametryLogistyczne> ParametryLogistyczne { get; set; }
+        public virtual DbSet<RodzajeMaterialow> RodzajeMaterialow { get; set; }
         public virtual DbSet<Rozliczenia> Rozliczenia { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<UstawieniaDomyslne> UstawieniaDomyslne { get; set; }
         public virtual DbSet<Wstawki> Wstawki { get; set; }
         public virtual DbSet<Wykonawcy> Wykonawcy { get; set; }
         public virtual DbSet<Zlecenia> Zlecenia { get; set; }
         public virtual DbSet<ZlecenieBOM> ZlecenieBOM { get; set; }
+        public virtual DbSet<IndeksBOM> IndeksBOM { get; set; }
+    
+        public virtual int DodajKosztMaterialu(Nullable<int> idMaterialu, Nullable<decimal> cenaJednostkowa, string kodMaterialu, string opis, string jednostkaMiary)
+        {
+            var idMaterialuParameter = idMaterialu.HasValue ?
+                new ObjectParameter("IdMaterialu", idMaterialu) :
+                new ObjectParameter("IdMaterialu", typeof(int));
+    
+            var cenaJednostkowaParameter = cenaJednostkowa.HasValue ?
+                new ObjectParameter("CenaJednostkowa", cenaJednostkowa) :
+                new ObjectParameter("CenaJednostkowa", typeof(decimal));
+    
+            var kodMaterialuParameter = kodMaterialu != null ?
+                new ObjectParameter("KodMaterialu", kodMaterialu) :
+                new ObjectParameter("KodMaterialu", typeof(string));
+    
+            var opisParameter = opis != null ?
+                new ObjectParameter("Opis", opis) :
+                new ObjectParameter("Opis", typeof(string));
+    
+            var jednostkaMiaryParameter = jednostkaMiary != null ?
+                new ObjectParameter("JednostkaMiary", jednostkaMiary) :
+                new ObjectParameter("JednostkaMiary", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DodajKosztMaterialu", idMaterialuParameter, cenaJednostkowaParameter, kodMaterialuParameter, opisParameter, jednostkaMiaryParameter);
+        }
+    
+        public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_alterdiagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int sp_creatediagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var versionParameter = version.HasValue ?
+                new ObjectParameter("version", version) :
+                new ObjectParameter("version", typeof(int));
+    
+            var definitionParameter = definition != null ?
+                new ObjectParameter("definition", definition) :
+                new ObjectParameter("definition", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_creatediagram", diagramnameParameter, owner_idParameter, versionParameter, definitionParameter);
+        }
+    
+        public virtual int sp_dropdiagram(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_dropdiagram", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagramdefinition_Result> sp_helpdiagramdefinition(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagramdefinition_Result>("sp_helpdiagramdefinition", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual ObjectResult<sp_helpdiagrams_Result> sp_helpdiagrams(string diagramname, Nullable<int> owner_id)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_helpdiagrams_Result>("sp_helpdiagrams", diagramnameParameter, owner_idParameter);
+        }
+    
+        public virtual int sp_renamediagram(string diagramname, Nullable<int> owner_id, string new_diagramname)
+        {
+            var diagramnameParameter = diagramname != null ?
+                new ObjectParameter("diagramname", diagramname) :
+                new ObjectParameter("diagramname", typeof(string));
+    
+            var owner_idParameter = owner_id.HasValue ?
+                new ObjectParameter("owner_id", owner_id) :
+                new ObjectParameter("owner_id", typeof(int));
+    
+            var new_diagramnameParameter = new_diagramname != null ?
+                new ObjectParameter("new_diagramname", new_diagramname) :
+                new ObjectParameter("new_diagramname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_renamediagram", diagramnameParameter, owner_idParameter, new_diagramnameParameter);
+        }
+    
+        public virtual int Sp_RozliczZlecenie(Nullable<int> idZlecenia, Nullable<int> iloscWykonana, Nullable<int> scrap)
+        {
+            var idZleceniaParameter = idZlecenia.HasValue ?
+                new ObjectParameter("IdZlecenia", idZlecenia) :
+                new ObjectParameter("IdZlecenia", typeof(int));
+    
+            var iloscWykonanaParameter = iloscWykonana.HasValue ?
+                new ObjectParameter("IloscWykonana", iloscWykonana) :
+                new ObjectParameter("IloscWykonana", typeof(int));
+    
+            var scrapParameter = scrap.HasValue ?
+                new ObjectParameter("Scrap", scrap) :
+                new ObjectParameter("Scrap", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_RozliczZlecenie", idZleceniaParameter, iloscWykonanaParameter, scrapParameter);
+        }
+    
+        public virtual int sp_upgraddiagrams()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual int Sp_ZapiszDoRozliczen(Nullable<int> idZlecenia, Nullable<int> idFaktury, Nullable<int> iloscWykonana, Nullable<int> scrap, Nullable<int> iloscZafakturowana, Nullable<decimal> materialOdzyskany, Nullable<decimal> materialUtylizacja, Nullable<int> rzeczCzasCyklu, Nullable<decimal> kosztUslugiJednostkowy, Nullable<decimal> kosztTransportu)
+        {
+            var idZleceniaParameter = idZlecenia.HasValue ?
+                new ObjectParameter("IdZlecenia", idZlecenia) :
+                new ObjectParameter("IdZlecenia", typeof(int));
+    
+            var idFakturyParameter = idFaktury.HasValue ?
+                new ObjectParameter("IdFaktury", idFaktury) :
+                new ObjectParameter("IdFaktury", typeof(int));
+    
+            var iloscWykonanaParameter = iloscWykonana.HasValue ?
+                new ObjectParameter("IloscWykonana", iloscWykonana) :
+                new ObjectParameter("IloscWykonana", typeof(int));
+    
+            var scrapParameter = scrap.HasValue ?
+                new ObjectParameter("Scrap", scrap) :
+                new ObjectParameter("Scrap", typeof(int));
+    
+            var iloscZafakturowanaParameter = iloscZafakturowana.HasValue ?
+                new ObjectParameter("IloscZafakturowana", iloscZafakturowana) :
+                new ObjectParameter("IloscZafakturowana", typeof(int));
+    
+            var materialOdzyskanyParameter = materialOdzyskany.HasValue ?
+                new ObjectParameter("MaterialOdzyskany", materialOdzyskany) :
+                new ObjectParameter("MaterialOdzyskany", typeof(decimal));
+    
+            var materialUtylizacjaParameter = materialUtylizacja.HasValue ?
+                new ObjectParameter("MaterialUtylizacja", materialUtylizacja) :
+                new ObjectParameter("MaterialUtylizacja", typeof(decimal));
+    
+            var rzeczCzasCykluParameter = rzeczCzasCyklu.HasValue ?
+                new ObjectParameter("RzeczCzasCyklu", rzeczCzasCyklu) :
+                new ObjectParameter("RzeczCzasCyklu", typeof(int));
+    
+            var kosztUslugiJednostkowyParameter = kosztUslugiJednostkowy.HasValue ?
+                new ObjectParameter("KosztUslugiJednostkowy", kosztUslugiJednostkowy) :
+                new ObjectParameter("KosztUslugiJednostkowy", typeof(decimal));
+    
+            var kosztTransportuParameter = kosztTransportu.HasValue ?
+                new ObjectParameter("KosztTransportu", kosztTransportu) :
+                new ObjectParameter("KosztTransportu", typeof(decimal));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_ZapiszDoRozliczen", idZleceniaParameter, idFakturyParameter, iloscWykonanaParameter, scrapParameter, iloscZafakturowanaParameter, materialOdzyskanyParameter, materialUtylizacjaParameter, rzeczCzasCykluParameter, kosztUslugiJednostkowyParameter, kosztTransportuParameter);
+        }
+    
+        public virtual ObjectResult<Sp_ZapotrzebowanieProdukcyjne_Result> Sp_ZapotrzebowanieProdukcyjne(string kodProduktu, Nullable<int> iloscSztuk)
+        {
+            var kodProduktuParameter = kodProduktu != null ?
+                new ObjectParameter("KodProduktu", kodProduktu) :
+                new ObjectParameter("KodProduktu", typeof(string));
+    
+            var iloscSztukParameter = iloscSztuk.HasValue ?
+                new ObjectParameter("IloscSztuk", iloscSztuk) :
+                new ObjectParameter("IloscSztuk", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_ZapotrzebowanieProdukcyjne_Result>("Sp_ZapotrzebowanieProdukcyjne", kodProduktuParameter, iloscSztukParameter);
+        }
+    
+        public virtual int Sp_ZmienStatusZlecenia(Nullable<int> idZlecenia, string nowyStatus)
+        {
+            var idZleceniaParameter = idZlecenia.HasValue ?
+                new ObjectParameter("IdZlecenia", idZlecenia) :
+                new ObjectParameter("IdZlecenia", typeof(int));
+    
+            var nowyStatusParameter = nowyStatus != null ?
+                new ObjectParameter("NowyStatus", nowyStatus) :
+                new ObjectParameter("NowyStatus", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_ZmienStatusZlecenia", idZleceniaParameter, nowyStatusParameter);
+        }
     }
 }

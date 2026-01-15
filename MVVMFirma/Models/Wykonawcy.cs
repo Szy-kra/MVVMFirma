@@ -37,6 +37,8 @@ namespace MVVMFirma.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Faktury> Faktury { get; set; }
         public virtual Kraje Kraje { get; set; }
+        public virtual LogistykaWykonawcow LogistykaWykonawcow { get; set; }
+        public virtual ParametryLogistyczne ParametryLogistyczne { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Rozliczenia> Rozliczenia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

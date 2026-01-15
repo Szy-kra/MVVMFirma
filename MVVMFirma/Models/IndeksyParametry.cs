@@ -12,16 +12,15 @@ namespace MVVMFirma.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class KosztyOperacyjne
+    public partial class IndeksyParametry
     {
-        public int Id { get; set; }
-        public int IdZlecenia { get; set; }
-        public string NazwaOperacji { get; set; }
-        public Nullable<decimal> Koszt { get; set; }
-        public string TypKosztu { get; set; }
-        public Nullable<System.DateTime> DataWpisu { get; set; }
-        public Nullable<int> IdWykonawcy { get; set; }
+        public int IdIndeksu { get; set; }
+        public Nullable<decimal> WagaWtryskuBrutto_g { get; set; }
+        public Nullable<decimal> WagaWtryskuNetto_g { get; set; }
+        public Nullable<int> NormaCzasCyklu_s { get; set; }
+        public Nullable<int> KrotnoscFormy { get; set; }
+        public Nullable<bool> CzyWlewek { get; set; }
     
-        public virtual Zlecenia Zlecenia { get; set; }
+        public virtual Indeksy Indeksy { get; set; }
     }
 }
