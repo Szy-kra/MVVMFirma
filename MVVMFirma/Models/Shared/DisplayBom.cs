@@ -1,18 +1,42 @@
-﻿namespace MVVMFirma.Models.Shared
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+
+namespace MVVMFirma.Models.Shared
 {
     public class DisplayBom
     {
-        public string Material { get; private set; }
-        public decimal Ilosc { get; private set; }
-        public string Jednostka { get; private set; }
-        public decimal Udzial { get; private set; }
+        #region Właściwości
+        public int IdBOM { get; set; }           // Z tabeli IndeksBOM
+        public string KodIndeksu { get; set; }    // Z tabeli Indeksy
+        public string Material { get; set; }     // Z tabeli Materialy (Nazwa)
+        public decimal Ilosc { get; set; }       // Z tabeli IndeksBOM
+        public string Jednostka { get; set; }    // Z tabeli Materialy (KodJednostki)
+        public decimal Udzial { get; set; }      // Z tabeli IndeksBOM (UdzialProcentowy)
+        #endregion
 
-        public DisplayBom(string material, decimal ilosc, string jednostka, decimal udzial)
+        #region Metody Statyczne
+        public static ObservableCollection<DisplayBom> LoadForIndex(MVVMFirmaEntities13 db, string kod)
         {
-            this.Material = material;
-            this.Ilosc = ilosc;
-            this.Jednostka = jednostka;
-            this.Udzial = udzial;
+            if (db == null || string.IsNullOrEmpty(kod))
+                return new ObservableCollection<DisplayBom>();
+
+            // Wykonujemy Join między IndeksBOM, Indeksy i Materialy
+            var query = from bom in db.IndeksBOM
+                        join ind in db.Indeksy on bom.IdIndeksu equals ind.Id
+                        join mat in db.Materialy on bom.IdMaterialu equals mat.Id
+                        where ind.KodIndeksu == kod
+                        select new DisplayBom
+                        {
+                            IdBOM = bom.IdBOM,
+                            KodIndeksu = ind.KodIndeksu,
+                            Material = mat.Nazwa,
+                            Ilosc = bom.Ilosc,
+                            Jednostka = mat.KodJednostki,
+                            Udzial = bom.UdzialProcentowy
+                        };
+
+            return new ObservableCollection<DisplayBom>(query.ToList());
         }
+        #endregion
     }
 }

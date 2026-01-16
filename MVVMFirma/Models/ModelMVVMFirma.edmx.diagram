@@ -55,6 +55,7 @@
         <EntityTypeShape EntityType="MVVMFirmaModel.IndeksBOM" Width="1.5" PointX="13.25" PointY="7.375" />
         <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_Indeksy" />
         <AssociationConnector Association="MVVMFirmaModel.FK_IndeksBOM_Materialy" />
+        <AssociationConnector Association="MVVMFirmaModel.FK_Formy_Maszyny" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

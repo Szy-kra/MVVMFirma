@@ -36,6 +36,7 @@
           <Property Name="Lokalizacja" Type="nvarchar(max)" />
           <Property Name="CzasCyklu" Type="decimal" Precision="18" Scale="0" />
           <Property Name="IloscGniazd" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="IdMaszyny" Type="int" />
         </EntityType>
         <EntityType Name="FormyMaszyny">
           <Key>
@@ -378,6 +379,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FM_Formy">
+          <End Role="Formy" Type="Self.Formy" Multiplicity="1" />
+          <End Role="FormyMaszyny" Type="Self.FormyMaszyny" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Formy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FormyMaszyny">
+              <PropertyRef Name="IdFormy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FM_Maszyny">
+          <End Role="Maszyny" Type="Self.Maszyny" Multiplicity="1" />
+          <End Role="FormyMaszyny" Type="Self.FormyMaszyny" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maszyny">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FormyMaszyny">
+              <PropertyRef Name="IdMaszyny" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Formy_Maszyny">
+          <End Role="Maszyny" Type="Self.Maszyny" Multiplicity="0..1" />
+          <End Role="Formy" Type="Self.Formy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maszyny">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Formy">
+              <PropertyRef Name="IdMaszyny" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_IndeksBOM_Indeksy">
           <End Role="Indeksy" Type="Self.Indeksy" Multiplicity="1" />
           <End Role="IndeksBOM" Type="Self.IndeksBOM" Multiplicity="*" />
@@ -695,6 +732,18 @@
             <End Role="Zlecenia" EntitySet="Zlecenia" />
             <End Role="ZlecenieBOM" EntitySet="ZlecenieBOM" />
           </AssociationSet>
+          <AssociationSet Name="FK_FM_Formy" Association="Self.FK_FM_Formy">
+            <End Role="Formy" EntitySet="Formy" />
+            <End Role="FormyMaszyny" EntitySet="FormyMaszyny" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FM_Maszyny" Association="Self.FK_FM_Maszyny">
+            <End Role="Maszyny" EntitySet="Maszyny" />
+            <End Role="FormyMaszyny" EntitySet="FormyMaszyny" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Formy_Maszyny" Association="Self.FK_Formy_Maszyny">
+            <End Role="Maszyny" EntitySet="Maszyny" />
+            <End Role="Formy" EntitySet="Formy" />
+          </AssociationSet>
           <AssociationSet Name="FK_IndeksBOM_Indeksy" Association="Self.FK_IndeksBOM_Indeksy">
             <End Role="Indeksy" EntitySet="Indeksy" />
             <End Role="IndeksBOM" EntitySet="IndeksBOM" />
@@ -952,6 +1001,10 @@
             <End Role="Materialy" EntitySet="Materialy" />
             <End Role="IndeksBOM" EntitySet="IndeksBOM" />
           </AssociationSet>
+          <AssociationSet Name="FK_Formy_Maszyny" Association="MVVMFirmaModel.FK_Formy_Maszyny">
+            <End Role="Maszyny" EntitySet="Maszyny" />
+            <End Role="Formy" EntitySet="Formy" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -1006,6 +1059,8 @@
           <Property Name="IloscGniazd" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="FormyMaszyny" Relationship="MVVMFirmaModel.FK__FormyMasz__IdFor__02084FDA" FromRole="Formy" ToRole="FormyMaszyny" />
           <NavigationProperty Name="Indeksy" Relationship="MVVMFirmaModel.FK_Indeksy_Formy" FromRole="Formy" ToRole="Indeksy" />
+          <Property Name="IdMaszyny" Type="Int32" />
+          <NavigationProperty Name="Maszyny" Relationship="MVVMFirmaModel.FK_Formy_Maszyny" FromRole="Formy" ToRole="Maszyny" />
         </EntityType>
         <EntityType Name="FormyMaszyny">
           <Key>
@@ -1128,6 +1183,7 @@
           <Property Name="KodMaszyny" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Nazwa" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="FormyMaszyny" Relationship="MVVMFirmaModel.FK__FormyMasz__IdMas__02FC7413" FromRole="Maszyny" ToRole="FormyMaszyny" />
+          <NavigationProperty Name="Formy" Relationship="MVVMFirmaModel.FK_Formy_Maszyny" FromRole="Maszyny" ToRole="Formy" />
         </EntityType>
         <EntityType Name="Materialy">
           <Key>
@@ -1585,6 +1641,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Formy_Maszyny">
+          <End Type="MVVMFirmaModel.Maszyny" Role="Maszyny" Multiplicity="0..1" />
+          <End Type="MVVMFirmaModel.Formy" Role="Formy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Maszyny">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Formy">
+              <PropertyRef Name="IdMaszyny" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1655,6 +1723,7 @@
           <EntitySetMapping Name="Formy">
             <EntityTypeMapping TypeName="MVVMFirmaModel.Formy">
               <MappingFragment StoreEntitySet="Formy">
+                <ScalarProperty Name="IdMaszyny" ColumnName="IdMaszyny" />
                 <ScalarProperty Name="IloscGniazd" ColumnName="IloscGniazd" />
                 <ScalarProperty Name="CzasCyklu" ColumnName="CzasCyklu" />
                 <ScalarProperty Name="Lokalizacja" ColumnName="Lokalizacja" />

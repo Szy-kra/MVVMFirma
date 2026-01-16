@@ -8,11 +8,12 @@
 
     <UserControl.Resources>
         <Style x:Key="ExcelInput" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="5,8"/>
+            <Setter Property="Padding" Value="5,0"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="TextAlignment" Value="Left"/> <Setter Property="Foreground" Value="Black"/>
         </Style>
 
         <Style x:Key="CellBorder" TargetType="Border">
@@ -32,6 +33,7 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="Black"/>
         </Style>
     </UserControl.Resources>
 
@@ -42,14 +44,7 @@
                 <ColumnDefinition Width="128*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> <RowDefinition Height="Auto"/> </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Margin="0,40,0,35" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
@@ -57,29 +52,38 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
                 <StackPanel Grid.Column="0" Margin="5">
                     <TextBlock Text="Nr zlecenia" FontWeight="Bold"/>
-                    <TextBox Text="{Binding Zlecenie.NrZlecenia}" Height="30"/>
+                    <TextBox Text="{Binding Zlecenie.NrZlecenia, Mode=OneWay}" IsReadOnly="True" Style="{StaticResource ExcelInput}" Background="#EEE"/>
+                    
                     <TextBlock Text="Indeks / Nazwa" FontWeight="Bold" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding Zlecenie.KodIndeksu}" TextChanged="TextBox_TextChanged" Height="30"/>
+                    <TextBox Text="{Binding Zlecenie.Indeksy.KodIndeksu, Mode=OneWay}" IsReadOnly="True" Style="{StaticResource ExcelInput}" Background="#EEE"/>
+                    
                     <TextBlock Text="Nr formy" FontWeight="Bold" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding Zlecenie.KodFormy}" TextChanged="TextBox_TextChanged_1" Height="30"/>
+                    <TextBox Text="{Binding KodFormy, Mode=OneWay}" IsReadOnly="True" Style="{StaticResource ExcelInput}" Background="#EEE"/>
                 </StackPanel>
+
                 <StackPanel Grid.Column="1" Margin="5">
                     <TextBlock Text="Ilość gniazd" FontWeight="Bold"/>
-                    <TextBox Text="{Binding IloscGniazd}" Height="30"/>
+                    <TextBox Text="{Binding IloscGniazd, Mode=OneWay}" IsReadOnly="True" Style="{StaticResource ExcelInput}" Background="#EEE"/>
+                    
                     <TextBlock Text="Czas cyklu [s]" FontWeight="Bold" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding CzasCyklu}" Height="30"/>
+                    <TextBox Text="{Binding CzasCyklu, Mode=OneWay}" IsReadOnly="True" Style="{StaticResource ExcelInput}" Background="#EEE"/>
+                    
                     <TextBlock Text="Wstawki / Uwagi" FontWeight="Bold" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding Wstawki}" Height="30"/>
+                    <TextBox Text="{Binding Zlecenie.Opis, Mode=OneWay}" IsReadOnly="True" Style="{StaticResource ExcelInput}" Background="#EEE"/>
                 </StackPanel>
+
                 <StackPanel Grid.Column="2" Margin="5">
                     <TextBlock Text="ILOŚĆ ZAPLANOWANA" FontWeight="Bold" Foreground="Blue"/>
-                    <TextBox Text="{Binding IloscZaplanowana}" Background="#EBF1FF" FontWeight="Bold" Height="30"/>
+                    <TextBox Text="{Binding Zlecenie.Ilosc, Mode=OneWay}" Background="#EBF1FF" FontWeight="Bold" Style="{StaticResource ExcelInput}"/>
+                    
                     <TextBlock Text="Ilość wykonana" FontWeight="Bold" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding IloscWykonana}" Height="30"/>
+                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
+                    
                     <TextBlock Text="Ilość zafakturowana" FontWeight="Bold" Margin="0,5,0,0"/>
-                    <TextBox Text="{Binding IloscZafakturowana}" Height="30"/>
+                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
                 </StackPanel>
             </Grid>
 
@@ -94,603 +98,84 @@
                     <TextBlock Text="BOM (Norma i Koszt na 1 sztukę)" FontWeight="Bold" Margin="0,0,0,5" Foreground="DarkBlue"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="Nazwa materiału" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="Udział %" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="Ilość na 1szt" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                        <Border Grid.Column="3" Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="Koszt na 1szt" Style="{StaticResource HeaderText}"/>
-                        </Border>
+                        <Border Style="{StaticResource MainHeaderStyle}"><TextBlock Text="Nazwa materiału" Style="{StaticResource HeaderText}"/></Border>
+                        <Border Grid.Column="1" Style="{StaticResource MainHeaderStyle}"><TextBlock Text="Udział %" Style="{StaticResource HeaderText}"/></Border>
+                        <Border Grid.Column="2" Style="{StaticResource MainHeaderStyle}"><TextBlock Text="Ilość na 1szt" Style="{StaticResource HeaderText}"/></Border>
+                        <Border Grid.Column="3" Style="{StaticResource MainHeaderStyle}"><TextBlock Text="Koszt na 1szt" Style="{StaticResource HeaderText}"/></Border>
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Border Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[0].Nazwa}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
+                            <TextBox Text="{Binding BomItems[0].Material}" Style="{StaticResource ExcelInput}" IsReadOnly="True"/>
                         </Border>
                         <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[0].UdzialProcentowy}" Style="{StaticResource ExcelInput}"/>
+                            <TextBox Text="{Binding BomItems[0].Udzial, StringFormat={}{0:P2}}" Style="{StaticResource ExcelInput}"/>
                         </Border>
                         <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[0].Zuzycie}" Style="{StaticResource ExcelInput}"/>
+                            <TextBox Text="{Binding BomItems[0].Ilosc, StringFormat={}{0:N4}}" Style="{StaticResource ExcelInput}"/>
                         </Border>
                         <Border Grid.Column="3" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[0].KosztJednostkowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[1].Nazwa}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[1].UdzialProcentowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[1].Zuzycie}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="3" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[1].KosztJednostkowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[2].Nazwa}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[2].UdzialProcentowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[2].Zuzycie}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="3" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[2].KosztJednostkowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[3].Nazwa}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[3].UdzialProcentowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[3].Zuzycie}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="3" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[3].KosztJednostkowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[4].Nazwa}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[4].UdzialProcentowy}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[4].Zuzycie}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="3" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding BomItems[4].KosztJednostkowy}" Style="{StaticResource ExcelInput}"/>
+                            <TextBox Text="{Binding BomItems[0].KosztJednostkowy, StringFormat={}{0:C}}" Style="{StaticResource ExcelInput}"/>
                         </Border>
                     </Grid>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="NR FAKTURY" FontWeight="Bold" Margin="0,0,0,5" Foreground="DarkGreen"/>
-                    <Grid>
-                        <Border Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="Numer dokumentu" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                    </Grid>
                     <Border Style="{StaticResource CellBorder}">
-                        <TextBox Text="{Binding Faktury[0].Numer}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                    </Border>
-                    <Border Style="{StaticResource CellBorder}">
-                        <TextBox Text="{Binding Faktury[1].Numer}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                    </Border>
-                    <Border Style="{StaticResource CellBorder}">
-                        <TextBox Text="{Binding Faktury[2].Numer}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                    </Border>
-                    <Border Style="{StaticResource CellBorder}">
-                        <TextBox Text="{Binding Faktury[3].Numer}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                    </Border>
-                    <Border Style="{StaticResource CellBorder}">
-                        <TextBox Text="{Binding Faktury[4].Numer}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
+                        <TextBox Text="{Binding Faktury[0].NrFaktury}" Style="{StaticResource ExcelInput}"/>
                     </Border>
                 </StackPanel>
             </Grid>
 
-            <StackPanel Grid.Row="1" Margin="5,221,5,255" Grid.ColumnSpan="2" Grid.RowSpan="3">
-                <TextBlock Text="OPIS DETALU" FontWeight="Bold"/>
-                <TextBox Text="{Binding Zlecenie.Opis}" MinHeight="40" TextWrapping="Wrap"/>
-            </StackPanel>
-
-            <UniformGrid Grid.Row="2" Columns="4" Margin="0,71,0,20" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <UniformGrid Grid.Row="3" Columns="4" Margin="0,10,0,20" Grid.ColumnSpan="2">
                 <StackPanel Margin="5">
                     <TextBlock Text="Koszt usługi"/>
-                    <TextBox Text="{Binding KosztUslugi}" Height="30"/>
+                    <TextBox Text="{Binding KosztUslugi, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ExcelInput}" Background="White"/>
                 </StackPanel>
                 <StackPanel Margin="5">
                     <TextBlock Text="Koszt transportu"/>
-                    <TextBox Text="{Binding KosztTransportu}" Height="30"/>
+                    <TextBox Text="{Binding KosztTransportu, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ExcelInput}" Background="White"/>
                 </StackPanel>
                 <StackPanel Margin="5">
                     <TextBlock Text="Koszt amortyzacji"/>
-                    <TextBox Text="{Binding KosztAmortyzacji}" Height="30"/>
+                    <TextBox Text="{Binding KosztAmortyzacji, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ExcelInput}" Background="White"/>
                 </StackPanel>
                 <StackPanel Margin="5">
                     <TextBlock Text="Inne koszty"/>
-                    <TextBox Text="{Binding KosztInne}" Height="30"/>
+                    <TextBox Text="{Binding KosztInne, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ExcelInput}" Background="White"/>
                 </StackPanel>
             </UniformGrid>
 
-            <Grid Grid.Row="3" Background="White" Grid.ColumnSpan="2" Margin="0,120,0,0" Grid.RowSpan="2">
+            <Grid Grid.Row="4" Margin="0,10,0,0" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="307.5"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="30"/><RowDefinition Height="30"/><RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="Materiał" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="PLAN" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="WYKONANIE" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="0" Grid.Column="5" Grid.ColumnSpan="2" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="FAKTURA" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="ilość" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="koszt" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="ilość" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="4" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="koszt" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="5" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="ilość" Style="{StaticResource HeaderText}"/>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="6" Style="{StaticResource MainHeaderStyle}">
-                    <TextBlock Text="koszt" Style="{StaticResource HeaderText}"/>
-                </Border>
+                <Border Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource MainHeaderStyle}"><TextBlock Text="Materiał" Style="{StaticResource HeaderText}"/></Border>
+                <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource MainHeaderStyle}"><TextBlock Text="PLAN" Style="{StaticResource HeaderText}"/></Border>
+                <Border Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Style="{StaticResource MainHeaderStyle}"><TextBlock Text="WYKONANIE" Style="{StaticResource HeaderText}"/></Border>
+                <Border Grid.Row="0" Grid.Column="5" Style="{StaticResource MainHeaderStyle}"><TextBlock Text="FAKTURA" Style="{StaticResource HeaderText}"/></Border>
 
-                <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
+                <Border Grid.Row="2" Style="{StaticResource CellBorder}">
+                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].Material}" Style="{StaticResource ExcelInput}" IsReadOnly="True"/>
                 </Border>
                 <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="2" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
+                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].ZaplanowaneIlosc, StringFormat={}{0:N2}}" Style="{StaticResource ExcelInput}"/>
                 </Border>
                 <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].WykonaneIlosc}" Style="{StaticResource ExcelInput}" FontWeight="Bold"/>
-                </Border>
-                <Border Grid.Row="2" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
+                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].WykonaneIlosc, StringFormat={}{0:N2}}" Style="{StaticResource ExcelInput}" FontWeight="Bold"/>
                 </Border>
                 <Border Grid.Row="2" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
+                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].ZafakturowaneIlosc, StringFormat={}{0:N2}}" Style="{StaticResource ExcelInput}"/>
                 </Border>
-                <Border Grid.Row="2" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[0].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[1].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[1].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[1].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[1].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[1].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[1].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="3" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[1].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[2].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="4" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[2].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="4" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[2].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[2].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="4" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[2].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="4" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[2].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="4" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[2].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="5" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[3].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="5" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[3].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="5" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[3].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="5" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[3].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="5" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[3].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="5" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[3].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="5" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[3].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="6" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[4].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="6" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[4].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="6" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[4].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[4].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="6" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[4].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="6" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[4].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="6" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[4].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="7" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[5].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="7" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[5].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="7" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[5].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="7" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[5].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="7" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[5].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="7" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[5].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="7" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[5].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="8" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[6].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="8" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[6].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="8" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[6].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="8" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[6].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="8" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[6].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="8" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[6].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="8" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[6].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="9" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[7].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="9" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[7].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="9" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[7].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="9" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[7].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="9" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[7].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="9" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[7].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="9" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[7].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-
-                <Border Grid.Row="10" Grid.Column="0" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[8].Material}" Style="{StaticResource ExcelInput}" TextAlignment="Left"/>
-                </Border>
-                <Border Grid.Row="10" Grid.Column="1" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[8].ZaplanowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="10" Grid.Column="2" Style="{StaticResource CellBorder}" Background="#FFF7D7">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[8].ZaplanowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="10" Grid.Column="3" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[8].WykonaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="10" Grid.Column="4" Style="{StaticResource CellBorder}" Background="#E5FFD9">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[8].WykonaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="10" Grid.Column="5" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[8].ZafakturowaneIlosc}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-                <Border Grid.Row="10" Grid.Column="6" Style="{StaticResource CellBorder}">
-                    <TextBox Text="{Binding ArkuszRozliczeniowy[8].ZafakturowaneKoszt}" Style="{StaticResource ExcelInput}"/>
-                </Border>
-            </Grid>
-
-            <Grid Grid.Row="5" Margin="0,20,0,90" Grid.ColumnSpan="2" Grid.RowSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="UTYLIZACJA / ODPAD" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="Materiał" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="ilość (kg)" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="koszt" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Surowiec1.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec1.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec1.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Surowiec2.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec2.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec2.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Surowiec3.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec3.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec3.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Surowiec4.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec4.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Surowiec4.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                </StackPanel>
-
-                <StackPanel Grid.Column="2">
-                    <TextBlock Text="ODZYSK SUROWCA" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="Materiał" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="ilość (kg)" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource MainHeaderStyle}">
-                            <TextBlock Text="koszt" Style="{StaticResource HeaderText}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Odzysk1.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk1.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk1.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Odzysk2.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk2.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk2.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Odzysk3.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk3.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk3.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border Style="{StaticResource CellBorder}">
-                            <ComboBox ItemsSource="{Binding DostepneMaterialy}" SelectedItem="{Binding Odzysk4.Rodzaj}" DisplayMemberPath="Nazwa" BorderThickness="0"/>
-                        </Border>
-                        <Border Grid.Column="1" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk4.Ilosc}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                        <Border Grid.Column="2" Style="{StaticResource CellBorder}">
-                            <TextBox Text="{Binding Odzysk4.Koszt}" Style="{StaticResource ExcelInput}"/>
-                        </Border>
-                    </Grid>
-                </StackPanel>
             </Grid>
 
             <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,300,0,10" Grid.Column="1">

@@ -50,7 +50,6 @@
                     <GradientStop Color="#2f3e7d" Offset="0.2"/>
                     <GradientStop Color="#72cee8" Offset="0.955"/>
                 </LinearGradientBrush>
-
             </Border.Background>
 
             <HeaderedContentControl 
@@ -62,17 +61,17 @@
                 Padding="10" />
         </Border>
 
+        <!-- 🔥 TU BYŁ SCROLLVIEWER – USUNIĘTY -->
         <Border Grid.Row="2" Grid.Column="1" CornerRadius="6" Margin="5">
             <HeaderedContentControl 
                 Header="Przestrzeń robocza"
                 Style="{StaticResource MainHCCStyle}"
                 Padding="10">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                              VerticalScrollBarVisibility="Auto">
-                    <ContentControl 
-                        Content="{Binding Workspaces}"
-                        ContentTemplate="{StaticResource WorkspacesTemplate}" />
-                </ScrollViewer>
+
+                <ContentControl 
+                    Content="{Binding Workspaces}"
+                    ContentTemplate="{StaticResource WorkspacesTemplate}" />
+
             </HeaderedContentControl>
         </Border>
 

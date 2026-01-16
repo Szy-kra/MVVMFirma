@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\BOMCalculator.cs" />
+    <Compile Include="Helper\BooleanAut.cs" />
     <Compile Include="Helper\Messenger.cs" />
     <Compile Include="Helper\ZlecenieHelper.cs" />
     <Compile Include="Models\CennikUslugWykonawcow.cs">
@@ -126,6 +127,7 @@
     <Compile Include="Models\Rozliczenia.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Shared\checkData.cs" />
     <Compile Include="Models\Shared\DisplayBom.cs" />
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>ModelMVVMFirma.tt</DependentUpon>

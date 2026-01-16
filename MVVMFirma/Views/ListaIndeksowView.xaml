@@ -3,10 +3,134 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MVVMFirma.Views"
+             xmlns:vm="clr-namespace:MVVMFirma.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="600" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <Style x:Key="FormatHintStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="#777"/>
+            <Setter Property="Margin" Value="2,0,0,2"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+        </Style>
+
+        <Style x:Key="PlaceholderTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border x:Name="Bd" BorderBrush="#CCC" BorderThickness="1" Background="White">
+                                <Grid>
+                                    <TextBlock x:Name="PlaceholderText" 
+                                               Text="{TemplateBinding Tag}" 
+                                               Foreground="LightGray" 
+                                               Margin="7,0" 
+                                               VerticalAlignment="Center" 
+                                               Visibility="Collapsed"/>
+                                    <ScrollViewer x:Name="PART_ContentHost"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Text" Value=""/>
+                                    <Condition Property="IsFocused" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            </MultiTrigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2980B9"/>
+                                <Setter TargetName="Bd" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Background="#F9F9F9" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="15">
+            <Grid>
+                <TextBlock Text="Lista zarejestrowanych indeksów" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <Button Content="Dodaj nowy indeks" 
+                        HorizontalAlignment="Right" 
+                        Command="{Binding NowyIndeksCommand}"
+                        Padding="15,5" 
+                        Background="#2980B9" 
+                        Foreground="White" 
+                        BorderThickness="0"/>
+            </Grid>
+        </Border>
+
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding ListaIndeksow}" 
+                  SelectedItem="{Binding WybranyIndeks}"
+                  AutoGenerateColumns="False" 
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  Margin="10"
+                  GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#F0F0F0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Kod Indeksu" Binding="{Binding KodIndeksu}" Width="150" FontWeight="Bold"/>
+                <DataGridTextColumn Header="Opis" Binding="{Binding Opis}" Width="*"/>
+
+                <DataGridTextColumn Header="Brutto (g)" Binding="{Binding IndeksyParametry.WagaWtryskuBrutto_g}" Width="80"/>
+                <DataGridTextColumn Header="Netto (g)" Binding="{Binding IndeksyParametry.WagaWtryskuNetto_g}" Width="80"/>
+                <DataGridTextColumn Header="Krotność" Binding="{Binding IndeksyParametry.KrotnoscFormy}" Width="70"/>
+                <DataGridTextColumn Header="Cykl (s)" Binding="{Binding IndeksyParametry.NormaCzasCyklu_s}" Width="70"/>
+
+                <DataGridTextColumn Header="Forma" Binding="{Binding KodFormy}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Border Grid.Row="2" Background="#F1F1F1" BorderBrush="#CCC" BorderThickness="0,1,0,0" Padding="15">
+            <StackPanel>
+                <TextBlock Text="Edycja parametrów technicznych wybranego indeksu" FontWeight="Bold" Margin="0,0,0,10"/>
+                <UniformGrid Columns="4">
+
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Waga Brutto (g) - Hint: 0.00" Style="{StaticResource FormatHintStyle}"/>
+                        <TextBox Text="{Binding WybranyIndeks.IndeksyParametry.WagaWtryskuBrutto_g, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="Wpisz wagę brutto..." 
+                                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Waga Netto (g) - Hint: 0.00" Style="{StaticResource FormatHintStyle}"/>
+                        <TextBox Text="{Binding WybranyIndeks.IndeksyParametry.WagaWtryskuNetto_g, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="Wpisz wagę netto..." 
+                                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Krotność - Hint: liczba" Style="{StaticResource FormatHintStyle}"/>
+                        <TextBox Text="{Binding WybranyIndeks.IndeksyParametry.KrotnoscFormy, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="Liczba gniazd..." 
+                                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Czas Cyklu - Hint: sekundy" Style="{StaticResource FormatHintStyle}"/>
+                        <TextBox Text="{Binding WybranyIndeks.IndeksyParametry.NormaCzasCyklu_s, UpdateSourceTrigger=PropertyChanged}"
+                                 Tag="Np. 25" 
+                                 Style="{StaticResource PlaceholderTextBoxStyle}"/>
+                    </StackPanel>
+
+                </UniformGrid>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

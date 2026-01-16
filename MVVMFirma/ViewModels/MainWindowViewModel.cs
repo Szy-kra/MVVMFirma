@@ -156,6 +156,8 @@ namespace MVVMFirma.ViewModels
             this.SetActiveWorkspace(workspace);
         }
 
+
+
         // =======================
         // AKTYWACJA
         // =======================
@@ -185,11 +187,30 @@ namespace MVVMFirma.ViewModels
             this.SetActiveWorkspace(workspace);
         }
 
+
+        #endregion
+
+        //== połacenie z NowyBomViewModel.cs ====
         public MainWindowViewModel()
         {
+            // Twoja obecna linia (ok. 159):
             Messenger.Register<Zlecenia>(zlecenie => this.OtworzRozliczenie(zlecenie));
+
+            // DOPISZ TĘ LINIĘ TUTAJ (ok. 161):
+            Messenger.Register<string>(message => { if (message == "NowyBom") this.CreateView(new NowyBomViewModel()); });
+
+
+            // Obsługa zleceń
+            Messenger.Register<Zlecenia>(zlecenie => this.OtworzRozliczenie(zlecenie));
+
+            // TO MA BYĆ TUTAJ (Odbieranie kodu z BomViewModel):
+            Messenger.Register<string>(message =>
+            {
+                var nowyViewModel = new NowyBomViewModel();
+                nowyViewModel.WybranyIndeks = message;
+                this.CreateView(nowyViewModel);
+            });
         }
-        #endregion
 
     }
 }

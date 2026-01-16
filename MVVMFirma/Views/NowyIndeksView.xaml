@@ -1,12 +1,101 @@
 ﻿<UserControl x:Class="MVVMFirma.Views.NowyIndeksView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MVVMFirma.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             xmlns:helpers="clr-namespace:MVVMFirma.Helper">
+
+    <UserControl.Resources>
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+            <Setter Property="Margin" Value="0,15,0,5"/>
+        </Style>
+
+        <Style x:Key="HintStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="#7F8C8D"/>
+            <Setter Property="Margin" Value="2,0,0,1"/>
+        </Style>
+
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="8,0"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Padding="25" Background="#F4F7F6">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel MaxWidth="600" HorizontalAlignment="Left">
+
+                <TextBlock Text="DANE GŁÓWNE INDEKSU (Tabela Indeksy)" Style="{StaticResource HeaderStyle}"/>
+
+                <TextBlock Text="Kod Indeksu (np. NN-CN-270):" Style="{StaticResource HintStyle}"/>
+                <TextBox Text="{Binding KodIndeksu, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+
+                <TextBlock Text="Rodzina (np. AHD, ACL):" Style="{StaticResource HintStyle}"/>
+                <TextBox Text="{Binding Rodzina, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+
+                <TextBlock Text="Opis Produktu:" Style="{StaticResource HintStyle}"/>
+                <TextBox Text="{Binding Opis, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+
+                <TextBlock Text="Kod Formy (np. MD-230530-01):" Style="{StaticResource HintStyle}"/>
+                <TextBox Text="{Binding KodFormy, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+
+                <TextBlock Text="Grupa Wstawki:" Style="{StaticResource HintStyle}"/>
+                <TextBox Text="{Binding GrupaWstawki, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+
+                <TextBlock Text="Praca Automatyczna (TAK/NIE):" Style="{StaticResource HintStyle}"/>
+                <TextBox Text="{Binding PracaAutomatyczna, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+
+                <Separator Margin="0,10,0,20" Background="#BDC3C7"/>
+
+                <TextBlock Text="PARAMETRY TECHNICZNE (Tabela IndeksyParametry)" Style="{StaticResource HeaderStyle}"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Waga Brutto [g]:" Style="{StaticResource HintStyle}"/>
+                        <TextBox Text="{Binding WagaBrutto, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Waga Netto [g]:" Style="{StaticResource HintStyle}"/>
+                        <TextBox Text="{Binding WagaNetto, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Krotność Formy:" Style="{StaticResource HintStyle}"/>
+                        <TextBox Text="{Binding Krotnosc, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Czas Cyklu [s]:" Style="{StaticResource HintStyle}"/>
+                        <TextBox Text="{Binding CzasCyklu, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
+                    </StackPanel>
+                </Grid>
+
+                <Button Content="ZAPISZ INDEKS I PARAMETRY" 
+                        Command="{Binding SaveCommand}" 
+                        Height="45" Margin="0,20,0,40"
+                        Background="#27AE60" Foreground="White" 
+                        FontWeight="Bold" Cursor="Hand"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
 </UserControl>

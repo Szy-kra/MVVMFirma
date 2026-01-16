@@ -3,10 +3,205 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MVVMFirma.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="White">
-        <Label Content="tu znajduja sie Bomy"      ></Label>
-    </Grid>
+             d:DesignHeight="1200" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <Style x:Key="PlaceholderTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" />
+                            </Border>
+                            <TextBlock x:Name="placeholder" Text="{TemplateBinding Tag}" 
+                                       Foreground="LightGray" IsHitTestVisible="False" 
+                                       Margin="5,0,0,0" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="placeholder" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Background="#F4F7F9">
+            <StackPanel Margin="20">
+
+                <Border Background="#FFFFFF" Padding="20" Margin="0,0,0,25" CornerRadius="10" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="INDEKS NADRZĘDNY (BOM)" FontWeight="Bold" FontSize="14" Foreground="#2C3E50"/>
+                        <ComboBox ItemsSource="{Binding ListaIndeksow}" 
+                                  Text="{Binding WybranyIndeks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                  IsEditable="True" Height="40" Margin="0,8,0,0" VerticalContentAlignment="Center" FontSize="16"/>
+                        <TextBlock Text="Format: Wybierz z listy lub wpisz nowy kod" FontSize="11" Foreground="#7F8C8D" Margin="2,4,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="SKŁADNIKI STRUKTURY (EDYCJA DANYCH Z BAZY)" FontWeight="Bold" Margin="5,0,0,10" Foreground="#34495E"/>
+
+                <Border Background="White" Padding="12" Margin="0,0,0,12" CornerRadius="8" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Materiał 1:"/>
+                            <ComboBox ItemsSource="{Binding ListaMaterialow}" Text="{Binding Mat1, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Ilość:"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Ilosc1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="0.0000"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Jednostka:"/>
+                            <ComboBox ItemsSource="{Binding ListaJednostek}" Text="{Binding Jedn1, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Udział (%):"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Udzial1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Tag="0.00%"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Border Background="White" Padding="12" Margin="0,0,0,12" CornerRadius="8" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Materiał 2:"/>
+                            <ComboBox ItemsSource="{Binding ListaMaterialow}" Text="{Binding Mat2, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Ilość:"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Ilosc2, Mode=TwoWay}" Tag="0.0000"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Jednostka:"/>
+                            <ComboBox ItemsSource="{Binding ListaJednostek}" Text="{Binding Jedn2, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Udział (%):"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Udzial2, Mode=TwoWay}" Tag="0.00%"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Border Background="White" Padding="12" Margin="0,0,0,12" CornerRadius="8" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Materiał 3:"/>
+                            <ComboBox ItemsSource="{Binding ListaMaterialow}" Text="{Binding Mat3, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Ilość:"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Ilosc3, Mode=TwoWay}" Tag="0.0000"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Jednostka:"/>
+                            <ComboBox ItemsSource="{Binding ListaJednostek}" Text="{Binding Jedn3, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Udział (%):"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Udzial3, Mode=TwoWay}" Tag="0.00%"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Border Background="White" Padding="12" Margin="0,0,0,12" CornerRadius="8" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Materiał 4:"/>
+                            <ComboBox ItemsSource="{Binding ListaMaterialow}" Text="{Binding Mat4, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Ilość:"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Ilosc4, Mode=TwoWay}" Tag="0.0000"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Jednostka:"/>
+                            <ComboBox ItemsSource="{Binding ListaJednostek}" Text="{Binding Jedn4, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Udział (%):"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Udzial4, Mode=TwoWay}" Tag="0.00%"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Border Background="White" Padding="12" Margin="0,0,0,12" CornerRadius="8" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Materiał 5:"/>
+                            <ComboBox ItemsSource="{Binding ListaMaterialow}" Text="{Binding Mat5, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Ilość:"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Ilosc5, Mode=TwoWay}" Tag="0.0000"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Jednostka:"/>
+                            <ComboBox ItemsSource="{Binding ListaJednostek}" Text="{Binding Jedn5, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Udział (%):"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Udzial5, Mode=TwoWay}" Tag="0.00%"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Border Background="White" Padding="12" Margin="0,0,0,12" CornerRadius="8" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Materiał 6:"/>
+                            <ComboBox ItemsSource="{Binding ListaMaterialow}" Text="{Binding Mat6, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Ilość:"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Ilosc6, Mode=TwoWay}" Tag="0.0000"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Jednostka:"/>
+                            <ComboBox ItemsSource="{Binding ListaJednostek}" Text="{Binding Jedn6, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Udział (%):"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Udzial6, Mode=TwoWay}" Tag="0.00%"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Border Background="White" Padding="12" Margin="0,0,0,12" CornerRadius="8" BorderBrush="#D1D8E0" BorderThickness="1">
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Materiał 7:"/>
+                            <ComboBox ItemsSource="{Binding ListaMaterialow}" Text="{Binding Mat7, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Ilość:"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Ilosc7, Mode=TwoWay}" Tag="0.0000"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Jednostka:"/>
+                            <ComboBox ItemsSource="{Binding ListaJednostek}" Text="{Binding Jedn7, Mode=TwoWay}" IsEditable="True" Height="35"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="Udział (%):"/>
+                            <TextBox Style="{StaticResource PlaceholderTextBox}" Text="{Binding Udzial7, Mode=TwoWay}" Tag="0.00%"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Border>
+
+                <Button Content="ZAPISZ ZMIANY W BOM" Command="{Binding SaveCommand}" 
+                        Height="50" Width="300" HorizontalAlignment="Right" Background="#27AE60" Foreground="White" 
+                        FontSize="14" FontWeight="Bold" Margin="0,20,0,50"/>
+
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

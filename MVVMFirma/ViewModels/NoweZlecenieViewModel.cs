@@ -140,7 +140,18 @@ namespace MVVMFirma.ViewModels
                 .Include(b => b.Materialy)
                 .ToList();
 
-            WidokBOM = new ObservableCollection<DisplayBom>(BOMCalculator.ObliczZapotrzebowanie(listaSkladnikowZDb, Ilosc));
+            WidokBOM = new ObservableCollection<DisplayBom>
+            (BOMCalculator.ObliczZapotrzebowanie(listaSkladnikowZDb, Ilosc)
+                .Select(x => new DisplayBom
+                {
+                    IdBOM = x.IdBOM,
+                    KodIndeksu = x.KodIndeksu,
+                    Material = x.Material,
+                    Ilosc = x.Ilosc,
+                    Jednostka = x.Jednostka,
+                    Udzial = x.Udzial
+                })
+            );
         }
 
         public void Save()

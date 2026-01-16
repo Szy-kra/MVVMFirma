@@ -1,9 +1,7 @@
 ﻿using MVVMFirma.Helper;
 using MVVMFirma.Models;
-using System;
-using System.Collections.Generic;
+using MVVMFirma.Models.Shared;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Linq;
 using System.Windows.Input;
 
@@ -11,133 +9,140 @@ namespace MVVMFirma.ViewModels
 {
     public class BomViewModel : WorkspaceViewModel
     {
-        // Używamy nazwy bazy z Twojego projektu
-        private MVVMFirmaEntities13 _db = new MVVMFirmaEntities13();
+        #region Bazadanych
+        private readonly MVVMFirmaEntities13 Bazadanych;
+        #endregion
 
-        private string _searchText;
-        private string _wybranyKodIndeksu;
-        private List<IndeksBOM> _wszystkieDaneZBazy;
+        #region Właściwości dla Widoku (Bindowanie z XAML)
 
-        // Lista kodów do ListBoxa (Lewa strona)
-        private ObservableCollection<string> _listaKodow;
-        public ObservableCollection<string> ListaKodow
+        // 1. Obsługa pola szukania: Text="{Binding FrazaWyszukiwania}"
+        private string _FrazaWyszukiwania;
+        public string FrazaWyszukiwania
         {
-            get => _listaKodow;
-            set { _listaKodow = value; OnPropertyChanged(nameof(ListaKodow)); }
-        }
-
-        public string SearchText
-        {
-            get => _searchText;
-            set { _searchText = value; OnPropertyChanged(nameof(SearchText)); FiltrujBomy(); }
-        }
-
-        // To co użytkownik kliknie na liście
-        public string WybranyKodIndeksu
-        {
-            get => _wybranyKodIndeksu;
+            get => _FrazaWyszukiwania;
             set
             {
-                _wybranyKodIndeksu = value;
-                OnPropertyChanged(nameof(WybranyKodIndeksu));
-                LadujSkladnikiDlaWybranego();
-                OnPropertyChanged(nameof(IsEditorVisible));
+                _FrazaWyszukiwania = value;
+                OnPropertyChanged(nameof(FrazaWyszukiwania));
+                Filtr(); // Metoda filtrująca listę po lewej
             }
         }
 
-        // Składniki wyświetlane w DataGrid (Prawa strona)
-        private ObservableCollection<IndeksBOM> _skladnikiWybranegoBomu;
-        public ObservableCollection<IndeksBOM> SkladnikiWybranegoBomu
+        // 2. Obsługa listy po lewej: ItemsSource="{Binding ListaIndeksow}"
+        private ObservableCollection<Indeksy> _ListaIndeksow;
+        public ObservableCollection<Indeksy> ListaIndeksow
         {
-            get => _skladnikiWybranegoBomu;
-            set { _skladnikiWybranegoBomu = value; OnPropertyChanged(nameof(SkladnikiWybranegoBomu)); }
+            get => _ListaIndeksow;
+            set
+            {
+                _ListaIndeksow = value;
+                OnPropertyChanged(nameof(ListaIndeksow));
+            }
         }
 
-        public System.Windows.Visibility IsEditorVisible =>
-            !string.IsNullOrEmpty(WybranyKodIndeksu) ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+        // 3. Wybrany element z listy: SelectedItem="{Binding WybranyIndeks}"
+        private Indeksy _WybranyIndeks;
+        public Indeksy WybranyIndeks
+        {
+            get => _WybranyIndeks;
+            set
+            {
+                _WybranyIndeks = value;
+                OnPropertyChanged(nameof(WybranyIndeks));
+                LoadStruktura(); // Ładujemy tabelę po kliknięciu w indeks
+            }
+        }
 
-        public ObservableCollection<Materialy> DostepneMaterialy { get; set; }
-        public ICommand CreateNewBomCommand { get; }
-        public ICommand SaveBomCommand { get; }
+        // 4. Obsługa tabeli: ItemsSource="{Binding StrukturaBOM}"
+        // Używamy Twojej klasy DisplayBom, ale właściwość nazywamy StrukturaBOM dla widoku
+        private ObservableCollection<DisplayBom> _StrukturaBOM;
+        public ObservableCollection<DisplayBom> StrukturaBOM
+        {
+            get => _StrukturaBOM;
+            set
+            {
+                _StrukturaBOM = value;
+                OnPropertyChanged(nameof(StrukturaBOM));
+            }
+        }
 
+        #endregion
+
+        #region Commands
+        private BaseCommand _SaveCommand;
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (_SaveCommand == null)
+                    _SaveCommand = new BaseCommand(Save);
+                return _SaveCommand;
+            }
+        }
+        #endregion
+
+        #region Metody Logiki
+
+        private void Load()
+        {
+            // Ładowanie początkowej listy indeksów do ListBoxa
+            ListaIndeksow = new ObservableCollection<Indeksy>(
+                Bazadanych.Indeksy.OrderBy(i => i.KodIndeksu).ToList()
+            );
+        }
+
+        private void LoadStruktura()
+        {
+            if (WybranyIndeks == null)
+            {
+                StrukturaBOM = new ObservableCollection<DisplayBom>();
+                return;
+            }
+
+            // Używamy Twojej metody statycznej z DisplayBom przekazując KodIndeksu
+            StrukturaBOM = DisplayBom.LoadForIndex(Bazadanych, WybranyIndeks.KodIndeksu);
+        }
+
+        public void Filtr()
+        {
+            if (string.IsNullOrEmpty(FrazaWyszukiwania))
+            {
+                Load();
+                return;
+            }
+
+            string fraza = FrazaWyszukiwania.ToLower();
+            ListaIndeksow = new ObservableCollection<Indeksy>(
+                Bazadanych.Indeksy
+                .Where(x => x.KodIndeksu.ToLower().Contains(fraza) || x.KodIndeksu.ToLower().Contains(fraza))
+                .ToList()
+            );
+        }
+
+        private void Save()
+        {
+            try
+            {
+                Bazadanych.SaveChanges();
+                CheckData.ShowSuccess("Zapisano zmiany w strukturze BOM.");
+            }
+            catch (System.Exception ex)
+            {
+                CheckData.ShowError(ex, "Błąd podczas zapisu danych.");
+            }
+        }
+
+        #endregion
+
+        #region Konstruktor
         public BomViewModel()
         {
-            // DisplayName pochodzi z BaseViewModel (upewnij się, że WorkspaceViewModel po nim dziedziczy)
-            this.DisplayName = "Baza BOM";
+            base.DisplayName = "Zarządzanie BOM";
+            Bazadanych = new MVVMFirmaEntities13();
 
-            // Używamy BaseCommand lub RelayCommand zależnie od tego co masz w Helperach
-            CreateNewBomCommand = new BaseCommand(() => OpenNowyBom());
-            SaveBomCommand = new BaseCommand(() => SaveChanges());
-
-            ZaladujDane();
+            _StrukturaBOM = new ObservableCollection<DisplayBom>();
+            Load(); // Ładujemy listę indeksów na starcie
         }
-
-        public void ZaladujDane()
-        {
-            try
-            {
-                // Pobieramy dane uwzględniając relacje z tabelami Materialy i Indeksy
-                _wszystkieDaneZBazy = _db.IndeksBOM
-                    .Include(b => b.Materialy)
-                    .Include(b => b.Indeksy)
-                    .ToList();
-
-                // Wyciągamy unikalne kody indeksów
-                var kody = _wszystkieDaneZBazy
-                    .Where(x => x.Indeksy != null)
-                    .Select(x => x.Indeksy.KodIndeksu)
-                    .Distinct()
-                    .OrderBy(x => x)
-                    .ToList();
-
-                ListaKodow = new ObservableCollection<string>(kody);
-                DostepneMaterialy = new ObservableCollection<Materialy>(_db.Materialy.ToList());
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Błąd ładowania: " + ex.Message);
-            }
-        }
-
-        private void LadujSkladnikiDlaWybranego()
-        {
-            if (string.IsNullOrEmpty(WybranyKodIndeksu)) return;
-
-            var skladniki = _wszystkieDaneZBazy
-                .Where(x => x.Indeksy != null && x.Indeksy.KodIndeksu == WybranyKodIndeksu)
-                .ToList();
-
-            SkladnikiWybranegoBomu = new ObservableCollection<IndeksBOM>(skladniki);
-        }
-
-        private void FiltrujBomy()
-        {
-            if (_wszystkieDaneZBazy == null) return;
-
-            var kody = _wszystkieDaneZBazy
-                .Where(x => x.Indeksy != null && x.Indeksy.KodIndeksu.ToLower().Contains(SearchText.ToLower()))
-                .Select(x => x.Indeksy.KodIndeksu)
-                .Distinct()
-                .ToList();
-
-            ListaKodow = new ObservableCollection<string>(kody);
-        }
-
-        private void SaveChanges()
-        {
-            try
-            {
-                _db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Błąd zapisu: " + ex.Message);
-            }
-        }
-
-        private void OpenNowyBom()
-        {
-            // Tutaj logika otwierania nowej zakładki dla NowyBomViewModel
-        }
+        #endregion
     }
 }

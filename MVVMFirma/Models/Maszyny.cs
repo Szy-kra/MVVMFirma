@@ -18,6 +18,7 @@ namespace MVVMFirma.Models
         public Maszyny()
         {
             this.FormyMaszyny = new HashSet<FormyMaszyny>();
+            this.Formy = new HashSet<Formy>();
         }
     
         public int Id { get; set; }
@@ -26,5 +27,7 @@ namespace MVVMFirma.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FormyMaszyny> FormyMaszyny { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Formy> Formy { get; set; }
     }
 }

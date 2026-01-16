@@ -27,10 +27,12 @@ namespace MVVMFirma.Models
         public string Lokalizacja { get; set; }
         public Nullable<decimal> CzasCyklu { get; set; }
         public Nullable<decimal> IloscGniazd { get; set; }
+        public Nullable<int> IdMaszyny { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FormyMaszyny> FormyMaszyny { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Indeksy> Indeksy { get; set; }
+        public virtual Maszyny Maszyny { get; set; }
     }
 }

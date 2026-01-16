@@ -1,102 +1,108 @@
 ﻿using MVVMFirma.Helper;
 using MVVMFirma.Models;
-using MVVMFirma.Models.Shared;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Linq;
-using System.Windows.Input;
 
 namespace MVVMFirma.ViewModels
 {
-    public class RozliczenieViewModel : WorkspaceViewModel
+    public class ArkuszRozliczeniowyItem : BaseViewModel
     {
-        #region Properties
-        private Zlecenia _zlecenie;
-        public Zlecenia Zlecenie
+        private string _material;
+        public string Material
         {
-            get => _zlecenie;
-            set { _zlecenie = value; OnPropertyChanged(); }
+            get { return _material; }
+            set { _material = value; OnPropertyChanged("Material"); }
         }
 
-        // Kolekcje zgodne z Twoim modelem DisplayBom i relacjami SQL
-        public ObservableCollection<DisplayBom> BomItems { get; set; }
-        public ObservableCollection<Faktury> Faktury { get; set; }
-        public ObservableCollection<ArkuszRozliczeniowyItem> ArkuszRozliczeniowy { get; set; }
-
-        public ICommand SaveCommand { get; }
-        #endregion
-
-        public RozliczenieViewModel(Zlecenia wybraneZlecenie) : base()
+        private decimal? _zaplanowaneIlosc;
+        public decimal? ZaplanowaneIlosc
         {
-            if (wybraneZlecenie == null) return;
-
-            // Inicjalizacja list
-            BomItems = new ObservableCollection<DisplayBom>();
-            Faktury = new ObservableCollection<Faktury>();
-            ArkuszRozliczeniowy = new ObservableCollection<ArkuszRozliczeniowyItem>();
-
-            // Pobieranie danych z bazy z uwzględnieniem relacji
-            this.Zlecenie = db.Zlecenia
-                .Include(z => z.Indeksy.Formy)
-                .Include(z => z.Indeksy.IndeksBOM.Select(b => b.Materialy.Jednostki))
-                .Include(z => z.Faktury)
-                .FirstOrDefault(z => z.Id == wybraneZlecenie.Id);
-
-            this.DisplayName = "Rozliczenie: " + (Zlecenie?.NrZlecenia ?? "");
-
-            SaveCommand = new BaseCommand(() => SaveAction());
-
-            OdswiezDane();
+            get { return _zaplanowaneIlosc; }
+            set { _zaplanowaneIlosc = value; OnPropertyChanged("ZaplanowaneIlosc"); }
         }
 
-        private void OdswiezDane()
+        private decimal? _wykonaneIlosc;
+        public decimal? WykonaneIlosc
         {
-            if (Zlecenie?.Indeksy == null) return;
-
-            // 1. BOM - używamy Twojego kalkulatora. 1m to decimal (ilość na 1 sztukę)
-            var listaBOM = db.IndeksBOM
-                .Where(b => b.IdIndeksu == Zlecenie.IdIndeksu)
-                .Include(b => b.Materialy.Jednostki)
-                .ToList();
-
-            var wynikiBOM = BOMCalculator.ObliczZapotrzebowanie(listaBOM, "1");
-
-            BomItems.Clear();
-            foreach (var item in wynikiBOM) BomItems.Add(item);
-            // Uzupełniamy do 5 wierszy dla XAML (używając Twojego konstruktora)
-            while (BomItems.Count < 5) BomItems.Add(new DisplayBom("", 0, "", 0));
-
-            // 2. Faktury
-            foreach (var f in Zlecenie.Faktury) Faktury.Add(f);
-            while (Faktury.Count < 5) Faktury.Add(new Faktury());
-
-            // 3. Arkusz (Plan/Wykonanie)
-            foreach (var b in listaBOM)
-            {
-                ArkuszRozliczeniowy.Add(new ArkuszRozliczeniowyItem
-                {
-                    Material = b.Materialy?.Nazwa,
-                    ZaplanowaneIlosc = b.Ilosc * Zlecenie.Ilosc
-                });
-            }
-            while (ArkuszRozliczeniowy.Count < 10) ArkuszRozliczeniowy.Add(new ArkuszRozliczeniowyItem());
+            get { return _wykonaneIlosc; }
+            set { _wykonaneIlosc = value; OnPropertyChanged("WykonaneIlosc"); }
         }
 
-        private void SaveAction()
+        private decimal? _zafakturowaneIlosc;
+        public decimal? ZafakturowaneIlosc
         {
-            db.SaveChanges();
+            get { return _zafakturowaneIlosc; }
+            set { _zafakturowaneIlosc = value; OnPropertyChanged("ZafakturowaneIlosc"); }
         }
     }
 
-    // Klasa pomocnicza tylko dla dolnej tabeli (bo tam nie masz modelu w bazie)
-    public class ArkuszRozliczeniowyItem
+    public class RozliczenieViewModel : WorkspaceViewModel
     {
-        public string Material { get; set; }
-        public decimal? ZaplanowaneIlosc { get; set; }
-        public decimal? ZaplanowaneKoszt { get; set; }
-        public decimal? WykonaneIlosc { get; set; }
-        public decimal? WykonaneKoszt { get; set; }
-        public decimal? ZafakturowaneIlosc { get; set; }
-        public decimal? ZafakturowaneKoszt { get; set; }
+        private Zlecenia _zlecenie;
+        public Zlecenia Zlecenie
+        {
+            get { return _zlecenie; }
+            set { _zlecenie = value; OnPropertyChanged("Zlecenie"); }
+        }
+
+        // Bindowania danych ze struktur Zlecenie -> Indeksy -> Formy
+        public string KodFormy
+        {
+            get { return (Zlecenie != null && Zlecenie.Indeksy != null && Zlecenie.Indeksy.Formy != null) ? Zlecenie.Indeksy.Formy.KodFormy : string.Empty; }
+        }
+
+        public int? IloscGniazd
+        {
+            get { return (Zlecenie != null && Zlecenie.Indeksy != null && Zlecenie.Indeksy.Formy != null) ? (int?)Zlecenie.Indeksy.Formy.IloscGniazd : null; }
+        }
+
+        public decimal? CzasCyklu
+        {
+            get { return (Zlecenie != null && Zlecenie.Indeksy != null && Zlecenie.Indeksy.Formy != null) ? (decimal?)Zlecenie.Indeksy.Formy.CzasCyklu : null; }
+        }
+
+        private decimal? _kosztUslugi;
+        public decimal? KosztUslugi { get { return _kosztUslugi; } set { _kosztUslugi = value; OnPropertyChanged("KosztUslugi"); } }
+
+        private decimal? _kosztTransportu;
+        public decimal? KosztTransportu { get { return _kosztTransportu; } set { _kosztTransportu = value; OnPropertyChanged("KosztTransportu"); } }
+
+        public ObservableCollection<ArkuszRozliczeniowyItem> ArkuszRozliczeniowy { get; set; }
+        public ObservableCollection<BOMResult> BomItems { get; set; }
+
+        public RozliczenieViewModel(Zlecenia wybrane)
+        {
+            ArkuszRozliczeniowy = new ObservableCollection<ArkuszRozliczeniowyItem>();
+            BomItems = new ObservableCollection<BOMResult>();
+
+            if (wybrane != null)
+            {
+                Zlecenie = db.Zlecenia.FirstOrDefault(z => z.Id == wybrane.Id);
+                LoadData();
+            }
+        }
+
+        private void LoadData()
+        {
+            if (Zlecenie == null || Zlecenie.Indeksy == null) return;
+
+            // Wywołanie displayBOM / Kalkulatora
+            var daneBOM = BOMCalculator.PobierzIOblicz(db, Zlecenie.Indeksy.KodIndeksu, Zlecenie.Ilosc.ToString());
+
+            foreach (var item in daneBOM)
+            {
+                BomItems.Add(item);
+                ArkuszRozliczeniowy.Add(new ArkuszRozliczeniowyItem
+                {
+                    Material = item.Material,
+                    ZaplanowaneIlosc = item.Ilosc
+                });
+            }
+
+            // Odświeżenie pól wyliczanych
+            OnPropertyChanged("KodFormy");
+            OnPropertyChanged("IloscGniazd");
+            OnPropertyChanged("CzasCyklu");
+        }
     }
 }
