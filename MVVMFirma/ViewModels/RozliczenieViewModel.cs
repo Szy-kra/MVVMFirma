@@ -1,83 +1,94 @@
 ﻿using MVVMFirma.Helper;
 using MVVMFirma.Models;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.Linq;
 
 namespace MVVMFirma.ViewModels
 {
-    public class ArkuszRozliczeniowyItem : BaseViewModel
-    {
-        private string _material;
-        public string Material
-        {
-            get { return _material; }
-            set { _material = value; OnPropertyChanged("Material"); }
-        }
-
-        private decimal? _zaplanowaneIlosc;
-        public decimal? ZaplanowaneIlosc
-        {
-            get { return _zaplanowaneIlosc; }
-            set { _zaplanowaneIlosc = value; OnPropertyChanged("ZaplanowaneIlosc"); }
-        }
-
-        private decimal? _wykonaneIlosc;
-        public decimal? WykonaneIlosc
-        {
-            get { return _wykonaneIlosc; }
-            set { _wykonaneIlosc = value; OnPropertyChanged("WykonaneIlosc"); }
-        }
-
-        private decimal? _zafakturowaneIlosc;
-        public decimal? ZafakturowaneIlosc
-        {
-            get { return _zafakturowaneIlosc; }
-            set { _zafakturowaneIlosc = value; OnPropertyChanged("ZafakturowaneIlosc"); }
-        }
-    }
-
     public class RozliczenieViewModel : WorkspaceViewModel
     {
         private Zlecenia _zlecenie;
         public Zlecenia Zlecenie
         {
-            get { return _zlecenie; }
-            set { _zlecenie = value; OnPropertyChanged("Zlecenie"); }
+            get => _zlecenie;
+            set { _zlecenie = value; OnPropertyChanged("Zlecenie"); OnPropertyChanged("OpisDetalu"); }
         }
 
-        // Bindowania danych ze struktur Zlecenie -> Indeksy -> Formy
-        public string KodFormy
+        // POLE: WYPRODUKOWANO (GÓRA)
+        private decimal? _iloscWykonanaNaglowek;
+        public decimal? IloscWykonanaNaglowek
         {
-            get { return (Zlecenie != null && Zlecenie.Indeksy != null && Zlecenie.Indeksy.Formy != null) ? Zlecenie.Indeksy.Formy.KodFormy : string.Empty; }
+            get => _iloscWykonanaNaglowek;
+            set
+            {
+                if (_iloscWykonanaNaglowek == value) return;
+                _iloscWykonanaNaglowek = value;
+                OnPropertyChanged("IloscWykonanaNaglowek");
+                OnPropertyChanged("ScrapNaglowek");
+
+                if (ArkuszRozliczeniowyLista != null)
+                {
+                    foreach (var wiersz in ArkuszRozliczeniowyLista)
+                    {
+                        // Tutaj 'value' jest nullable, więc musimy go zabezpieczyć
+                        decimal iloscZNaglowka = value ?? 0m;
+
+                        wiersz.WykonaneIlosc = value;
+                        // Tutaj wiersz.CenaJednostkowa prawdopodobnie NIE jest nullable, więc usuwamy ??
+                        wiersz.WykonaneKoszt = iloscZNaglowka * wiersz.CenaJednostkowa;
+
+                        // Scrap: Wykonano (nullable) - Zafakturowano (nullable)
+                        wiersz.Scrap = (wiersz.WykonaneIlosc ?? 0m) - (wiersz.ZafakturowaneIlosc ?? 0m);
+                    }
+                }
+            }
         }
 
-        public int? IloscGniazd
+        // POLE: ZAFAKTUROWANO (GÓRA)
+        private decimal? _iloscZafakturowanaNaglowek;
+        public decimal? IloscZafakturowanaNaglowek
         {
-            get { return (Zlecenie != null && Zlecenie.Indeksy != null && Zlecenie.Indeksy.Formy != null) ? (int?)Zlecenie.Indeksy.Formy.IloscGniazd : null; }
+            get => _iloscZafakturowanaNaglowek;
+            set
+            {
+                if (_iloscZafakturowanaNaglowek == value) return;
+                _iloscZafakturowanaNaglowek = value;
+                OnPropertyChanged("IloscZafakturowanaNaglowek");
+                OnPropertyChanged("ScrapNaglowek");
+
+                if (ArkuszRozliczeniowyLista != null)
+                {
+                    foreach (var wiersz in ArkuszRozliczeniowyLista)
+                    {
+                        decimal iloscZNaglowka = value ?? 0m;
+
+                        wiersz.ZafakturowaneIlosc = value;
+                        // Usuwamy ?? przy CenaJednostkowa
+                        wiersz.ZafakturowaneKoszt = iloscZNaglowka * wiersz.CenaJednostkowa;
+                        wiersz.Scrap = (wiersz.WykonaneIlosc ?? 0m) - (wiersz.ZafakturowaneIlosc ?? 0m);
+                    }
+                }
+            }
         }
 
-        public decimal? CzasCyklu
-        {
-            get { return (Zlecenie != null && Zlecenie.Indeksy != null && Zlecenie.Indeksy.Formy != null) ? (decimal?)Zlecenie.Indeksy.Formy.CzasCyklu : null; }
-        }
+        public decimal? ScrapNaglowek => (IloscWykonanaNaglowek ?? 0m) - (IloscZafakturowanaNaglowek ?? 0m);
 
-        private decimal? _kosztUslugi;
-        public decimal? KosztUslugi { get { return _kosztUslugi; } set { _kosztUslugi = value; OnPropertyChanged("KosztUslugi"); } }
+        public string OpisDetalu => Zlecenie?.Indeksy?.Opis ?? "BRAK OPISU W BAZIE";
 
-        private decimal? _kosztTransportu;
-        public decimal? KosztTransportu { get { return _kosztTransportu; } set { _kosztTransportu = value; OnPropertyChanged("KosztTransportu"); } }
-
-        public ObservableCollection<ArkuszRozliczeniowyItem> ArkuszRozliczeniowy { get; set; }
+        public ObservableCollection<ArkuszRozliczeniowy> ArkuszRozliczeniowyLista { get; set; }
         public ObservableCollection<BOMResult> BomItems { get; set; }
+        public ObservableCollection<Faktury> Faktury { get; set; }
 
         public RozliczenieViewModel(Zlecenia wybrane)
         {
-            ArkuszRozliczeniowy = new ObservableCollection<ArkuszRozliczeniowyItem>();
+            ArkuszRozliczeniowyLista = new ObservableCollection<ArkuszRozliczeniowy>();
             BomItems = new ObservableCollection<BOMResult>();
+            Faktury = new ObservableCollection<Faktury>();
 
             if (wybrane != null)
             {
-                Zlecenie = db.Zlecenia.FirstOrDefault(z => z.Id == wybrane.Id);
+                this.Zlecenie = db.Zlecenia.Include("Indeksy").FirstOrDefault(z => z.Id == wybrane.Id);
                 LoadData();
             }
         }
@@ -86,23 +97,30 @@ namespace MVVMFirma.ViewModels
         {
             if (Zlecenie == null || Zlecenie.Indeksy == null) return;
 
-            // Wywołanie displayBOM / Kalkulatora
-            var daneBOM = BOMCalculator.PobierzIOblicz(db, Zlecenie.Indeksy.KodIndeksu, Zlecenie.Ilosc.ToString());
+            var daneBOM = BOMCalculator.PobierzZKosztami(db, Zlecenie.Indeksy.KodIndeksu, "1");
 
-            foreach (var item in daneBOM)
+            if (daneBOM != null)
             {
-                BomItems.Add(item);
-                ArkuszRozliczeniowy.Add(new ArkuszRozliczeniowyItem
+                foreach (var item in daneBOM)
                 {
-                    Material = item.Material,
-                    ZaplanowaneIlosc = item.Ilosc
-                });
+                    BomItems.Add(item);
+
+                    // Jeśli item.Ilosc i item.Cena NIE są nullable (są zwykłymi decimal), 
+                    // to po prostu je przypisujemy bez żadnych znaków zapytania.
+                    ArkuszRozliczeniowyLista.Add(new ArkuszRozliczeniowy(this)
+                    {
+                        Material = item.Material,
+                        Jednostka = item.Jednostka,
+                        CenaJednostkowa = item.Cena,
+                        ZaplanowaneIlosc = item.Ilosc,
+                        ZaplanowaneKoszt = item.Ilosc * item.Cena
+                    });
+                }
             }
 
-            // Odświeżenie pól wyliczanych
-            OnPropertyChanged("KodFormy");
-            OnPropertyChanged("IloscGniazd");
-            OnPropertyChanged("CzasCyklu");
+            var listaFaktur = db.Faktury.Where(f => f.IdZlecenia == Zlecenie.Id).Take(5).ToList();
+            foreach (var f in listaFaktur) Faktury.Add(f);
+            while (Faktury.Count < 5) Faktury.Add(new Faktury());
         }
     }
 }

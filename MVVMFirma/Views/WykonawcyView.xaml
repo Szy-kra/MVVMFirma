@@ -3,64 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MVVMFirma.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="1100">
 
-    <Grid >
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <Border Background="#34495E" Padding="10">
+            <TextBlock Text="Zestawienie: Wykonawca - Adres - Zlecenie" 
+                       Foreground="White" FontSize="18" FontWeight="Bold"/>
+        </Border>
 
-        <DataGrid ItemsSource="{Binding Wykonawcy}"
-                  AutoGenerateColumns="False"
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding ListaZbiorcza}" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True" 
+                  Margin="5"
                   Background="White"
-                  Foreground="Black"
-                  HeadersVisibility="Column"
-                  GridLinesVisibility="All"
-                  Margin="10"
-                  RowHeight="35">
-
+                  GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#DDD">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Kod Wyk." Binding="{Binding NrWykonawcy}" Width="100"/>
+                <DataGridTextColumn Header="Nazwa Firmy" Binding="{Binding Nazwa}" Width="150"/>
+                <DataGridTextColumn Header="NIP" Binding="{Binding NIP}" Width="100"/>
 
-                <DataGridTextColumn Header="Nr wykonawcy"
-                                    Binding="{Binding NrWykonawcy}"
-                                    Width="120"/>
+                <DataGridTextColumn Header="Miasto" Binding="{Binding Miasto}" Width="100"/>
+                <DataGridTextColumn Header="Ulica" Binding="{Binding Ulica}" Width="120"/>
+                <DataGridTextColumn Header="Nr" Binding="{Binding NrDomu}" Width="50"/>
 
-                <DataGridTextColumn Header="Nazwa wykonawcy"
-                                    Binding="{Binding Nazwa}"
-                                    Width="200"/>
-
-                <DataGridTextColumn Header="NIP"
-                                    Binding="{Binding NIP}"
-                                    Width="120"/>
-
-                <DataGridTextColumn Header="Telefon"
-                                    Binding="{Binding Telefon}"
-                                    Width="150"/>
-
-                <DataGridTextColumn Header="Kraj"
-                                    Binding="{Binding Kraj}"
-                                    Width="120"/>
-
-                <DataGridTextColumn Header="Miasto"
-                                    Binding="{Binding Miasto}"
-                                    Width="150"/>
-
-                <DataGridTextColumn Header="Kod pocztowy"
-                                    Binding="{Binding KodPocztowy}"
-                                    Width="120"/>
-
-                <DataGridTextColumn Header="Ulica"
-                                    Binding="{Binding Ulica}"
-                                    Width="150"/>
-
-                <DataGridTextColumn Header="Nr domu"
-                                    Binding="{Binding NrDomu}"
-                                    Width="80"/>
-
+                <DataGridTextColumn Header="NR ZLECENIA" Binding="{Binding NrZlecenia}" Width="150" FontWeight="Bold" Foreground="Blue"/>
+                <DataGridTextColumn Header="Data" Binding="{Binding DataZlecenia, StringFormat={}{0:dd.MM.yyyy}}" Width="100"/>
+                <DataGridTextColumn Header="Ilość" Binding="{Binding Ilosc}" Width="80"/>
+                <DataGridTextColumn Header="Uwagi" Binding="{Binding Uwagi}" Width="*"/>
             </DataGrid.Columns>
-
         </DataGrid>
-
     </Grid>
 </UserControl>
-

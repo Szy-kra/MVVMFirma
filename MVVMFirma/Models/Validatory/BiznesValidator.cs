@@ -4,7 +4,7 @@ namespace MVVMFirma.Models.Validatory
 {
     public class BiznesValidator : Validator
     {
-        // Walidacja dla NowyWykonawca
+        #region Walidacja dla NowyWykonawca
         public static string WalidujNazweWykonawcy(string nazwa)
         {
             if (string.IsNullOrWhiteSpace(nazwa)) return null;
@@ -28,8 +28,9 @@ namespace MVVMFirma.Models.Validatory
                 return "Wymagany format: xx-xxx";
             return null;
         }
+        #endregion
 
-        // Walidacja dla NoweZlecenie
+        #region Walidacja dla NoweZlecenie
         public static string WalidujNumerZlecenia(string numer)
         {
             if (string.IsNullOrWhiteSpace(numer)) return null;
@@ -37,7 +38,6 @@ namespace MVVMFirma.Models.Validatory
             return null;
         }
 
-        // DODANO: Walidacja ilości (rozwiązuje błąd CS0117)
         public static string WalidujIloscZlecona(string wartosc)
         {
             if (string.IsNullOrWhiteSpace(wartosc)) return null;
@@ -45,5 +45,28 @@ namespace MVVMFirma.Models.Validatory
             if (wynik <= 0) return "Musi być > 0";
             return null;
         }
+        #endregion
+
+        #region Walidacja dla NowyKosztMaterialowy (NOWE)
+        public static string WalidujKodMaterialu(string kod)
+        {
+            if (string.IsNullOrWhiteSpace(kod)) return "Kod materiału jest wymagany";
+            if (kod.Length < 2) return "Kod jest za krótki";
+            return null;
+        }
+
+        public static string WalidujCeneMaterialu(string cena)
+        {
+            if (string.IsNullOrWhiteSpace(cena)) return "Cena jest wymagana";
+
+            // Walidacja liczby zmiennoprzecinkowej dla .NET 4.8
+            if (!decimal.TryParse(cena, out decimal wynik))
+                return "Niepoprawny format (użyj przecinka)";
+
+            if (wynik < 0) return "Cena nie może być ujemna";
+
+            return null;
+        }
+        #endregion
     }
 }

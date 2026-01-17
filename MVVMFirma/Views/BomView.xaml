@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             d:DesignHeight="600"
-             d:DesignWidth="1200">
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1200">
 
     <Grid Background="#F0F0F0">
         <Grid.ColumnDefinitions>
@@ -13,12 +12,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- LEWY PANEL -->
-        <Border Grid.Column="0"
-                Background="White"
-                BorderBrush="#CCCCCC"
-                BorderThickness="0,0,1,0">
-
+        <Border Grid.Column="0" Background="White" BorderBrush="#CCCCCC" BorderThickness="0,0,1,0">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -26,28 +20,16 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Szukaj Indeksu:"
-                           FontWeight="Bold"
-                           Margin="0,0,0,5"
-                           Foreground="Black"/>
+                <TextBlock Text="Szukaj Indeksu:" FontWeight="Bold" Margin="0,0,0,5" Foreground="Black"/>
+                <TextBox Grid.Row="1" Text="{Binding FrazaWyszukiwania, UpdateSourceTrigger=PropertyChanged}"
+                         Height="25" VerticalContentAlignment="Center" Margin="0,0,0,10" Foreground="Black"/>
 
-                <TextBox Grid.Row="1"
-                         Text="{Binding FrazaWyszukiwania, UpdateSourceTrigger=PropertyChanged}"
-                         Height="25"
-                         VerticalContentAlignment="Center"
-                         Margin="0,0,0,10"
-                         Foreground="Black"/>
-
-                <ListBox Grid.Row="2"
-                         ItemsSource="{Binding ListaIndeksow}"
-                         SelectedItem="{Binding WybranyIndeks}"
-                         DisplayMemberPath="KodIndeksu"
-                         Foreground="Black"
+                <ListBox Grid.Row="2" ItemsSource="{Binding ListaIndeksow}" SelectedItem="{Binding WybranyIndeks}"
+                         DisplayMemberPath="KodIndeksu" Foreground="Black"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"/>
             </Grid>
         </Border>
 
-        <!-- PRAWY PANEL -->
         <Grid Grid.Column="1" Margin="15">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -56,71 +38,24 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                <TextBlock Text="Struktura BOM dla:"
-                           FontSize="14"
-                           Foreground="Black"/>
-                <TextBlock Text="{Binding WybranyIndeks.KodIndeksu}"
-                           FontSize="20"
-                           FontWeight="Bold"
-                           Foreground="#2C3E50"/>
+                <TextBlock Text="Podgląd struktury dla:" FontSize="14" Foreground="Black"/>
+                <TextBlock Text="{Binding WybranyIndeks.KodIndeksu}" FontSize="20" FontWeight="Bold" Foreground="#2C3E50"/>
             </StackPanel>
 
-            <!-- DATA GRID -->
-            <DataGrid Grid.Row="1"
-                      ItemsSource="{Binding StrukturaBOM}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="True"
-                      Background="White"
-                      Foreground="Black"
-                      RowBackground="White"
-                      AlternatingRowBackground="#F9F9F9"
-                      HorizontalAlignment="Stretch"
-                      ColumnWidth="Auto"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
-
+            <DataGrid Grid.Row="1" ItemsSource="{Binding StrukturaBOM}" AutoGenerateColumns="False"
+                      IsReadOnly="True" Background="White" Foreground="Black">
                 <DataGrid.Columns>
-
-                    <DataGridTextColumn Header="Składnik (Materiał)"
-                                        Binding="{Binding Material}"
-                                        Width="380"
-                                        Foreground="Black">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                                <Setter Property="ToolTip" Value="{Binding Material}"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Ilość"
-                                        Binding="{Binding Ilosc, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="100"
-                                        Foreground="Black"/>
-
-                    <DataGridTextColumn Header="Jedn."
-                                        Binding="{Binding Jednostka}"
-                                        Width="80"
-                                        Foreground="Black"/>
-
-                    <DataGridTextColumn Header="Udział %"
-                                        Binding="{Binding Udzial}"
-                                        Width="100"
-                                        Foreground="Black"/>
-
+                    <DataGridTextColumn Header="Składnik (Materiał)" Binding="{Binding Material}" Width="380"/>
+                    <DataGridTextColumn Header="Ilość" Binding="{Binding Ilosc}" Width="100"/>
+                    <DataGridTextColumn Header="Jedn." Binding="{Binding Jednostka}" Width="80"/>
+                    <DataGridTextColumn Header="Udział %" Binding="{Binding Udzial}" Width="100"/>
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Button Grid.Row="2"
-                    Content="Zapisz zmiany w BOM"
-                    Command="{Binding SaveCommand}"
-                    Width="220"
-                    Height="38"
-                    HorizontalAlignment="Right"
-                    Margin="0,15,0,0"
-                    Background="#27AE60"
-                    Foreground="White"
-                    FontWeight="Bold"/>
+            <Button Grid.Row="2" Content="Dodaj / Edytuj Strukturę (Nowy BOM)" 
+                    Command="{Binding ShowNowyBomCommand}"
+                    Width="300" Height="40" HorizontalAlignment="Right" Margin="0,15,0,0"
+                    Background="#3498DB" Foreground="White" FontWeight="Bold"/>
         </Grid>
     </Grid>
 </UserControl>

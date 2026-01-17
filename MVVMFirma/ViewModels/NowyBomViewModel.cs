@@ -1,6 +1,7 @@
 ﻿using MVVMFirma.Helper;
 using MVVMFirma.Models;
 using MVVMFirma.Models.Shared;
+using MVVMFirma.Models.Validatory;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -39,7 +40,6 @@ namespace MVVMFirma.ViewModels
         public ObservableCollection<string> ListaMaterialow { get; set; }
         public ObservableCollection<string> ListaJednostek { get; set; }
 
-        // Właściwości bindowane do View (Wiersze 1-7)
         public string Mat1 { get => _mat1; set { _mat1 = value; OnPropertyChanged(nameof(Mat1)); } }
         public string Ilosc1 { get => _ilosc1; set { _ilosc1 = value; OnPropertyChanged(nameof(Ilosc1)); } }
         public string Jedn1 { get => _jedn1; set { _jedn1 = value; OnPropertyChanged(nameof(Jedn1)); } }
@@ -69,6 +69,30 @@ namespace MVVMFirma.ViewModels
         public string Jedn7 { get => _jedn7; set { _jedn7 = value; OnPropertyChanged(nameof(Jedn7)); } }
         #endregion
 
+        #region Walidacja (IDataErrorInfo Override)
+        // Nadpisujemy właściwości z BaseViewModel/WorkspaceViewModel
+        public override string Error => null;
+
+        public override string this[string columnName]
+        {
+            get
+            {
+                string result = null;
+                switch (columnName)
+                {
+                    case nameof(Ilosc1): result = BiznesValidator.WalidujIloscZlecona(Ilosc1); break;
+                    case nameof(Ilosc2): result = BiznesValidator.WalidujIloscZlecona(Ilosc2); break;
+                    case nameof(Ilosc3): result = BiznesValidator.WalidujIloscZlecona(Ilosc3); break;
+                    case nameof(Ilosc4): result = BiznesValidator.WalidujIloscZlecona(Ilosc4); break;
+                    case nameof(Ilosc5): result = BiznesValidator.WalidujIloscZlecona(Ilosc5); break;
+                    case nameof(Ilosc6): result = BiznesValidator.WalidujIloscZlecona(Ilosc6); break;
+                    case nameof(Ilosc7): result = BiznesValidator.WalidujIloscZlecona(Ilosc7); break;
+                }
+                return result;
+            }
+        }
+        #endregion
+
         public ICommand SaveCommand { get; }
 
         public NowyBomViewModel()
@@ -80,16 +104,13 @@ namespace MVVMFirma.ViewModels
         }
 
         #region Metody
-
         private void PobierzDaneZKlasyDisplayBom()
         {
             if (string.IsNullOrEmpty(WybranyIndeks)) return;
             var daneZBazy = DisplayBom.LoadForIndex(_db, WybranyIndeks);
             if (daneZBazy != null)
             {
-                // Czyścimy pola przed załadowaniem nowych
                 WyczyscPola();
-
                 if (daneZBazy.Count >= 1) { Mat1 = daneZBazy[0].Material; Ilosc1 = daneZBazy[0].Ilosc.ToString(); Jedn1 = daneZBazy[0].Jednostka; }
                 if (daneZBazy.Count >= 2) { Mat2 = daneZBazy[1].Material; Ilosc2 = daneZBazy[1].Ilosc.ToString(); Jedn2 = daneZBazy[1].Jednostka; }
                 if (daneZBazy.Count >= 3) { Mat3 = daneZBazy[2].Material; Ilosc3 = daneZBazy[2].Ilosc.ToString(); Jedn3 = daneZBazy[2].Jednostka; }
@@ -110,7 +131,6 @@ namespace MVVMFirma.ViewModels
         {
             try
             {
-                // Szukamy obiektu nadrzędnego po KodIndeksu (zgodnie z Twoim modelem)
                 var nadrzedny = _db.Indeksy.FirstOrDefault(i => i.KodIndeksu == WybranyIndeks);
                 if (nadrzedny == null)
                 {
@@ -118,10 +138,8 @@ namespace MVVMFirma.ViewModels
                     return;
                 }
 
-                // Pobieramy aktualne rekordy powiązane z tym indeksem
                 var aktualnyBOM = _db.IndeksBOM.Where(b => b.Indeksy.KodIndeksu == WybranyIndeks).ToList();
 
-                // Aktualizujemy wiersze 1-7
                 AktualizujRekord(nadrzedny, Mat1, Ilosc1, aktualnyBOM.ElementAtOrDefault(0));
                 AktualizujRekord(nadrzedny, Mat2, Ilosc2, aktualnyBOM.ElementAtOrDefault(1));
                 AktualizujRekord(nadrzedny, Mat3, Ilosc3, aktualnyBOM.ElementAtOrDefault(2));
@@ -148,12 +166,10 @@ namespace MVVMFirma.ViewModels
 
             if (istniejacy != null)
             {
-                // Jeśli rekord istnieje, po prostu zmieniamy ilość
                 istniejacy.Ilosc = nowaIlosc;
             }
             else
             {
-                // Jeśli rekordu nie ma, szukamy materiału po nazwie i dodajemy nowy wpis do BOM
                 var material = _db.Materialy.FirstOrDefault(m => m.Nazwa == nazwaMat);
                 if (material != null)
                 {

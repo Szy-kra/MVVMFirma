@@ -36,22 +36,6 @@
         </Style.Triggers>
     </Style>
 
-    <DataTemplate DataType="{x:Type vm:WszystkieTowaryViewModel}">
-        <vw:WszystkieTowaryView/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:NowyTowarViewModel}">
-        <vw:NowyTowarView/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:FakturyViewModel}">
-        <vw:FakturyView/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:NowaFakturaViewModel}">
-        <vw:NowaFakturaView/>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:ListaIndeksowViewModel}">
         <vw:ListaIndeksowView/>
     </DataTemplate>
@@ -68,12 +52,10 @@
         <vw:NowyBomView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:KosztyOperacyjneViewModel}">
-        <vw:KosztyOperacyjneView/>
-    </DataTemplate>
+    
 
-    <DataTemplate DataType="{x:Type vm:NowyKosztOperacyjnyViewModel}">
-        <vw:NowyKosztOperacyjnyView/>
+    <DataTemplate DataType="{x:Type vm:NowyMaterialViewModel}">
+        <vw:NowyMaterialView/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:KosztyMaterialoweViewModel}">

@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
+﻿using MVVMFirma.ViewModels;
+using System.Windows.Controls;
 
 namespace MVVMFirma.Views
 {
-    /// <summary>
-    /// Interaction logic for RozliczenieView.xaml
-    /// </summary>
     public partial class RozliczenieView : UserControl
     {
         public RozliczenieView()
@@ -12,14 +10,12 @@ namespace MVVMFirma.Views
             InitializeComponent();
         }
 
-        // Ta metoda już była
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        // TO JEST KLUCZOWE: 
+        // W .NET 4.8 Widok musi otrzymać ViewModel i przypisać go do DataContext
+        public RozliczenieView(RozliczenieViewModel viewModel)
         {
-        }
-
-        // TEJ METODY BRAKOWAŁO - to ona powoduje błąd kompilacji
-        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
-        {
+            InitializeComponent();
+            this.DataContext = viewModel; // TO ŁĄCZY C# Z XAML
         }
     }
 }

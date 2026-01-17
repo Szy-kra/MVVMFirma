@@ -51,6 +51,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\ArkuszRozliczeniowy.cs" />
     <Compile Include="Helper\BOMCalculator.cs" />
     <Compile Include="Helper\BooleanAut.cs" />
     <Compile Include="Helper\Messenger.cs" />
@@ -197,6 +198,7 @@
   <!-- Views -->
   <ItemGroup>
     <Page Include="Views\NowyKosztOperacyjnyView.xaml" />
+    <Compile Include="ViewModels\NowyMaterialViewModel.cs" />
     <Compile Include="Views\NowyKosztOperacyjnyView.xaml.cs">
       <DependentUpon>NowyKosztOperacyjnyView.xaml</DependentUpon>
     </Compile>
@@ -257,7 +259,14 @@
     <Compile Include="Views\NowyKosztMaterialowyView.xaml.cs">
       <DependentUpon>NowyKosztMaterialowyView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\NowyMaterialView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NowyTowarView.xaml" />
+    <Compile Include="Views\NowyMaterialView.xaml.cs">
+      <DependentUpon>NowyMaterialView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NowyTowarView.xaml.cs">
       <DependentUpon>NowyTowarView.xaml</DependentUpon>
     </Compile>
